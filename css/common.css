@@ -22,7 +22,10 @@ body {
 }
 
 /* 네비게이션 링크 버튼 스타일 */
-.nav-bar a { 
+.nav-bar a {
+    display: flex;             /* 메뉴 버튼 가로 배치 */
+    justify-content: center;   /* 버튼 그룹 가로 중앙 정렬 */
+    gap: 10px;                 /* 버튼 간격 */
     text-decoration: none;     /* 밑줄 제거 */
     color: #268bd2;            /* 푸른색 글씨 */
     font-weight: bold;         /* 글씨 굵게 */
