@@ -5,147 +5,98 @@
     <title>책방 소개 | Netropy Books</title>
     <style>
         /* ========================================== */
-        /* 1. 전체 페이지 기본 스타일 설정               */
+        /* 1. 서브 페이지 공통 기본 스타일             */
         /* ========================================== */
-        body {
-            background-color: #fdf6e3; /* 따뜻한 책방 분위기의 아이보리 배경색 */
-            font-family: 'Arial', sans-serif; /* 기본 글꼴 */
-            margin: 0;
-            padding: 0;
-            color: #333333; /* 기본 글자 색상 */
+        body { 
+            background-color: #fdf6e3; 
+            font-family: 'Arial', sans-serif; 
+            margin: 0; 
+            padding: 0; 
         }
 
         /* ========================================== */
-        /* 2. 상단 헤더 및 내비게이션 메뉴 바 스타일       */
+        /* 2. 상단 헤더 전체 영역 (두 줄 구조)        */
         /* ========================================== */
         .header-section {
-            background-color: #eee8d5; /* 헤더 영역의 은은한 배경색 */
-            display: flex;          /* 가로 배치를 위한 핵심 */
-            justify-content: space-between; /* 로고는 왼쪽 끝, 메뉴는 오른쪽 끝으로 */
-            align-items: center;    /* 세로 기준 가운데 정렬 */
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 2px solid #586e75; /* 아래쪽 경계선 */
-        }
-
-        /* 로고 크기 조정 */
-        .header-logo {
-            width: 120px; /* 로고를 적당한 크기로 줄임 */
-            height: auto;
-        }
-
-        .header-section h2 {
-            margin: 0 0 15px 0;
-            color: #586e75;
-        }
-
-        /* 상단 메뉴 바 레이아웃 (가로 정렬) */
-        .nav-bar {
+            background-color: #eee8d5;
             display: flex;
+            flex-direction: column;         /* 세로로 두 줄 배치 */
+            align-items: center;            /* 가로 기준 중앙 정렬 */
             justify-content: center;
-            gap: 15px; /* 메뉴 버튼 사이의 간격 */
+            padding: 20px 0;
+            border-bottom: 2px solid #586e75;
+            gap: 15px;                      /* 위쪽 로고와 아래쪽 메뉴 사이의 간격 */
         }
 
-        /* 개별 메뉴 버튼 스타일 */
+        /* 위쪽 영역: 로고 스타일 (마우스 올리면 1.2배 확대) */
+        .logo-link {
+            display: inline-block;
+        }
+        .header-logo { 
+            width: 140px; 
+            height: auto; 
+            transition: transform 0.3s ease; /* 부드러운 확대 효과 */
+        }
+        .header-logo:hover { 
+            transform: scale(1.2);          /* 1.2배 확대 */
+        }
+
+        /* 아래쪽 영역: 내비게이션 메뉴 바 */
+        .nav-bar { 
+            display: flex; 
+            gap: 15px; 
+            flex-wrap: wrap;                /* 화면이 아주 좁을 경우 메뉴가 다음 줄로 자연스럽게 떨어지도록 함 */
+            justify-content: center;
+            padding: 0 10px;
+        }
         .nav-bar a {
-            text-decoration: none; /* 밑줄 제거 */
-            color: #268bd2;        /* 푸른색 글씨 */
-            font-weight: bold;     /* 굵은 글꼴 */
+            text-decoration: none; 
+            color: #268bd2; 
+            font-weight: bold; 
             font-size: 15px;
-            padding: 6px 14px;
-            background-color: #ffffff; /* 흰색 배경 */
-            border: 1px solid #268bd2; /* 파란 테두리 */
-            border-radius: 5px;    /* 둥근 모서리 */
-            transition: all 0.3s ease; /* 부드러운 효과 */
+            padding: 8px 16px; 
+            background-color: #ffffff; 
+            border: 1px solid #268bd2;
+            border-radius: 5px; 
+            transition: all 0.3s ease;
         }
-
-        /* 메뉴 버튼에 마우스를 올렸을 때의 효과 */
-        .nav-bar a:hover {
-            background-color: #268bd2;
-            color: #ffffff;
-        }
-
-        /* ========================================== */
-        /* 3. 책방 소개 본문 영역 스타일 (✨ 핵심 콘텐츠)  */
-        /* ========================================== */
-        .about-container {
-            max-width: 800px;  /* 본문이 너무 퍼지지 않도록 최대 너비 제한 */
-            margin: 40px auto; /* 상하 여백을 주고 화면 중앙에 배치 */
-            padding: 40px;
-            background-color: #ffffff; /* 가독성을 위한 하얀색 종이 느낌 배경 */
-            border: 1px solid #e1dcd0;
-            border-radius: 12px;       /* 둥근 모서리 박스 */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* 은은한 입체 그림자 */
-            text-align: left;          /* 글자는 읽기 편하게 왼쪽 정렬 */
-        }
-
-        /* 소개 페이지 큰 제목 */
-        .about-container h3 {
-            color: #b58900;    /* 책방의 상징적인 골드 컬러 */
-            font-size: 26px;
-            border-bottom: 2px solid #eee8d5; /* 제목 아래 얇은 구분선 */
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
-
-        /* 소개 문단 스타일 */
-        .about-container p {
-            font-size: 16px;
-            line-height: 1.8;  /* 줄 간격을 넓게 주어 가독성 향상 */
-            color: #555555;
-            margin-bottom: 20px;
-        }
-
-        /* 강조하고 싶은 철학 문구 스타일 */
-        .philosophy-quote {
-            background-color: #fdf6e3;
-            border-left: 4px solid #b58900; /* 왼쪽에 진한 골드색 포인트 바 */
-            padding: 15px 20px;
-            margin: 30px 0;
-            font-style: italic; /* 이탈릭체로 인용구 느낌 살리기 */
-            color: #444444;
+        .nav-bar a:hover { 
+            background-color: #268bd2; 
+            color: #ffffff; 
         }
 
         /* ========================================== */
-        /* 4. 하단(Footer) 영역 스타일                 */
-        /* ========================================== */
-        .footer-section {
-            background-color: #073642;
-            color: #93a1a1;
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            margin-top: 60px;
-        }
-
-        /* ========================================== */
-        /* 5. 모바일 반응형 디자인 (화면이 좁아질 때)   */
+        /* 3. 모바일 반응형 디자인 (화면이 좁아질 때)   */
         /* ========================================== */
         @media screen and (max-width: 768px) {
-            .about-container {
-                margin: 20px 15px; /* 모바일에서는 양옆 여백을 줄임 */
-                padding: 20px;     /* 내부 여백 축소 */
+            .header-section {
+                padding: 15px 0;
+                gap: 10px;
             }
-            .about-container h3 {
-                font-size: 22px;
+            
+            .header-logo {
+                width: 110px;                 /* 스마트폰 화면에서는 로고를 살짝 더 아담하게 조절 */
             }
-            .about-container p {
-                font-size: 15px;
+
+            .nav-bar a {
+                font-size: 14px;
+                padding: 6px 12px;            /* 모바일에서 버튼 크기를 손가락으로 누르기 좋게 최적화 */
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- 상단 헤더 구역 -->
+    <!-- 상단 두 줄 헤더 구역 -->
     <header class="header-section">
-        <!-- 로고 영역: 왼쪽 끝으로 배치 -->
+        <!-- 첫 번째 줄 (위쪽): 로고 (클릭 시 홈 이동, 호버 시 1.2배 확대) -->
         <a href="index.html" class="logo-link">
             <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo">
         </a>
 
-        <!-- 현재 머무는 페이지에는 'active'라는 클래스를 추가합니다 -->
+        <!-- 두 번째 줄 (아래쪽): 내비게이션 메뉴 바 -->
         <nav class="nav-bar">
+            <!-- 현재 머물고 있는 페이지에는 파란색 배경 스타일을 넣어주세요! -->
             <a href="about.html" style="background-color: #268bd2; color: #ffffff;">책방 소개</a>
             <a href="books.html">도서 목록</a>
             <a href="contact.html">오시는 길</a>
