@@ -2,50 +2,51 @@
 
 /* 상단 메인 헤더 박스 */
 .header-section {
-    background-color: #eee8d5;[cite: 4]
-    padding: 30px 20px;[cite: 4]
-    border-bottom: 2px solid #586e75;[cite: 4]
-    text-align: center;[cite: 4]
+    background-color: #eee8d5;
+    padding: 30px 20px;
+    border-bottom: 2px solid #586e75;
+    text-align: center;
 }
 
 /* 메인 로고 이미지 스타일 */
 .main-logo {
-    width: 180px;[cite: 4]
-    height: auto;[cite: 4]
-    padding: 15px;[cite: 4]
-    border: 1px solid #586e75;[cite: 4]
-    border-radius: 10px;[cite: 4]
-    background-color: #ffffff;[cite: 4]
-    margin-bottom: 15px;[cite: 4]
-    transition: transform 0.3s ease, box-shadow 0.3s ease;[cite: 4]
+    width: 180px;
+    height: auto;
+    padding: 15px;
+    border: 1px solid #586e75;
+    border-radius: 10px;
+    background-color: #ffffff;
+    /* background-color: #073642; /* #ffffff(흰색) 대신 어두운 배경 적용 */
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .main-logo:hover {
-    transform: scale(1.05); /* 확대 효과 */[cite: 4]
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);[cite: 4]
+    transform: scale(1.05); /* 확대 효과 */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 /* 헤더 타이틀 3단계 텍스트 라인 */
-h1 { margin-top: 10px; }[cite: 4]
-.title-line1 { font-size: 20px; color: #657b83; margin-bottom: 5px; }[cite: 4]
-.title-line2 { font-size: 30px; color: #b58900; font-weight: bold; margin-bottom: 5px; }[cite: 4]
-.title-line3 { font-size: 24px; color: #268bd2; }[cite: 4]
+h1 { margin-top: 10px; }
+.title-line1 { font-size: 20px; color: #657b83; margin-bottom: 5px; }
+.title-line2 { font-size: 30px; color: #b58900; font-weight: bold; margin-bottom: 5px; }
+.title-line3 { font-size: 24px; color: #268bd2; }
 
 /* 메인 본문 구역 */
 .content-section {
-    padding: 50px 20px;[cite: 4]
-    font-size: 18px;[cite: 4]
-    color: #333333;[cite: 4]
-    line-height: 1.6;[cite: 4]
-    text-align: center;[cite: 4]
+    padding: 50px 20px;
+    font-size: 18px;
+    color: #333333;
+    line-height: 1.6;
+    text-align: center;
 }
 
 /* 메인 페이지 전용 모바일 반응형 설정 */
 @media screen and (max-width: 768px) {
-    .header-section { padding: 20px 10px; }[cite: 4]
-    .main-logo { width: 140px; }[cite: 4]
-    .title-line1 { font-size: 16px; }[cite: 4]
-    .title-line2 { font-size: 22px; }[cite: 4]
-    .title-line3 { font-size: 18px; }[cite: 4]
-    .content-section { padding: 30px 15px; font-size: 16px; }[cite: 4]
+    .header-section { padding: 20px 10px; }
+    .main-logo { width: 140px; }
+    .title-line1 { font-size: 16px; }
+    .title-line2 { font-size: 22px; }
+    .title-line3 { font-size: 18px; }
+    .content-section { padding: 30px 15px; font-size: 16px; }
 }
