@@ -6,19 +6,47 @@
         <style>
             body {
                 background-color: #fdf6e3;
+                font-family: 'Arial', sans-serif;
                 text-align: center;
-                padding-top: 100px;
+                padding-top: 50px;
             }
+
+            /* 로고 이미지 스타일링 */
+            .main-logo {
+                width: 180px;            /* 로고 크기: 여기서 숫자를 조절해 보세요! */
+                height: auto;
+                
+                /* 로고 주변 꾸미기 */
+                padding: 15px;           /* 로고와 테두리 사이 간격 */
+                border: 1px solid #586e75; /* 얇고 깔끔한 테두리 */
+                border-radius: 10px;     /* 모서리를 살짝 둥글게 */
+                background-color: #ffffff; /* 테두리 안쪽을 하얗게 하여 로고가 더 선명하게 보이게 함 */
+                
+                /* 애니메이션 효과 */
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            /* 마우스를 올렸을 때의 효과 */
+            .main-logo:hover {
+                transform: scale(1.05);   /* 로고가 살짝 커짐 */
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 그림자가 생겨 입체감이 느껴짐 */
+            }
+
             h1 {
-                color: #2c3e50;
+                color: #586e75;
+                margin-top: 30px;
             }
         </style>
     </head>
+    
     <body>
-        <!-- 이부분은 로고 이미지 태그-->
-        <img src="images/NB_logo_Black.png" alt="NetropyBooks 로고" class="main-logo">
+        <!-- 링크를 통해 index.html로 돌아가게 설정 -->
+        <a href="index.html">
+            <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="main-logo">
+        </a>
 
         <h1>안녕하세요? NetropyBooks의 홈페이지에 오신 것을 환영합니다.</h1>
-        <p>VS Code로 제작하였습니다.</p>
+        <p>VS Code와 GitHub Pages로 제작하였습니다.</p>
     </body>
+
 </html>
