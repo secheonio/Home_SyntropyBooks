@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <!-- 모바일 기기 반응형 대응을 위한 필수 뷰포트 설정 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>책방 소개 | Netropy Books</title>
     <style>
@@ -24,7 +23,7 @@
             display: flex; 
             flex-direction: row; 
             align-items: stretch; 
-            padding: 20px 40px; 
+            padding: 0 40px; /* 상하 패딩 0: 헤더 전체 높이를 로고 이미지 높이로 제한 */
             background-color: #eee8d5; 
             border-bottom: 2px solid #586e75; 
             box-sizing: border-box; 
@@ -38,13 +37,14 @@
             justify-content: center; 
             background: #ffffff; 
             border: 1px dashed #b58900; 
-            padding: 15px; 
+            padding: 0 15px; /* 상하 패딩 0: 로고 크기 외 추가 높이 발생 방지 */
             border-radius: 10px; 
+            box-sizing: border-box;
         }
 
         .header-logo { 
-            width: 140px; 
-            height: auto; 
+            height: 100px; /* 헤더 전체 높이의 기준이 되는 로고 이미지 높이 */
+            width: auto; 
             display: block; 
             transition: transform 0.3s, box-shadow 0.3s; 
         }
@@ -62,6 +62,7 @@
             border-radius: 10px; 
             background: rgba(255,255,255,0.5); 
             overflow: hidden; 
+            box-sizing: border-box;
         }
         
         .header-top-row { 
@@ -97,11 +98,11 @@
             text-decoration: none; 
             color: #268bd2; 
             font-weight: bold; 
-            padding: 6px 12px; 
+            padding: 4px 10px; 
             background: #ffffff; 
             border: 1px solid #268bd2; 
             border-radius: 5px; 
-            font-size: 0.9rem; 
+            font-size: 0.85rem; 
             transition: 0.3s; 
             text-align: center;
         } 
@@ -201,41 +202,40 @@
 
         /* =========================================
            5. 반응형 미디어 쿼리 (Mobile Style)
-           - 화면 너비가 768px 이하일 때 동작합니다.
         ========================================= */
         @media (max-width: 768px) {
-            /* 헤더 재배치: 가로 분할에서 세로 쌓임 구조로 변경 */
             .header-section {
                 flex-direction: column;
-                padding: 15px 20px;
+                padding: 10px 20px;
                 gap: 15px;
             }
 
             .header-left {
                 width: 100%;
-                box-sizing: border-box;
             }
 
             .header-logo {
-                width: 120px; /* 모바일용 로고 크기 축소 */
+                height: 80px; /* 모바일 전용 로고 높이 지정 */
             }
 
             .header-right {
                 width: 100%;
-                box-sizing: border-box;
             }
 
-            /* 메인 이미지 영역의 모바일 고정 높이 확보 */
-            .header-top-row {
-                height: 140px; 
+            /* 1. 이미지를 감싸는 윗줄 틀 (전체 높이의 2/3 차지) */
+            .header-top-row { 
+                flex: 2;            /* 오른쪽 칸 높이의 2/3 배분 */
+                min-height: 0;      /* 이미지가 틀 높이를 강제로 늘리지 못하도록 방지 */
+                overflow: hidden;   /* 틀을 벗어나는 이미지 영역을 깔끔하게 잘라냄 */
+                position: relative; 
+                border-bottom: 1px dotted #839496; 
             }
 
             .header-bottom-row {
-                padding: 12px;
-                justify-content: center; /* 메뉴 중앙 정렬 */
+                padding: 10px;
+                justify-content: center;
             }
 
-            /* 네비게이션 버튼을 균등하게 가로 배열 및 가독성 확보 */
             .nav-bar {
                 width: 100%;
                 justify-content: space-between;
@@ -243,11 +243,10 @@
 
             .nav-bar a {
                 flex: 1;
-                padding: 8px 4px;
+                padding: 6px 4px;
                 font-size: 0.85rem;
             }
 
-            /* 본문 여백 및 글자 크기 조정 */
             .about-container {
                 width: 92%;
                 margin: 20px auto;
@@ -255,9 +254,18 @@
             }
 
             .main-title {
-                font-size: 1.4rem; /* 타일틀 폰트 감소로 텍스트 잘림 방지 */
+                font-size: 1.4rem;
             }
 
+            /* 2. 메인 이미지 */
+            .main-header-img { 
+                width: 100%; 
+                height: 100%; 
+                object-fit: cover;             /* 비율을 유지하며 틀(2/3 높이)을 가득 채움 */
+                object-position: center center; /* 기본값: 이미지의 정중앙 부위를 보여줌 */
+                display: block; 
+            }
+            
             .subtitle {
                 font-size: 0.95rem;
             }
@@ -272,21 +280,21 @@
 <body>
 
     <header class="header-section">
-        <!-- [왼쪽 칸] 로고 영역 -->
+        <!-- [왼쪽 칸] 로고 영역 (높이 기준점) -->
         <div class="header-left">
             <a href="index.html">
-                <img src="images/SB_logo_White.png" alt="Syntropy Books 로고" class="header-logo">
+                <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo">
             </a>
         </div>
         
         <!-- [오른쪽 칸] 2줄 레이아웃 영역 -->
         <div class="header-right">
-            <!-- 윗줄 (메인 이미지) -->
+            <!-- 윗줄 (메인 이미지: 로고 높이의 2/3) -->
             <div class="header-top-row">
-                <img src="images/main-image.png" alt="Syntropy Books 메인 이미지" class="main-header-img">
+                <img src="images/main-image.png" alt="Netropy Books 메인 이미지" class="main-header-img">
             </div>
             
-            <!-- 아랫줄: 네비게이션 메뉴 -->
+            <!-- 아랫줄: 네비게이션 메뉴 (로고 높이의 1/3) -->
             <div class="header-bottom-row">
                 <nav class="nav-bar">
                     <a href="about.html" class="active">책방 소개</a>
@@ -298,9 +306,9 @@
     </header>
 
     <main class="about-container">
-        <!-- 1. 서점 헤더 섹션 (상단 메인 카피) -->
+        <!-- 1. 서점 헤더 섹션 -->
         <header class="about-header">
-            <p class="subtitle">SYNTROPY BOOKS</p>
+            <p class="subtitle">NETROPY BOOKS</p>
             <h1 class="main-title">무질서한 정보의 바다에서,<br>삶의 질서를 찾아가는 공간</h1>
         </header>
 
@@ -312,8 +320,8 @@
             엔트로피(Entropy)가 증가하며 무질서로 향하는 세상 속에서, 우리는 때때로 방향을 잃고 혼란을 느낍니다.
             </p>
             <p class="description">
-            <strong>SYNTROPY BOOKS</strong>는 이러한 엔트로피의 반대편에 서 있습니다. 
-            <strong>신트로피(Syntropy)</strong>는 무질서에서 질서를 만들어내고, 흩어진 것들을 하나로 연결하여 아름다운 체계를 구축하는 자연의 위대한 원리입니다.
+            <strong>NETROPY BOOKS</strong>는 이러한 엔트로피의 반대편에 서 있습니다. 
+            <strong>네트로피(Netropy)</strong>는 무질서에서 질서를 만들어내고, 흩어진 것들을 하나로 연결하여 아름다운 체계를 구축하는 자연의 위대한 원리입니다.
             </p>
             <p class="description">
             책은 단순한 종이의 집합이 아닙니다. 인류가 수 세기에 걸쳐 흩어진 생각과 경험, 지식을 정돈하여 만들어낸 가장 완벽한 '네트로피적 구조물'입니다.
@@ -343,13 +351,13 @@
         <section class="about-closing">
             <p class="closing-text">
             복잡한 세상의 소음에서 벗어나, 당신의 삶과 사유에 완벽한 질서를 선사할 단 한 권의 책을 
-            <strong>SYNTROPY BOOKS</strong>에서 만나보세요.
+            <strong>NETROPY BOOKS</strong>에서 만나보세요.
             </p>
         </section>
     </main>
 
     <footer class="footer-section">
-        <p>&copy; 2026 Syntropy Books. All rights reserved.</p>
+        <p>&copy; 2026 Netropy Books. All rights reserved.</p>
     </footer>
 
 </body>
