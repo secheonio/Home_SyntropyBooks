@@ -78,3 +78,146 @@ body {
         font-size: 0.8rem;
     }
 }
+
+/* =========================================
+   공통 헤더 영역 스타일 (모듈화)
+   ========================================= */
+
+/* 1. 전체 헤더 상자 (2단 구조 틀) */
+.header-section { 
+    display: flex; 
+    flex-direction: row; 
+    align-items: stretch; 
+    padding: 0 40px; 
+    background-color: #eee8d5; 
+    border-bottom: 2px solid #586e75; 
+    box-sizing: border-box; 
+    gap: 20px;
+}
+
+/* 2. 좌측 로고 박스 (어두운 배경 적용으로 흰색 로고 가독성 확보) */
+.header-left { 
+    flex-shrink: 0; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: #073642; 
+    border: 1px dashed #b58900; 
+    padding: 0 15px; 
+    border-radius: 10px; 
+    box-sizing: border-box;
+}
+
+/* 3. 로고 이미지 컨트롤러 */
+.header-logo { 
+    height: 120px; 
+    width: auto; 
+    display: block; 
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.header-logo:hover { 
+    transform: scale(1.05); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 4. 우측 전체 영역 (상단 타이틀 + 하단 메뉴) */
+.header-right { 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 0; 
+    border: 1px dashed #268bd2; 
+    border-radius: 10px; 
+    background: rgba(255,255,255,0.5); 
+    overflow: hidden; 
+    box-sizing: border-box;
+}
+
+/* 5. 우측 상단 (메인 텍스트가 들어가는 칸) */
+.header-top-row { 
+    flex: 2;                   
+    display: flex;             
+    align-items: center;       
+    justify-content: center;   
+    min-height: 0; 
+    position: relative; 
+    border-bottom: 1px dotted #839496; 
+    background-color: #fdf6e3; 
+    overflow: hidden;
+}
+
+/* 6. 메인 타이틀 텍스트 스타일 */
+.main-header-text {
+    font-size: calc(120px * (2 / 3) * 0.4); /* 로고 높이 기준 비율 계산식 */
+    font-weight: bold;
+    color: #073642; 
+    letter-spacing: 2px; 
+}
+
+/* 7. 우측 하단 (개념 소개 + 메뉴 버튼을 나누는 칸) */
+.header-bottom-row { 
+    flex: 1;                   
+    display: flex; 
+    align-items: center;       
+    padding: 0 20px;
+    gap: 20px;                 
+}
+
+/* 8. 하단 왼쪽 칸 (개념 소개 문구) */
+.header-intro-text {
+    flex-grow: 1;      
+    text-align: left;  
+    font-size: 14px; 
+    color: #586e75;    
+    letter-spacing: 0.5px;
+}
+
+/* 9. 하단 오른쪽 칸 (메뉴 버튼 그룹 방어막) */
+.header-nav-wrap {
+    flex-shrink: 0;    
+}
+
+/* =========================================
+   공통 헤더 모바일 반응형 미디어 쿼리 (768px 이하)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    .header-section { 
+        flex-direction: column; 
+        padding: 10px 20px; 
+        gap: 15px; 
+    }
+    
+    .header-left { 
+        width: 100%; 
+        padding: 10px 0; 
+    }
+    
+    .header-logo { 
+        height: 80px; 
+    } 
+    
+    .header-right { 
+        width: 100%; 
+    }
+    
+    .header-top-row { 
+        height: 100px; 
+    }
+    
+    .main-header-text {
+        font-size: calc(80px * (2 / 3) * 0.4); /* 모바일 로고 높이 기준 비율 적용 */
+    }
+    
+    .header-bottom-row {
+        flex-direction: column; 
+        gap: 10px;
+        padding: 10px;
+        justify-content: center;
+    }
+    
+    .header-intro-text {
+        text-align: center; 
+        font-size: 12px;
+    }
+}
