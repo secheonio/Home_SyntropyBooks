@@ -23,7 +23,7 @@
             display: flex; 
             flex-direction: row; 
             align-items: stretch; 
-            padding: 0 40px; /* 상하 패딩 0: 헤더 전체 높이를 로고 이미지 높이로 제한 */
+            padding: 0 40px; /* 상하 패딩 0: 로고 높이가 곧 헤더 전체 높이가 됩니다 */
             background-color: #eee8d5; 
             border-bottom: 2px solid #586e75; 
             box-sizing: border-box; 
@@ -35,15 +35,16 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            background: #ffffff; 
+            background: #073642; /* 흰색 로고(SB_logo_White.png)가 잘 보이도록 어두운 배경 적용 */
             border: 1px dashed #b58900; 
-            padding: 0 15px; /* 상하 패딩 0: 로고 크기 외 추가 높이 발생 방지 */
+            padding: 0 15px; /* 상하 패딩 0: 여분의 높이 발생 방지 */
             border-radius: 10px; 
             box-sizing: border-box;
         }
 
+        /* [핵심] 헤더 전체 높이를 결정하는 컨트롤러 */
         .header-logo { 
-            height: 100px; /* 헤더 전체 높이의 기준이 되는 로고 이미지 높이 */
+            height: 120px; /* 이 로고 높이(120px)에 맞추어 헤더와 오른쪽 영역 높이가 자동 결정됩니다 */
             width: auto; 
             display: block; 
             transition: transform 0.3s, box-shadow 0.3s; 
@@ -51,7 +52,7 @@
         
         .header-logo:hover { 
             transform: scale(1.05); 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
         }
         
         .header-right { 
@@ -65,21 +66,24 @@
             box-sizing: border-box;
         }
         
+        /* 로고 높이(120px)의 2/3 = 80px 자동 배분 */
         .header-top-row { 
             flex: 2; 
             min-height: 0; 
             position: relative; 
             border-bottom: 1px dotted #839496; 
+            overflow: hidden;
         }
         
         .main-header-img { 
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
-            object-position: center center; 
+            object-position: 50% 30%; /* 이미지의 높이 중 30% 지점을 중심으로 잘라서 보여줍니다 */
             display: block; 
         }
         
+        /* 로고 높이(120px)의 1/3 = 40px 자동 배분 */
         .header-bottom-row { 
             flex: 1; 
             display: flex; 
@@ -212,23 +216,19 @@
 
             .header-left {
                 width: 100%;
+                padding: 10px 0;
             }
 
             .header-logo {
-                height: 80px; /* 모바일 전용 로고 높이 지정 */
+                height: 80px; /* 모바일 화면에서의 로고 기준 높이 */
             }
 
             .header-right {
                 width: 100%;
             }
 
-            /* 1. 이미지를 감싸는 윗줄 틀 (전체 높이의 2/3 차지) */
-            .header-top-row { 
-                flex: 2;            /* 오른쪽 칸 높이의 2/3 배분 */
-                min-height: 0;      /* 이미지가 틀 높이를 강제로 늘리지 못하도록 방지 */
-                overflow: hidden;   /* 틀을 벗어나는 이미지 영역을 깔끔하게 잘라냄 */
-                position: relative; 
-                border-bottom: 1px dotted #839496; 
+            .header-top-row {
+                height: 120px; 
             }
 
             .header-bottom-row {
@@ -257,15 +257,6 @@
                 font-size: 1.4rem;
             }
 
-            /* 2. 메인 이미지 */
-            .main-header-img { 
-                width: 100%; 
-                height: 100%; 
-                object-fit: cover;             /* 비율을 유지하며 틀(2/3 높이)을 가득 채움 */
-                object-position: center center; /* 기본값: 이미지의 정중앙 부위를 보여줌 */
-                display: block; 
-            }
-            
             .subtitle {
                 font-size: 0.95rem;
             }
@@ -280,21 +271,21 @@
 <body>
 
     <header class="header-section">
-        <!-- [왼쪽 칸] 로고 영역 (높이 기준점) -->
+        <!-- [왼쪽 칸] 로고 영역 (높이 결정 기준점) -->
         <div class="header-left">
             <a href="index.html">
-                <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo">
+                <img src="images/SB_logo_White.png" alt="Netropy Books 로고" class="header-logo">
             </a>
         </div>
         
         <!-- [오른쪽 칸] 2줄 레이아웃 영역 -->
         <div class="header-right">
-            <!-- 윗줄 (메인 이미지: 로고 높이의 2/3) -->
+            <!-- 윗줄: 메인 이미지 (로고 높이의 2/3 차지) -->
             <div class="header-top-row">
                 <img src="images/main-image.png" alt="Netropy Books 메인 이미지" class="main-header-img">
             </div>
             
-            <!-- 아랫줄: 네비게이션 메뉴 (로고 높이의 1/3) -->
+            <!-- 아랫줄: 네비게이션 메뉴 (로고 높이의 1/3 차지) -->
             <div class="header-bottom-row">
                 <nav class="nav-bar">
                     <a href="about.html" class="active">책방 소개</a>
