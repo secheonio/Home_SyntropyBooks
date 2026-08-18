@@ -2,10 +2,13 @@
 
 /* 상단 메인 헤더 박스 */
 .header-section {
+    display: flex;
+    flex-direction: column;  /* 1. 내부 요소들을 세로(위->아래) 방향으로 나열 */
+    align-items: center;     /* 2. 나열된 모든 요소를 가로 중앙으로 정렬 */
+    text-align: center;      /* 3. 텍스트 자체도 가운데 정렬 */
     background-color: #eee8d5;
     padding: 30px 20px;
     border-bottom: 2px solid #586e75;
-    text-align: center;
 }
 
 /* 메인 로고 이미지 스타일 */
@@ -32,13 +35,16 @@ h1 { margin-top: 10px; }
 .title-line2 { font-size: 30px; color: #b58900; font-weight: bold; margin-bottom: 5px; }
 .title-line3 { font-size: 24px; color: #268bd2; }
 
-/* 메인 본문 구역 */
+/* 본문 콘텐츠 구역 */
 .content-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* 안내글(<p>) 요소를 가로 중앙 정렬 */
+    text-align: center;      /* 문장 텍스트 가운데 정렬 */
     padding: 50px 20px;
     font-size: 18px;
     color: #333333;
     line-height: 1.6;
-    text-align: center;
 }
 
 /* 메인 페이지 전용 모바일 반응형 설정 */
