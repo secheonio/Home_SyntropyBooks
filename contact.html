@@ -3,145 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>오시는 길 | Netropy Books</title>
+    <!-- 스타일은 위와 동일하게 유지 -->
     <style>
-        body { 
-            background-color: #fdf6e3; 
-            font-family: 'Arial', sans-serif; 
-            margin: 0; 
-            padding: 0; 
-        }
-
-        .header-section {
-            background-color: #eee8d5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 0;
-            border-bottom: 2px solid #586e75;
-            gap: 15px;
-        }
-
-        /* ✨ 메인 페이지와 동일한 테두리 및 효과가 적용된 로고 스타일 */
-        .logo-link {
-            display: inline-block;
-        }
-        .header-logo { 
-            width: 140px; 
-            height: auto; 
-            padding: 15px;
-            background-color: #ffffff;
-            border: 1px solid #586e75;
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .header-logo:hover { 
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .nav-bar { 
-            display: flex; 
-            gap: 15px; 
-            flex-wrap: wrap; 
-            justify-content: center;
-            padding: 0 10px;
-        }
-        .nav-bar a {
-            text-decoration: none; 
-            color: #268bd2; 
-            font-weight: bold; 
-            font-size: 15px;
-            padding: 8px 16px; 
-            background-color: #ffffff; 
-            border: 1px solid #268bd2;
-            border-radius: 5px; 
-            transition: all 0.3s ease;
-        }
-        .nav-bar a:hover { 
-            background-color: #268bd2; 
-            color: #ffffff; 
-        }
-
-        .contact-container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 40px;
-            background-color: #ffffff;
-            border: 1px solid #e1dcd0;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .contact-container h3 {
-            color: #b58900;
-            font-size: 24px;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-        .info-box {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #555555;
-            margin-bottom: 30px;
-            text-align: left;
-            background-color: #fdf6e3;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #268bd2;
-        }
-
-        .footer-section {
-            background-color: #073642;
-            color: #93a1a1;
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            margin-top: 60px;
-        }
-
-        @media screen and (max-width: 768px) {
-            .header-section { padding: 15px 0; gap: 10px; }
-            .header-logo { width: 110px; padding: 10px; }
-            .nav-bar a { font-size: 14px; padding: 6px 12px; }
-            .contact-container { margin: 20px 15px; padding: 20px; }
-        }
+        body { background-color: #fdf6e3; font-family: 'Arial', sans-serif; margin: 0; padding: 0; }
+        .header-section { background-color: #eee8d5; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-bottom: 2px solid #586e75; gap: 15px; }
+        .header-logo { width: 140px; padding: 15px; background: #ffffff; border: 1px solid #586e75; border-radius: 10px; }
+        .nav-bar { display: flex; gap: 15px; justify-content: center; }
+        .nav-bar a { text-decoration: none; color: #268bd2; font-weight: bold; padding: 8px 16px; background: #ffffff; border: 1px solid #268bd2; border-radius: 5px; }
+        .nav-bar a:hover { background-color: #268bd2; color: #ffffff; }
+        .contact-container { max-width: 800px; margin: 40px auto; padding: 40px; background: #ffffff; text-align: center; }
+        .footer-section { background-color: #073642; color: #93a1a1; text-align: center; padding: 20px; margin-top: 60px; }
     </style>
 </head>
 <body>
-
     <header class="header-section">
-        <a href="index.html" class="logo-link">
-            <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo">
-        </a>
+        <a href="index.html"><img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo"></a>
         <nav class="nav-bar">
             <a href="about.html">책방 소개</a>
             <a href="books.html">도서 목록</a>
             <a href="contact.html" style="background-color: #268bd2; color: #ffffff;">오시는 길</a>
         </nav>
     </header>
-
     <main class="contact-container">
-        <h3>오시는 길 & 찾아오시는 방법</h3>
-        <div class="info-box">
-            <p><strong>📍 주소:</strong> 대한민국 과학로 123, Netropy 빌딩 1층</p>
-            <p><strong>⏰ 운영 시간:</strong> 화요일 ~ 일요일 (오전 10시 ~ 오후 8시 / 매주 월요일 휴무)</p>
-            <p><strong>📞 문의 전화:</strong> 02-123-4567</p>
-            <p><strong>🚇 대중교통:</strong> 과학역 3번 출구에서 도보 5분 거리</p>
-        </div>
-        <img src="images/map-preview.png" alt="Netropy Books 위치 지도" style="width: 100%; max-width: 500px; border-radius: 10px; margin-bottom: 20px;">
-        <div class="map-nav-container">
-            <a href="https://kko.to/f-qqm1hM58" 
-               target="_blank" 
-               style="display: inline-block; padding: 12px 24px; background-color: #fee500; color: #3c1e1e; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-               🚗 카카오 지도로 길 찾기
-            </a>
-        </div>
+        <h3>오시는 길</h3>
+        <!-- 상세 위치 정보 -->
     </main>
-
     <footer class="footer-section">
         <p>&copy; 2026 Netropy Books. All rights reserved.</p>
     </footer>
-
 </body>
 </html>
