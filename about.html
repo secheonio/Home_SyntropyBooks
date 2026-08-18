@@ -36,79 +36,84 @@
 </head>
 
 <body>
-    <header class="header-section" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 40px;">
-        <!-- 왼쪽 칸: 로고 크기에 맞춘 영역 -->
-        <div class="header-left" style="flex-shrink: 0;">
+    <header class="header-section" style="display: flex; justify-content: space-between; align-items: stretch; padding: 20px 40px; background-color: #eee8d5; border-bottom: 2px solid #586e75; min-height: 180px;">
+        
+        <!-- [왼쪽 칸] 로고 영역: 테두리와 배경을 주어 구분을 명확히 함 -->
+        <div class="header-left" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #ffffff; border: 1px dashed #b58900; padding: 15px; border-radius: 10px;">
             <a href="index.html">
                 <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo" style="width: 140px; display: block;">
             </a>
         </div>
         
-        <!-- 오른쪽 칸: 두 줄로 구분 (윗줄 2/3: 메인 이미지, 아래줄 1/3: 메뉴 버튼) -->
-        <div class="header-right" style="flex-grow: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+        <!-- [오른쪽 칸] 전체 영역 (가로 방향으로 남은 공간을 모두 차지) -->
+        <div class="header-right" style="flex-grow: 1; display: flex; flex-direction: column; margin-left: 20px; border: 1px dashed #268bd2; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.5);">
+            
             <!-- 윗줄 (2/3 비율 공간): 메인 이미지 배치 -->
-            <div class="header-top-row" style="flex: 2; display: flex; justify-content: flex-end;">
-                <img src="images/main-image.png" alt="Netropy Books 메인 이미지" class="main-header-img" style="max-height: 100px; width: auto; object-fit: contain; border-radius: 6px;">
+            <div class="header-top-row" style="flex: 2; display: flex; justify-content: flex-end; align-items: center; border-bottom: 1px dotted #839496; padding-bottom: 8px; margin-bottom: 8px;">
+                <img src="images/main-image.png" alt="Netropy Books 메인 이미지" class="main-header-img" style="max-height: 80px; width: auto; object-fit: contain; border-radius: 6px;">
             </div>
             
             <!-- 아래줄 (1/3 비율 공간): 네비게이션 메뉴 버튼 배치 -->
-            <div class="header-bottom-row" style="flex: 1; display: flex; justify-content: flex-end;">
-                <nav class="nav-bar">
-                    <a href="about.html" style="background-color: #268bd2; color: #ffffff;">책방 소개</a>
-                    <a href="books.html">도서 목록</a>
-                    <a href="contact.html">오시는 길</a>
+            <div class="header-bottom-row" style="flex: 1; display: flex; justify-content: flex-end; align-items: center;">
+                <nav class="nav-bar" style="display: flex; gap: 10px;">
+                    <a href="about.html" style="text-decoration: none; background-color: #268bd2; color: #ffffff; font-weight: bold; padding: 6px 12px; border-radius: 5px; font-size: 0.9rem;">책방 소개</a>
+                    <a href="books.html" style="text-decoration: none; color: #268bd2; font-weight: bold; padding: 6px 12px; background: #ffffff; border: 1px solid #268bd2; border-radius: 5px; font-size: 0.9rem;">도서 목록</a>
+                    <a href="contact.html" style="text-decoration: none; color: #268bd2; font-weight: bold; padding: 6px 12px; background: #ffffff; border: 1px solid #268bd2; border-radius: 5px; font-size: 0.9rem;">오시는 길</a>
                 </nav>
             </div>
+            
         </div>
     </header>
 
     <main class="about-container">
-        <header class="about-header">
-            <h1>[Netropy Books] : 질서와 안정이 피어나는 지혜의 숲</h1>
-            <p class="subtitle">머무름이 곧 배움이 되는 곳, Netropy Books에 오신 것을 환영합니다</p>
-        </header>
+    <!-- 1. 서점 헤더 섹션 (상단 메인 카피) -->
+    <header class="about-header">
+        <p class="subtitle">NETROPY & SYNTROPY BOOKS</p>
+        <h1 class="main-title">무질서한 정보의 바다에서,<br>삶의 질서를 찾아가는 공간</h1>
+    </header>
 
-        <section class="intro-section">
-            <p>급변하는 시대 속에서 세상은 끊임없이 무질서와 혼돈(Entropy)을 향해 달려가는 듯합니다. 하지만 그 흐름 속에서도 우리는 중심을 잡고, 작은 지혜와 온기를 모아 단단한 질서와 안정을 만들어갈 수 있습니다.</p>
-            <p>시골 가을볕의 따스함과 풀벌레 소리가 가득한 한적한 서점마을, 그곳에 자리 잡은 <strong>Netropy Books</strong>는 단순한 책방을 넘어, 흩어진 마음의 결을 바로잡고 자연 속에서 진정한 쉼을 누리는 대안적 배움과 사유의 공간입니다.</p>
-        </section>
+    <!-- 2. 철학 및 메인 소개글 섹션 -->
+    <section class="about-philosophy">
+        <h2 class="section-title">우리의 철학 (Philosophy)</h2>
+        <p class="description">
+        우리가 살아가는 세상은 수많은 정보와 소음으로 가득 차 있습니다. 
+        엔트로피(Entropy)가 증가하며 무질서로 향하는 세상 속에서, 우리는 때때로 방향을 잃고 혼란을 느낍니다.
+        </p>
+        <p class="description">
+        <strong>NETROPY BOOKS</strong>는 이러한 엔트로피의 반대편에 서 있습니다. 
+        <strong>신트로피(Syntropy)</strong>는 무질서에서 질서를 만들어내고, 흩어진 것들을 하나로 연결하여 아름다운 체계를 구축하는 자연의 위대한 원리입니다.
+        </p>
+        <p class="description">
+        책은 단순한 종이의 집합이 아닙니다. 인류가 수 세기에 걸쳐 흩어진 생각과 경험, 지식을 정돈하여 만들어낸 가장 완벽한 '신트로피적 구조물'입니다.
+        </p>
+    </section>
 
-        <section class="program-section">
-            <h2>주요 공간 및 프로그램 안내</h2>
-            
-            <div class="program-item">
-                <h3>1. Book (독서와 사유의 공간)</h3>
-                <p>엔트로피(무질서)에 맞서는 <strong>'네트로피(Netropy, 질서와 생명력)'</strong>의 철학을 담아낸 서적들이 가득합니다.</p>
-                <ul>
-                    <li><strong>과학과 철학의 경계에서:</strong> 우주의 법칙부터 인간 내면의 질서까지 다루는 인문·과학 도서들을 엄선했습니다.</li>
-                    <li><strong>청소년과 미래 세대를 위한 서가:</strong> 경쟁 중심의 교육을 넘어, 스스로 질문을 던지고 삶의 방향을 기획하는 힘을 길러주는 생태·철학·예술 도서를 만나볼 수 있습니다.</li>
-                    <li><strong>고요한 사색의 독서실:</strong> 창밖으로 펼쳐진 시골 풍경을 바라보며 깊은 사색에 잠길 수 있는 독립된 독서 공간을 제공합니다.</li>
-                </ul>
-            </div>
+    <!-- 3. 서점의 핵심 가치 리스트 섹션 -->
+    <section class="about-values">
+        <h2 class="section-title">3가지 핵심 가치</h2>
+        <ul class="value-list">
+        <li class="value-item">
+            <h3>지식의 정렬 (Ordered Knowledge)</h3>
+            <p>흩어진 정보 조각들을 선별하고 정돈하여, 당신의 삶에 명확한 통찰을 전하는 도서를 큐레이션합니다.</p>
+        </li>
+        <li class="value-item">
+            <h3>성장의 순환 (Continuous Growth)</h3>
+            <p>자연의 완벽한 비율인 피보나치 곡선처럼, 한 권의 책에서 시작된 배움이 삶 전체로 부드럽게 확장되는 선순환을 지향합니다.</p>
+        </li>
+        <li class="value-item">
+            <h3>지성인들의 연대 (Connected Mind)</h3>
+            <p>무질서한 세상 속에서 자신만의 중심을 잡고자 하는 독자들이 모여 깊이 있는 담론을 나누는 지적 안식처가 되어드립니다.</p>
+        </li>
+        </ul>
+    </section>
 
-            <div class="program-item">
-                <h3>2. 쉼과 민박 (머무는 배움)</h3>
-                <p>배움은 쉼 없이 달릴 때가 아니라, 깊이 호흡하고 멈춰 섰을 때 비로소 시작됩니다. Netropy Books는 방문객들이 일상을 내려놓고 온전한 안정을 찾을 수 있도록 아늑한 민박 공간을 함께 운영합니다.</p>
-                <ul>
-                    <li><strong>흙냄새와 나무 결이 살아있는 스테이:</strong> 자연 소재로 지어진 아늑한 객실에서 도시의 소음을 벗어나 온전한 휴식을 취할 수 있습니다.</li>
-                    <li><strong>밤하늘 아래의 대화:</strong> 저녁이면 모여앉아 책에 대한 단상을 나누고, 미래 세대가 살아갈 세상에 대해 소박하지만 깊이 있는 이야기를 나누는 살롱(Salon) 프로그램이 열립니다.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="future-section">
-            <h2>미래 사회를 마주할 청소년과 동반자들에게</h2>
-            <p>우리 청소년들이 살아갈 미래는 정답을 빠르게 맞히는 능력보다, <strong>혼돈 속에서 스스로 질서를 찾아내고 타인과 연대하는 힘</strong>이 더욱 중요해질 것입니다.</p>
-            <p>Netropy Books는 시골마을의 느린 호흡 속에서 자연의 이치를 배우고, 책을 통해 내면의 뿌리를 깊게 내리는 시간을 선물합니다. 자연이 주는 넉넉한 품 안에서 책장을 넘기며 쉼을 얻고, 다시 일상으로 돌아갈 단단한 안정을 충전해 가시기를 바랍니다.</p>
-        </section>
-
-        <footer class="about-footer">
-            <p class="quote-box">
-                Netropy Books는 무질서와 혼돈(Entropy) 속에서 의미 있는 질서를 만들어가는 공간입니다.<br><br>
-                <em>"지혜는 혼돈 속에서 질서를 세우는 힘이며, 참된 배움은 고요한 쉼에서 비롯됩니다."</em>
-            </p>
-            <p class="signature">— Netropy Books 일동</p>
-        </footer>
+    <!-- 4. 하단 맺음말 카피 섹션 -->
+    <section class="about-closing">
+        <p class="closing-text">
+        복잡한 세상의 소음에서 벗어나, 당신의 삶과 사유에 완벽한 질서를 선사할 단 한 권의 책을 
+        <strong>NETROPY BOOKS</strong>에서 만나보세요.
+        </p>
+    </section>
     </main>
 
     <footer class="footer-section">
