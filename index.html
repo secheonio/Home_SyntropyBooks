@@ -75,6 +75,43 @@
                 bottom: 0;
                 width: 100%;
             }
+        
+            /* ========================================== */
+            /* 모바일 화면 배려 (반응형 디자인 영역)          */
+            /* ========================================== */
+            @media screen and (max-width: 768px) {
+                /* 스마트폰처럼 화면 가로폭이 768픽셀보다 작아질 때 이 속성들이 발동합니다! */
+                
+                .header-section {
+                    padding: 20px 10px; /* 모바일에서는 상단 여백을 줄여서 답답하지 않게 만듭니다 */
+                }
+
+                .main-logo {
+                    width: 140px;       /* 모바일 화면에 맞게 로고 크기를 살짝 줄여줍니다 */
+                }
+
+                .title-line1 {
+                    font-size: 16px;    /* 첫 번째 줄 글자 크기 축소 */
+                }
+
+                .title-line2 {
+                    font-size: 22px;    /* 책방 이름 줄 글자 크기 축소 */
+                }
+
+                .title-line3 {
+                    font-size: 18px;    /* 환영 인사 줄 글자 크기 축소 */
+                }
+
+                .content-section {
+                    padding: 30px 15px; /* 본문 여백 조정 */
+                    font-size: 16px;    /* 모바일에서 읽기 편한 글자 크기로 조절 */
+                }
+                
+                .footer-section {
+                    font-size: 12px;    /* 하단 글자 크기 미세 조정 */
+                    padding: 15px;
+                }
+            }
         </style>
 
     </head>
