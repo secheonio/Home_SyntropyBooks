@@ -1,0 +1,77 @@
+@charset "UTF-8";
+
+/* =========================================
+   1. 전체 페이지 기본 초기화 (Base Styles)
+   ========================================= */
+body { 
+    background-color: #fdf6e3; /* 따뜻한 느낌의 아이보리 배경색 */[cite: 1, 2, 3, 4]
+    font-family: 'Arial', sans-serif; /* 기본 글꼴 설정 */[cite: 1, 2, 3, 4]
+    margin: 0; 
+    padding: 0;
+    color: #333333; /* 기본 텍스트 색상 */[cite: 1, 4]
+    box-sizing: border-box;
+}
+
+/* =========================================
+   2. 공통 네비게이션 바 (Navigation Bar)
+   ========================================= */
+.nav-bar { 
+    display: flex;             /* 메뉴 버튼을 가로로 배치 */[cite: 1, 4]
+    gap: 10px;                 /* 버튼 사이의 간격 */[cite: 1, 4]
+    justify-content: center;   /* 정중앙 정렬 */[cite: 2, 3, 4]
+}
+
+/* 네비게이션 링크 버튼 스타일 */
+.nav-bar a { 
+    text-decoration: none;     /* 밑줄 제거 */[cite: 1, 2, 3, 4]
+    color: #268bd2;            /* 푸른색 글씨 */[cite: 1, 2, 3, 4]
+    font-weight: bold;         /* 글씨 굵게 */[cite: 1, 2, 3, 4]
+    padding: 6px 12px;         /* 클릭 영역을 넓히는 패딩 */
+    background: #ffffff;       /* 흰색 버튼 배경 */[cite: 1, 2, 3, 4]
+    border: 1px solid #268bd2; /* 테두리 선 */[cite: 1, 2, 3, 4]
+    border-radius: 5px;        /* 부드러운 라운딩 처리 */[cite: 1, 2, 3, 4]
+    font-size: 0.85rem; 
+    transition: all 0.3s ease; /* 호버 시 부드러운 전환 효과 */[cite: 1, 4]
+    text-align: center;
+} 
+
+/* 현재 활성화된 페이지 메뉴 버튼 */
+.nav-bar a.active {
+    background-color: #268bd2; /* 활성화 배경색 */[cite: 1, 2, 3]
+    color: #ffffff;            /* 흰색 글자 */[cite: 1, 2, 3]
+}
+
+/* 마우스 호버 효과 */
+.nav-bar a:hover { 
+    background-color: #268bd2; 
+    color: #ffffff; 
+}
+
+/* =========================================
+   3. 공통 푸터 영역 (Footer Section)
+   ========================================= */
+.footer-section { 
+    background-color: #073642; /* 어두운 톤의 딥블루 배경 */[cite: 1, 2, 3, 4]
+    color: #93a1a1;            /* 밝은 회색 글자 */[cite: 1, 2, 3, 4]
+    text-align: center;        /* 텍스트 중앙 정렬 */[cite: 1, 2, 3, 4]
+    padding: 20px;             /* 내부 여백 */[cite: 1, 2, 3, 4]
+    margin-top: 60px;          /* 본문과의 여백 차이 */[cite: 1, 2, 3, 4]
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   4. 공통 모바일 반응형 미디어 쿼리 (768px 이하)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    /* 모바일 환경에서 메뉴 버튼을 폭에 맞게 자동 조절 */
+    .nav-bar {
+        width: 100%;
+        gap: 8px;
+    }
+
+    .nav-bar a {
+        flex: 1;               /* 동일 비율로 분할 */
+        padding: 6px 4px;      /* 좁은 화면에 맞춰 패딩 축소 */[cite: 1, 4]
+        font-size: 0.8rem;
+    }
+}

@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+/* 상단 심플 헤더 레아아웃 */
+.header-section { 
+    background-color: #eee8d5; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 20px 0; 
+    border-bottom: 2px solid #586e75; 
+    gap: 15px;[cite: 2]
+}
+
+.header-logo { 
+    width: 140px; 
+    padding: 15px; 
+    background: #ffffff; 
+    border: 1px solid #586e75; 
+    border-radius: 10px;[cite: 2]
+}
+
+/* 도서 그리드 컨테이너 (자동 그리드 컬럼 설정) */
+.book-container { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 화면 너비에 맞춰 자동 카드 배치 */[cite: 2]
+    gap: 20px; 
+    padding: 40px; 
+    max-width: 1000px; 
+    margin: 0 auto;[cite: 2]
+}
+
+/* 모바일 모드 최적화 */
+@media (max-width: 768px) {
+    .book-container {
+        padding: 20px 15px;
+        grid-template-columns: 1fr; /* 모바일에서는 1열 세로 배치 */
+    }
+}
