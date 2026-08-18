@@ -8,10 +8,15 @@ Home_NetropyBooks 폴더와 같으면 관리하기 편리
 - Git 가입
 - VScode 실행
 ∙깃과 연동
-    git add .
-    git commit -m "변경내용"
-    git push origin main
+    ==> git add .
+        git commit -m "변경내용"
+        git push origin main
+    
     ==> git add . && git commit -m "도서 목록 페이지 추가" && git push origin main
+
+    ==> function push { git add . ; git commit -m $args ; git push origin main }
+        push "변경 내용" /* 평상시엔 push "", 에러나면 funtion push { } 한 번 더 실행 */
+
 
 홈페이지 작업
 - open folder 클릭 – 홈페이지 루트폴더
