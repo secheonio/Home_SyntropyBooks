@@ -32,9 +32,30 @@
                 box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 그림자가 생겨 입체감이 느껴짐 */
             }
 
+            /* h1 전체의 기본 설정을 잡아줍니다 */
             h1 {
-                color: #586e75;
-                margin-top: 30px;
+                margin-top: 20px;
+            }
+
+            /* 1번 줄: "안녕하세요?" 디자인 */
+            .title-line1 {
+                font-size: 24px;   /* 글자 크기를 조금 아담하게 */
+                color: #657b83;    /* 차분한 회색빛 */
+                margin-bottom: 10px;
+            }
+
+            /* 2번 줄: "NetropyBooks의 홈페이지에" 디자인 (책방 이름 강조!) */
+            .title-line2 {
+                font-size: 36px;   /* 글자 크기를 아주 크고 묵직하게 */
+                color: #b58900;    /* 과학 책방에 어울리는 고급스러운 골드/머스터드 컬러 */
+                font-weight: bold; /* 글자를 굵게 */
+                margin-bottom: 10px;
+            }
+
+            /* 3번 줄: "오신 것을 환영합니다." 디자인 */
+            .title-line3 {
+                font-size: 28px;   /* 중간 크기 */
+                color: #268bd2;    /* 신뢰감을 주는 시원한 푸른 계열 */
             }
         </style>
     </head>
@@ -45,7 +66,12 @@
             <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="main-logo">
         </a>
 
-        <h1>안녕하세요? NetropyBooks의 홈페이지에 오신 것을 환영합니다.</h1>
+        <h1>
+            <div class="title-line1">안녕하세요?</div>
+            <div class="title-line2">NetropyBooks의 홈페이지에</div>
+            <div class="title-line3">오신 것을 환영합니다.</div>
+        </h1>
+
         <p>VS Code와 GitHub Pages로 제작하였습니다.</p>
     </body>
 
