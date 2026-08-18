@@ -1,121 +1,355 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
+    <!-- 모바일 기기 반응형 대응을 위한 필수 뷰포트 설정 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>책방 소개 | Netropy Books</title>
-<!-- CSS 스타일시트 시작: 웹페이지의 전체적인 디자인과 레이아웃을 정의합니다 -->
     <style>
-        /* 전체 문서(body)의 기본 배경색을 따뜻한 미색 계열(#fdf6e3)로 지정하고, 기본 폰트와 여백을 초기화합니다 */
-        body { background-color: #fdf6e3; font-family: 'Arial', sans-serif; margin: 0; padding: 0; }
+        /* =========================================
+           1. 기본 설정 (Base Styles)
+        ========================================= */
+        body { 
+            background-color: #fdf6e3; 
+            font-family: 'Arial', sans-serif; 
+            margin: 0; 
+            padding: 0;
+            color: #333333;
+        }
+
+        /* =========================================
+           2. 상단 헤더 영역 (Header Section - Desktop)
+        ========================================= */
+        .header-section { 
+            display: flex; 
+            flex-direction: row; 
+            align-items: stretch; 
+            padding: 20px 40px; 
+            background-color: #eee8d5; 
+            border-bottom: 2px solid #586e75; 
+            box-sizing: border-box; 
+            gap: 20px;
+        }
         
-        /* 상단 헤더 영역: 배경색을 차분한 회색빛 톤(#eee8d5)으로 하고, 내부 요소를 세로 방향 중앙 정렬하며 하단에 경계선을 넣습니다 */
-        .header-section { background-color: #eee8d5; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-bottom: 2px solid #586e75; gap: 15px; }
+        .header-left { 
+            flex-shrink: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: #ffffff; 
+            border: 1px dashed #b58900; 
+            padding: 15px; 
+            border-radius: 10px; 
+        }
+
+        .header-logo { 
+            width: 140px; 
+            height: auto; 
+            display: block; 
+            transition: transform 0.3s, box-shadow 0.3s; 
+        }
         
-        /* 헤더 로고 이미지: 고정 너비와 흰색 배경, 테두리 및 둥근 모서리를 적용하고 마우스 호버 시 부드러운 애니메이션 효과를 줍니다 */
-        .header-logo { width: 80px; padding: 15px; background: #ffffff; border: 1px solid #586e75; border-radius: 10px; transition: 0.3s; }
+        .header-logo:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
         
-        /* 로고 마우스 호버 효과: 마우스를 올렸을 때 살짝 커지며(scale) 은은한 그림자 효과를 더해 입체감을 줍니다 */
-        .header-logo:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .header-right { 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            border: 1px dashed #268bd2; 
+            border-radius: 10px; 
+            background: rgba(255,255,255,0.5); 
+            overflow: hidden; 
+        }
         
-        /* 네비게이션 바(메뉴): 링크 요소들을 가로로 배치하고 간격을 주며 중앙에 정렬합니다 */
-        .nav-bar { display: flex; gap: 15px; justify-content: center; }
+        .header-top-row { 
+            flex: 2; 
+            min-height: 0; 
+            position: relative; 
+            border-bottom: 1px dotted #839496; 
+        }
         
-        /* 네비게이션 링크 버튼: 밑줄을 없애고 파란색 톤의 깔끔한 박스 형태로 만들어 가독성과 클릭 편의성을 높입니다 */
-        .nav-bar a { text-decoration: none; color: #268bd2; font-weight: bold; padding: 8px 16px; background: #ffffff; border: 1px solid #268bd2; border-radius: 5px; transition: 0.3s; }
+        .main-header-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            object-position: center center; 
+            display: block; 
+        }
         
-        /* 네비게이션 링크 호버 효과: 마우스를 올리면 배경과 글자 색상이 반전되어 시각적 피드백을 제공합니다 */
-        .nav-bar a:hover { background-color: #268bd2; color: #ffffff; }
+        .header-bottom-row { 
+            flex: 1; 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center; 
+            padding: 0 15px; 
+        }
+
+        /* 네비게이션 바 */
+        .nav-bar { 
+            display: flex; 
+            gap: 10px; 
+        }
         
-        /* 본문 컨테이너(메인 콘텐츠 영역): 최대 너비를 제한하고 화면 중앙에 배치하며, 흰색 배경과 둥근 모서리, 부드러운 그림자를 주어 가독성을 극대화합니다 */
-        .about-container { max-width: 800px; margin: 40px auto; padding: 40px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); line-height: 1.8; }
+        .nav-bar a { 
+            text-decoration: none; 
+            color: #268bd2; 
+            font-weight: bold; 
+            padding: 6px 12px; 
+            background: #ffffff; 
+            border: 1px solid #268bd2; 
+            border-radius: 5px; 
+            font-size: 0.9rem; 
+            transition: 0.3s; 
+            text-align: center;
+        } 
         
-        /* 하단 푸터 영역: 어두운 청록색 계열(#073642) 배경에 차분한 회색 글씨를 사용하여 페이지의 안정적인 마무리를 돕습니다 */
-        .footer-section { background-color: #073642; color: #93a1a1; text-align: center; padding: 20px; margin-top: 60px; }
+        .nav-bar a.active {
+            background-color: #268bd2; 
+            color: #ffffff;
+        }
+
+        .nav-bar a:hover { 
+            background-color: #268bd2; 
+            color: #ffffff; 
+        }
+        
+        /* =========================================
+           3. 메인 콘텐츠 영역 (Main Content)
+        ========================================= */
+        .about-container { 
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 40px; 
+            background: #ffffff; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+            line-height: 1.8; 
+            box-sizing: border-box;
+        }
+
+        .subtitle {
+            color: #859900;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .main-title {
+            color: #073642;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .section-title {
+            color: #268bd2;
+            border-bottom: 2px solid #eee8d5;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        .description {
+            font-size: 1.05rem;
+            color: #586e75;
+        }
+
+        .value-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .value-item {
+            background-color: #fdf6e3;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #2aa198;
+        }
+
+        .value-item h3 {
+            margin: 0 0 10px 0;
+            color: #073642;
+        }
+
+        .value-item p {
+            margin: 0;
+            color: #586e75;
+        }
+
+        .closing-text {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #b58900;
+            margin-top: 50px;
+        }
+        
+        /* =========================================
+           4. 하단 푸터 영역 (Footer Section)
+        ========================================= */
+        .footer-section { 
+            background-color: #073642; 
+            color: #93a1a1; 
+            text-align: center; 
+            padding: 20px; 
+            margin-top: 60px; 
+        }
+
+        /* =========================================
+           5. 반응형 미디어 쿼리 (Mobile Style)
+           - 화면 너비가 768px 이하일 때 동작합니다.
+        ========================================= */
+        @media (max-width: 768px) {
+            /* 헤더 재배치: 가로 분할에서 세로 쌓임 구조로 변경 */
+            .header-section {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+
+            .header-left {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .header-logo {
+                width: 120px; /* 모바일용 로고 크기 축소 */
+            }
+
+            .header-right {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            /* 메인 이미지 영역의 모바일 고정 높이 확보 */
+            .header-top-row {
+                height: 140px; 
+            }
+
+            .header-bottom-row {
+                padding: 12px;
+                justify-content: center; /* 메뉴 중앙 정렬 */
+            }
+
+            /* 네비게이션 버튼을 균등하게 가로 배열 및 가독성 확보 */
+            .nav-bar {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .nav-bar a {
+                flex: 1;
+                padding: 8px 4px;
+                font-size: 0.85rem;
+            }
+
+            /* 본문 여백 및 글자 크기 조정 */
+            .about-container {
+                width: 92%;
+                margin: 20px auto;
+                padding: 25px 20px;
+            }
+
+            .main-title {
+                font-size: 1.4rem; /* 타일틀 폰트 감소로 텍스트 잘림 방지 */
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+            }
+
+            .closing-text {
+                font-size: 1.05rem;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <header class="header-section" style="display: flex; flex-direction: row; justify-content: space-between; align-items: stretch; padding: 20px 40px; background-color: #eee8d5; border-bottom: 2px solid #586e75; min-height: 180px; box-sizing: border-box;">
+    <header class="header-section">
         <!-- [왼쪽 칸] 로고 영역 -->
-        <div class="header-left" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #ffffff; border: 1px dashed #b58900; padding: 15px; border-radius: 10px;">
-            <a href="index.html" style="display: flex; align-items: center; justify-content: center;">
-                <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo" style="width: 140px; height: auto; display: block;">
+        <div class="header-left">
+            <a href="index.html">
+                <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo">
             </a>
         </div>
         
         <!-- [오른쪽 칸] 2줄 레이아웃 영역 -->
-        <div class="header-right" style="flex-grow: 1; display: flex; flex-direction: column; margin-left: 20px; border: 1px dashed #268bd2; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.5);">
-            <!-- 윗줄 (2/3 비율): 이미지 크기와 무관하게 영역 높이에 100% 맞춤 -->
-            <div class="header-top-row" style="flex: 2; display: flex; justify-content: flex-end; align-items: center; overflow: hidden; border-bottom: 1px dotted #839496; padding-bottom: 8px; margin-bottom: 8px;">
-                <img src="images/main-image.png" alt="Netropy Books 메인 이미지" class="main-header-img" style="width: auto; height: 100%; object-fit: cover; object-position: center; border-radius: 6px;">
+        <div class="header-right">
+            <!-- 윗줄 (메인 이미지) -->
+            <div class="header-top-row">
+                <img src="images/main-image.png" alt="Netropy Books 메인 이미지" class="main-header-img">
             </div>
             
-            <!-- 아랫줄 (1/3 비율): 네비게이션 메뉴 -->
-            <div class="header-bottom-row" style="flex: 1; display: flex; justify-content: flex-end; align-items: center;">
-                <nav class="nav-bar" style="display: flex; gap: 10px;">
-                    <a href="about.html" style="text-decoration: none; background-color: #268bd2; color: #ffffff; font-weight: bold; padding: 6px 12px; border-radius: 5px; font-size: 0.9rem;">책방 소개</a>
-                    <a href="books.html" style="text-decoration: none; color: #268bd2; font-weight: bold; padding: 6px 12px; background: #ffffff; border: 1px solid #268bd2; border-radius: 5px; font-size: 0.9rem;">도서 목록</a>
-                    <a href="contact.html" style="text-decoration: none; color: #268bd2; font-weight: bold; padding: 6px 12px; background: #ffffff; border: 1px solid #268bd2; border-radius: 5px; font-size: 0.9rem;">오시는 길</a>
+            <!-- 아랫줄: 네비게이션 메뉴 -->
+            <div class="header-bottom-row">
+                <nav class="nav-bar">
+                    <a href="about.html" class="active">책방 소개</a>
+                    <a href="books.html">도서 목록</a>
+                    <a href="contact.html">오시는 길</a>
                 </nav>
             </div>            
         </div>
     </header>
 
     <main class="about-container">
-    <!-- 1. 서점 헤더 섹션 (상단 메인 카피) -->
-    <header class="about-header">
-        <p class="subtitle">SYNTROPY BOOKS</p>
-        <h1 class="main-title">무질서한 정보의 바다에서,<br>삶의 질서를 찾아가는 공간</h1>
-    </header>
+        <!-- 1. 서점 헤더 섹션 (상단 메인 카피) -->
+        <header class="about-header">
+            <p class="subtitle">NETROPY BOOKS</p>
+            <h1 class="main-title">무질서한 정보의 바다에서,<br>삶의 질서를 찾아가는 공간</h1>
+        </header>
 
-    <!-- 2. 철학 및 메인 소개글 섹션 -->
-    <section class="about-philosophy">
-        <h2 class="section-title">우리의 철학 (Philosophy)</h2>
-        <p class="description">
-        우리가 살아가는 세상은 수많은 정보와 소음으로 가득 차 있습니다. 
-        엔트로피(Entropy)가 증가하며 무질서로 향하는 세상 속에서, 우리는 때때로 방향을 잃고 혼란을 느낍니다.
-        </p>
-        <p class="description">
-        <strong>SYNTROPY BOOKS</strong>는 이러한 엔트로피의 반대편에 서 있습니다. 
-        <strong>신트로피(Syntropy)</strong>는 무질서에서 질서를 만들어내고, 흩어진 것들을 하나로 연결하여 아름다운 체계를 구축하는 자연의 위대한 원리입니다.
-        </p>
-        <p class="description">
-        책은 단순한 종이의 집합이 아닙니다. 인류가 수 세기에 걸쳐 흩어진 생각과 경험, 지식을 정돈하여 만들어낸 가장 완벽한 '신트로피적 구조물'입니다.
-        </p>
-    </section>
+        <!-- 2. 철학 및 메인 소개글 섹션 -->
+        <section class="about-philosophy">
+            <h2 class="section-title">우리의 철학 (Philosophy)</h2>
+            <p class="description">
+            우리가 살아가는 세상은 수많은 정보와 소음으로 가득 차 있습니다. 
+            엔트로피(Entropy)가 증가하며 무질서로 향하는 세상 속에서, 우리는 때때로 방향을 잃고 혼란을 느낍니다.
+            </p>
+            <p class="description">
+            <strong>NETROPY BOOKS</strong>는 이러한 엔트로피의 반대편에 서 있습니다. 
+            <strong>네트로피(Netropy)</strong>는 무질서에서 질서를 만들어내고, 흩어진 것들을 하나로 연결하여 아름다운 체계를 구축하는 자연의 위대한 원리입니다.
+            </p>
+            <p class="description">
+            책은 단순한 종이의 집합이 아닙니다. 인류가 수 세기에 걸쳐 흩어진 생각과 경험, 지식을 정돈하여 만들어낸 가장 완벽한 '네트로피적 구조물'입니다.
+            </p>
+        </section>
 
-    <!-- 3. 서점의 핵심 가치 리스트 섹션 -->
-    <section class="about-values">
-        <h2 class="section-title">3가지 핵심 가치</h2>
-        <ul class="value-list">
-        <li class="value-item">
-            <h3>지식의 정렬 (Ordered Knowledge)</h3>
-            <p>흩어진 정보 조각들을 선별하고 정돈하여, 당신의 삶에 명확한 통찰을 전하는 도서를 큐레이션합니다.</p>
-        </li>
-        <li class="value-item">
-            <h3>성장의 순환 (Continuous Growth)</h3>
-            <p>자연의 완벽한 비율인 피보나치 곡선처럼, 한 권의 책에서 시작된 배움이 삶 전체로 부드럽게 확장되는 선순환을 지향합니다.</p>
-        </li>
-        <li class="value-item">
-            <h3>지성인들의 연대 (Connected Mind)</h3>
-            <p>무질서한 세상 속에서 자신만의 중심을 잡고자 하는 독자들이 모여 깊이 있는 담론을 나누는 지적 안식처가 되어드립니다.</p>
-        </li>
-        </ul>
-    </section>
+        <!-- 3. 서점의 핵심 가치 리스트 섹션 -->
+        <section class="about-values">
+            <h2 class="section-title">3가지 핵심 가치</h2>
+            <ul class="value-list">
+                <li class="value-item">
+                    <h3>지식의 정렬 (Ordered Knowledge)</h3>
+                    <p>흩어진 정보 조각들을 선별하고 정돈하여, 당신의 삶에 명확한 통찰을 전하는 도서를 큐레이션합니다.</p>
+                </li>
+                <li class="value-item">
+                    <h3>성장의 순환 (Continuous Growth)</h3>
+                    <p>자연의 완벽한 비율인 피보나치 곡선처럼, 한 권의 책에서 시작된 배움이 삶 전체로 부드럽게 확장되는 선순환을 지향합니다.</p>
+                </li>
+                <li class="value-item">
+                    <h3>지성인들의 연대 (Connected Mind)</h3>
+                    <p>무질서한 세상 속에서 자신만의 중심을 잡고자 하는 독자들이 모여 깊이 있는 담론을 나누는 지적 안식처가 되어드립니다.</p>
+                </li>
+            </ul>
+        </section>
 
-    <!-- 4. 하단 맺음말 카피 섹션 -->
-    <section class="about-closing">
-        <p class="closing-text">
-        복잡한 세상의 소음에서 벗어나, 당신의 삶과 사유에 완벽한 질서를 선사할 단 한 권의 책을 
-        <strong>SYNTROPY BOOKS</strong>에서 만나보세요.
-        </p>
-    </section>
+        <!-- 4. 하단 맺음말 카피 섹션 -->
+        <section class="about-closing">
+            <p class="closing-text">
+            복잡한 세상의 소음에서 벗어나, 당신의 삶과 사유에 완벽한 질서를 선사할 단 한 권의 책을 
+            <strong>NETROPY BOOKS</strong>에서 만나보세요.
+            </p>
+        </section>
     </main>
 
     <footer class="footer-section">
-        <p>&copy; 2026 Syntropy Books. All rights reserved.</p>
+        <p>&copy; 2026 Netropy Books. All rights reserved.</p>
     </footer>
 
 </body>
