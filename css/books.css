@@ -8,25 +8,26 @@
     align-items: center; 
     padding: 20px 0; 
     border-bottom: 2px solid #586e75; 
-    gap: 15px;[cite: 2]
+    gap: 15px;
 }
 
 .header-logo { 
     width: 140px; 
     padding: 15px; 
     background: #ffffff; 
+    /* background-color: #073642; /* #ffffff(흰색) 대신 어두운 배경 적용 */
     border: 1px solid #586e75; 
-    border-radius: 10px;[cite: 2]
+    border-radius: 10px;
 }
 
 /* 도서 그리드 컨테이너 (자동 그리드 컬럼 설정) */
 .book-container { 
     display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 화면 너비에 맞춰 자동 카드 배치 */[cite: 2]
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 화면 너비에 맞춰 자동 카드 배치 */
     gap: 20px; 
     padding: 40px; 
     max-width: 1000px; 
-    margin: 0 auto;[cite: 2]
+    margin: 0 auto;
 }
 
 /* 모바일 모드 최적화 */

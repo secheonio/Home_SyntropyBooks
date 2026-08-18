@@ -7,15 +7,16 @@
     align-items: center; 
     padding: 20px 0; 
     border-bottom: 2px solid #586e75; 
-    gap: 15px;[cite: 3]
+    gap: 15px;
 }
 
 .header-logo { 
     width: 140px; 
     padding: 15px; 
     background: #ffffff; 
+    /* background-color: #073642; /* #ffffff(흰색) 대신 어두운 배경 적용 */
     border: 1px solid #586e75; 
-    border-radius: 10px;[cite: 3]
+    border-radius: 10px;
 }
 
 /* 오시는 길 중앙 카드 */
@@ -25,7 +26,7 @@
     padding: 40px; 
     background: #ffffff; 
     border-radius: 12px;
-    text-align: center;[cite: 3]
+    text-align: center;
 }
 
 @media (max-width: 768px) {
