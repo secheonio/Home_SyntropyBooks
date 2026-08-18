@@ -55,8 +55,12 @@
     /* 핵심 포인트 2: 이미지 컨테이너 역시 최소 높이 제한을 해제합니다 */
     min-height: 0; 
     /* ------------------------------------------------------------- */
+    display: flex;             /* 1. 텍스트 배치를 위해 Flexbox 선언 */
+    align-items: center;       /* 2. 세로(위아래) 여백의 중앙을 맞춥니다. */
+    justify-content: center;   /* 3. 가로(좌우) 여백의 중앙을 맞춥니다. */
     position: relative; 
     border-bottom: 1px dotted #839496; 
+    background-color: #fdf6e3; /* 빈 공간이 허전하지 않도록 따뜻한 배경색 추가 */
     overflow: hidden;
 }
 
@@ -70,6 +74,17 @@
     object-fit: cover; /* 비율을 유지하면서, 남거나 넘치는 부분을 예쁘게 잘라냅니다 */
     /* ------------------------------------------------------------- */
     display: block;
+}
+
+/* ========================================
+   메인 타이틀 텍스트 스타일
+   ======================================== */
+.main-header-text {
+    /* 데스크톱 로고 높이(120px)의 2/3 크기인 80px로 설정합니다. */
+    font-size: 80px;
+    font-weight: bold;
+    color: #073642; /* 브랜드 특유의 어두운 청록색 통일 */
+    letter-spacing: 2px; /* 글자 간격을 살짝 넓혀 여유롭고 고급스러운 느낌 강조 */
 }
 
 /* 좌측 로고 박스 (어두운 배경 적용으로 흰색 로고 가독성 확보) */
@@ -133,4 +148,9 @@
     .header-bottom-row { padding: 10px; justify-content: center; }
     .about-container { width: 92%; margin: 20px auto; padding: 25px 20px; }
     .main-title { font-size: 1.4rem; }
+    .main-header-text {
+        /* 모바일 환경에서는 로고 높이가 80px로 줄어들기 때문에,
+           그의 2/3 크기인 약 53px로 폰트 크기를 자동 축소합니다. */
+        font-size: 53px;
+    }
 }
