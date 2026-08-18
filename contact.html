@@ -5,38 +5,36 @@
     <title>오시는 길 | Netropy Books</title>
     <style>
         /* ========================================== */
-        /* 1. 전체 페이지 기본 스타일 설정               */
+        /* 1. 전체 페이지 기본 스타일 설정             */
         /* ========================================== */
         body {
             background-color: #fdf6e3; /* 따뜻한 책방 분위기의 아이보리 배경 */
-            display: flex;          /* 가로 배치를 위한 핵심 */
-            justify-content: space-between; /* 로고는 왼쪽 끝, 메뉴는 오른쪽 끝으로 */
-            align-items: center;    /* 세로 기준 가운데 정렬 */
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             color: #333333;
         }
 
+        /* ========================================== */
+        /* 2. 상단 헤더 및 내비게이션 메뉴 바 스타일      */
+        /* ========================================== */
+        .header-section {
+            background-color: #eee8d5;
+            display: flex;             /* 가로 배치를 위한 핵심 */
+            justify-content: space-between; /* 로고는 왼쪽 끝, 메뉴는 오른쪽 끝으로 */
+            align-items: center;    /* 세로 기준 가운데 정렬 */
+            padding: 20px 40px;
+            border-bottom: 2px solid #586e75;
+        }
+
         /* 로고 크기 조정 */
         .header-logo {
             width: 120px; /* 로고를 적당한 크기로 줄임 */
             height: auto;
+            transition: transform 0.3s ease;
         }
-
-        /* ========================================== */
-        /* 2. 상단 헤더 및 내비게이션 메뉴 바 스타일       */
-        /* ========================================== */
-        .header-section {
-            background-color: #eee8d5;
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 2px solid #586e75;
-        }
-
-        .header-section h2 {
-            margin: 0 0 15px 0;
-            color: #586e75;
+        .header-logo:hover {
+            transform: scale(1.05);
         }
 
         .nav-bar {
@@ -50,7 +48,7 @@
             color: #268bd2;
             font-weight: bold;
             font-size: 15px;
-            padding: 6px 14px;
+            padding: 8px 16px;
             background-color: #ffffff;
             border: 1px solid #268bd2;
             border-radius: 5px;
@@ -97,25 +95,7 @@
         }
 
         /* ========================================== */
-        /* 4. 구글 지도 반응형 감싸개 박스 (✨ 중요!)     */
-        /* ========================================== */
-        .map-wrapper {
-            width: 100%;
-            height: 400px; /* 지도의 높이 설정 */
-            border-radius: 8px;
-            overflow: hidden; /* 모서리가 둥글 때 밖으로 튀어나오는 지도 자르기 */
-            border: 1px solid #ddd;
-        }
-
-        /* 구글 지도 iframe 태그 자체를 박스 크기에 꽉 차게 조절 */
-        .map-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: 0; /* 기본 테두리 제거 */
-        }
-
-        /* ========================================== */
-        /* 5. 하단(Footer) 영역 스타일                 */
+        /* 4. 하단(Footer) 영역 스타일                */
         /* ========================================== */
         .footer-section {
             background-color: #073642;
@@ -127,22 +107,18 @@
         }
 
         /* ========================================== */
-        /* 6. 모바일 반응형 디자인 (화면이 좁아질 때)   */
+        /* 5. 모바일 반응형 디자인 (화면이 좁아질 때)   */
         /* ========================================== */
         @media screen and (max-width: 768px) {
             .contact-container {
                 margin: 20px 15px;
                 padding: 20px;
             }
-            .map-wrapper {
-                height: 300px; /* 스마트폰 화면에서는 지도를 살짝 낮게 조절 */
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- 상단 헤더 구역: 메뉴 바 포함 -->
     <!-- 상단 헤더 구역 -->
     <header class="header-section">
         <!-- 로고 영역: 왼쪽 끝으로 배치 -->
@@ -150,12 +126,11 @@
             <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo">
         </a>
 
-        <!-- 내비게이션 메뉴 영역 -->
+        <!-- 내비게이션 메뉴: 현재 페이지인 '오시는 길'에 파란색 강조 표시 -->
         <nav class="nav-bar">
-            <!-- 홈 버튼은 삭제하고, 필요한 메뉴만 배치 -->
             <a href="about.html">책방 소개</a>
             <a href="books.html">도서 목록</a>
-            <a href="contact.html">오시는 길</a>
+            <a href="contact.html" style="background-color: #268bd2; color: #ffffff;">오시는 길</a>
         </nav>
     </header>
 
@@ -171,17 +146,17 @@
             <p><strong>🚇 대중교통:</strong> 과학역 3번 출구에서 도보 5분 거리</p>
         </div>
 
-        <!-- 카카오 지도 길찾기 버튼 시작 -->
-        <img src="images/map-preview.png" alt="Netropy Books 위치 지도" style="width: 100%; max-width: 500px; border-radius: 10px;">
+        <!-- 카카오 지도 길찾기 미리보기 이미지 -->
+        <img src="images/map-preview.png" alt="Netropy Books 위치 지도" style="width: 100%; max-width: 500px; border-radius: 10px; margin-bottom: 20px;">
 
-        <div class="map-nav-container" style="text-align: center; margin: 20px 0;">
+        <!-- 카카오 지도 길찾기 버튼 -->
+        <div class="map-nav-container">
             <a href="https://kko.to/f-qqm1hM58" 
-            target="_blank" 
-            style="display: inline-block; padding: 12px 24px; background-color: #fee500; color: #3c1e1e; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            🚗 카카오 지도로 길 찾기
+               target="_blank" 
+               style="display: inline-block; padding: 12px 24px; background-color: #fee500; color: #3c1e1e; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
+               🚗 카카오 지도로 길 찾기
             </a>
         </div>
-        <!-- 카카오 지도 길찾기 버튼 끝 -->
     </main>
 
     <!-- 하단 구역 -->
