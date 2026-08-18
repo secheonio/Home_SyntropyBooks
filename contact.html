@@ -9,10 +9,19 @@
         /* ========================================== */
         body {
             background-color: #fdf6e3; /* 따뜻한 책방 분위기의 아이보리 배경 */
+            display: flex;          /* 가로 배치를 위한 핵심 */
+            justify-content: space-between; /* 로고는 왼쪽 끝, 메뉴는 오른쪽 끝으로 */
+            align-items: center;    /* 세로 기준 가운데 정렬 */
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             color: #333333;
+        }
+
+        /* 로고 크기 조정 */
+        .header-logo {
+            width: 120px; /* 로고를 적당한 크기로 줄임 */
+            height: auto;
         }
 
         /* ========================================== */
@@ -134,10 +143,16 @@
 <body>
 
     <!-- 상단 헤더 구역: 메뉴 바 포함 -->
+    <!-- 상단 헤더 구역 -->
     <header class="header-section">
-        <h2>Netropy Books</h2>
+        <!-- 로고 영역: 왼쪽 끝으로 배치 -->
+        <a href="index.html" class="logo-link">
+            <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo">
+        </a>
+
+        <!-- 내비게이션 메뉴 영역 -->
         <nav class="nav-bar">
-            <a href="index.html">홈</a>
+            <!-- 홈 버튼은 삭제하고, 필요한 메뉴만 배치 -->
             <a href="about.html">책방 소개</a>
             <a href="books.html">도서 목록</a>
             <a href="contact.html">오시는 길</a>
