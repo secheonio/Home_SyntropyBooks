@@ -1,6 +1,15 @@
 @charset "UTF-8";
 
 /* ========================================
+   전역 변수 설정 (값을 한 곳에서 쉽게 관리하기 위함)
+   ======================================== */
+:root {
+    --logo-height-desktop: 120px; /* 데스크톱 로고 높이 */
+    --logo-height-mobile: 80px;   /* 모바일 로고 높이 */
+    --title-ratio: 0.4;           /* 폰트 크기 조절 배율 (언제든 이 숫자만 바꾸면 됩니다!) */
+}
+
+/* ========================================
    헤더 영역 레이아웃 설정 
    ======================================== */
 .header-section { 
@@ -19,7 +28,7 @@
    ======================================== */
 .header-logo {
     /* background-color: #073642; /* #ffffff(흰색) 대신 어두운 배경 적용 */ 
-    height: 120px; /* 로고의 높이가 전체 헤더 높이의 기준점이 됨 */
+    height: var(--logo-height-desktop); /* 로고의 높이가 전체 헤더 높이의 기준점이 됨, 120% 대신 변수 사용 */
     width: auto; 
     display: block; 
     transition: transform 0.3s, box-shadow 0.3s;
@@ -80,8 +89,8 @@
    메인 타이틀 텍스트 스타일
    ======================================== */
 .main-header-text {
-    /* 데스크톱 로고 높이(120px)의 2/3 크기인 80px로 설정합니다. */
-    font-size: 80px;
+    /* 데스크톱 로고 높이(120px)의 2/3 크기인 80px의 80%인 로 설정합니다. */
+    font-size: calc(var(--logo-height-desktop) * (2/3) * var(--title-ratio));
     font-weight: bold;
     color: #073642; /* 브랜드 특유의 어두운 청록색 통일 */
     letter-spacing: 2px; /* 글자 간격을 살짝 넓혀 여유롭고 고급스러운 느낌 강조 */
@@ -142,7 +151,7 @@
 @media (max-width: 768px) {
     .header-section { flex-direction: column; padding: 10px 20px; gap: 15px; }
     .header-left { width: 100%; padding: 10px 0; }
-    .header-logo { height: 80px; } /* 모바일에서는 기준 로고 높이 축소 */
+    .header-logo { height: var(--logo-height-mobile); } /* 모바일에서는 기준 로고 높이 80px 적용 */
     .header-right { width: 100%; }
     .header-top-row { height: 120px; }
     .header-bottom-row { padding: 10px; justify-content: center; }
@@ -151,6 +160,6 @@
     .main-header-text {
         /* 모바일 환경에서는 로고 높이가 80px로 줄어들기 때문에,
            그의 2/3 크기인 약 53px로 폰트 크기를 자동 축소합니다. */
-        font-size: 53px;
+        font-size: calc(var(--logo-height-mobile) * (2/3) * var(--title-ratio));
     }
 }
