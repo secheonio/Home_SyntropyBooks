@@ -8,71 +8,100 @@
                 background-color: #fdf6e3;
                 font-family: 'Arial', sans-serif;
                 text-align: center;
-                padding-top: 50px;
+                margin: 0;
+                padding: 0;
             }
 
-            /* 로고 이미지 스타일링 */
+            /* 1. 상단 구역 디자인 */
+            .header-section {
+                background-color: #eee8d5; /* 본문과 구분되는 연한 배경색 */
+                padding: 40px 20px;
+                border-bottom: 2px solid #586e75; /* 아래쪽 경계선 */
+            }
+
             .main-logo {
-                width: 180px;            /* 로고 크기: 여기서 숫자를 조절해 보세요! */
+                width: 180px;
                 height: auto;
-                
-                /* 로고 주변 꾸미기 */
-                padding: 15px;           /* 로고와 테두리 사이 간격 */
-                border: 1px solid #586e75; /* 얇고 깔끔한 테두리 */
-                border-radius: 10px;     /* 모서리를 살짝 둥글게 */
-                background-color: #ffffff; /* 테두리 안쪽을 하얗게 하여 로고가 더 선명하게 보이게 함 */
-                
-                /* 애니메이션 효과 */
+                padding: 15px;
+                border: 1px solid #586e75;
+                border-radius: 10px;
+                background-color: #ffffff;
+                margin-bottom: 20px;
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
             }
 
-            /* 마우스를 올렸을 때의 효과 */
             .main-logo:hover {
-                transform: scale(1.05);   /* 로고가 살짝 커짐 */
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 그림자가 생겨 입체감이 느껴짐 */
+                transform: scale(1.25);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             }
 
-            /* h1 전체의 기본 설정을 잡아줍니다 */
             h1 {
-                margin-top: 20px;
+                margin-top: 10px;
             }
 
-            /* 1번 줄: "안녕하세요?" 디자인 */
             .title-line1 {
-                font-size: 24px;   /* 글자 크기를 조금 아담하게 */
-                color: #657b83;    /* 차분한 회색빛 */
-                margin-bottom: 10px;
+                font-size: 20px;
+                color: #657b83;
+                margin-bottom: 5px;
             }
 
-            /* 2번 줄: "NetropyBooks의 홈페이지에" 디자인 (책방 이름 강조!) */
             .title-line2 {
-                font-size: 36px;   /* 글자 크기를 아주 크고 묵직하게 */
-                color: #b58900;    /* 과학 책방에 어울리는 고급스러운 골드/머스터드 컬러 */
-                font-weight: bold; /* 글자를 굵게 */
-                margin-bottom: 10px;
+                font-size: 30px;
+                color: #b58900;
+                font-weight: bold;
+                margin-bottom: 5px;
             }
 
-            /* 3번 줄: "오신 것을 환영합니다." 디자인 */
             .title-line3 {
-                font-size: 28px;   /* 중간 크기 */
-                color: #268bd2;    /* 신뢰감을 주는 시원한 푸른 계열 */
+                font-size: 24px;
+                color: #268bd2;
+            }
+
+            /* 2. 본문 구역 디자인 */
+            .content-section {
+                padding: 50px 20px;
+                font-size: 18px;
+                color: #333333;
+                line-height: 1.6;
+            }
+
+            /* 3. 하단 구역 디자인 */
+            .footer-section {
+                background-color: #073642; /* 차분한 어두운 색상 */
+                color: #93a1a1;            /* 밝은 회색빛 글씨 */
+                padding: 20px;
+                font-size: 14px;
+                position: fixed;           /* 화면 맨 아래에 고정하고 싶을 때 사용 */
+                bottom: 0;
+                width: 100%;
             }
         </style>
+
     </head>
     
     <body>
-        <!-- 링크를 통해 index.html로 돌아가게 설정 -->
-        <a href="index.html">
-            <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="main-logo">
-        </a>
+        <!-- 1. 상단 구역 (Header): 로고나 메뉴가 들어가는 자리 -->
+        <header class="header-section">
+            <a href="index.html">
+                <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="main-logo">
+            </a>
+            <h1>
+                <div class="title-line1">안녕하세요?</div>
+                <div class="title-line2">NetropyBooks의 홈페이지에</div>
+                <div class="title-line3">오신 것을 환영합니다.</div>
+            </h1>
+        </header>
 
-        <h1>
-            <div class="title-line1">안녕하세요?</div>
-            <div class="title-line2">NetropyBooks</div>
-            <div class="title-line3">홈페이지에 오신 것을 환영합니다.</div>
-        </h1>
+        <!-- 2. 본문 구역 (Main Content): 책 소개나 핵심 내용이 들어갈 자리 -->
+        <main class="content-section">
+            <p>VS Code와 GitHub Pages로 제작한 과학 책방입니다.</p>
+            <p>질서와 안정을 찾아가는 다양한 도서들을 만나보세요.</p>
+        </main>
 
-        <p>VS Code와 GitHub Pages로 제작하였습니다.</p>
+        <!-- 3. 하단 구역 (Footer): 저작권이나 연락처가 들어갈 자리 -->
+        <footer class="footer-section">
+            <p>&copy; 2026 Netropy Books. All rights reserved.</p>
+        </footer>
     </body>
 
 </html>
