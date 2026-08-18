@@ -2,26 +2,46 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <!-- 모바일 미디어 쿼리 정상 작동을 위한 필수 태그 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>도서 목록 | Syntropy Books</title>
+    <title>도서 목록 | Netropy Books</title>
 
-    <!-- 공통 및 전용 CSS 불러오기 -->
+    <!-- 공통 CSS 연결 (헤더 스타일이 이 안에 모두 들어있습니다) -->
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/books.css">
 </head>
 <body>
-
-    <!-- 헤더 영역 -->
+    <!-- 통일된 헤더 구조 -->
     <header class="header-section">
-        <a href="index.html">
-            <img src="images/SB_logo_White.png" alt="Syntropy Books 로고" class="header-logo">
-        </a>
-        <nav class="nav-bar">
-            <a href="about.html">책방 소개</a>
-            <a href="books.html" class="active">도서 목록</a>
-            <a href="contact.html">오시는 길</a>
-        </nav>
+        <!-- 1. 좌측 로고 영역 -->
+        <div class="header-left">
+            <a href="index.html">
+                <img src="images/SB_logo_White.png" alt="Syntropy Books 로고" class="header-logo">
+            </a>
+        </div>
+        
+        <!-- 2. 우측 분할 영역 (타이틀 + 메뉴) -->
+        <div class="header-right">
+            <!-- 상단: 메인 텍스트 -->
+            <div class="header-top-row">
+                <div class="main-header-text">Syntropy Books</div>
+            </div>
+
+            <!-- 하단: 개념 소개 + 메뉴 -->
+            <div class="header-bottom-row">                
+                <div class="header-intro-text">
+                    <span>Syntropy : 무질서 속에서 새로운 질서와 생명력을 만들어내는 힘</span>
+                </div>
+                
+                <div class="header-nav-wrap">
+                    <nav class="nav-bar">
+                        <!-- 페이지별로 active 클래스 위치만 변경 -->
+                        <a href="about.html">책방 소개</a>
+                        <a href="books.html" class="active">도서 목록</a>
+                        <a href="contact.html">오시는 길</a>
+                    </nav>
+                </div>
+            </div>          
+        </div>
     </header>
 
     <!-- 도서 목록 반응형 그리드 본문 -->
@@ -32,7 +52,7 @@
 
     <!-- 공통 푸터 -->
     <footer class="footer-section">
-        <p>&copy; 2026 Syntropy Books. All rights reserved.</p>
+        <p>&copy; 2026 Netropy Books. All rights reserved.</p>
     </footer>
 
 </body>
