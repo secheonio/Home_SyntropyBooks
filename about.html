@@ -1,20 +1,40 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <title>책방 소개 | Netropy Books</title>
+<!-- CSS 스타일시트 시작: 웹페이지의 전체적인 디자인과 레이아웃을 정의합니다 -->
     <style>
+        /* 전체 문서(body)의 기본 배경색을 따뜻한 미색 계열(#fdf6e3)로 지정하고, 기본 폰트와 여백을 초기화합니다 */
         body { background-color: #fdf6e3; font-family: 'Arial', sans-serif; margin: 0; padding: 0; }
+        
+        /* 상단 헤더 영역: 배경색을 차분한 회색빛 톤(#eee8d5)으로 하고, 내부 요소를 세로 방향 중앙 정렬하며 하단에 경계선을 넣습니다 */
         .header-section { background-color: #eee8d5; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-bottom: 2px solid #586e75; gap: 15px; }
+        
+        /* 헤더 로고 이미지: 고정 너비와 흰색 배경, 테두리 및 둥근 모서리를 적용하고 마우스 호버 시 부드러운 애니메이션 효과를 줍니다 */
         .header-logo { width: 140px; padding: 15px; background: #ffffff; border: 1px solid #586e75; border-radius: 10px; transition: 0.3s; }
+        
+        /* 로고 마우스 호버 효과: 마우스를 올렸을 때 살짝 커지며(scale) 은은한 그림자 효과를 더해 입체감을 줍니다 */
         .header-logo:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        
+        /* 네비게이션 바(메뉴): 링크 요소들을 가로로 배치하고 간격을 주며 중앙에 정렬합니다 */
         .nav-bar { display: flex; gap: 15px; justify-content: center; }
+        
+        /* 네비게이션 링크 버튼: 밑줄을 없애고 파란색 톤의 깔끔한 박스 형태로 만들어 가독성과 클릭 편의성을 높입니다 */
         .nav-bar a { text-decoration: none; color: #268bd2; font-weight: bold; padding: 8px 16px; background: #ffffff; border: 1px solid #268bd2; border-radius: 5px; transition: 0.3s; }
+        
+        /* 네비게이션 링크 호버 효과: 마우스를 올리면 배경과 글자 색상이 반전되어 시각적 피드백을 제공합니다 */
         .nav-bar a:hover { background-color: #268bd2; color: #ffffff; }
+        
+        /* 본문 컨테이너(메인 콘텐츠 영역): 최대 너비를 제한하고 화면 중앙에 배치하며, 흰색 배경과 둥근 모서리, 부드러운 그림자를 주어 가독성을 극대화합니다 */
         .about-container { max-width: 800px; margin: 40px auto; padding: 40px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); line-height: 1.8; }
+        
+        /* 하단 푸터 영역: 어두운 청록색 계열(#073642) 배경에 차분한 회색 글씨를 사용하여 페이지의 안정적인 마무리를 돕습니다 */
         .footer-section { background-color: #073642; color: #93a1a1; text-align: center; padding: 20px; margin-top: 60px; }
     </style>
 </head>
+
 <body>
     <header class="header-section">
         <a href="index.html"><img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo"></a>
@@ -24,32 +44,56 @@
             <a href="contact.html">오시는 길</a>
         </nav>
     </header>
+
     <main class="about-container">
-        <h3>[Netropy Books] : 질서와 안정이 피어나는 지혜의 숲</h3>
-            머무름이 곧 배움이 되는 곳, Netropy Books에 오신 것을 환영합니다
-            급변하는 시대 속에서 세상은 끊임없이 무질서와 혼돈(Entropy)을 향해 달려가는 듯합니다. 하지만 그 흐름 속에서도 우리는 중심을 잡고, 작은 지혜와 온기를 모아 단단한 질서와 안정을 만들어갈 수 있습니다.
-            시골 가을볕의 따스함과 풀벌레 소리가 가득한 한적한 서점마을, 그곳에 자리 잡은 Netropy Books는 단순한 책방을 넘어, 흩어진 마음의 결을 바로잡고 자연 속에서 진정한 쉼을 누리는 대안적 배움과 사유의 공간입니다.
+        <header class="about-header">
+            <h1>[Netropy Books] : 질서와 안정이 피어나는 지혜의 숲</h1>
+            <p class="subtitle">머무름이 곧 배움이 되는 곳, Netropy Books에 오신 것을 환영합니다</p>
+        </header>
 
-            주요 공간 및 프로그램 안내
-            1. Book (독서와 사유의 공간)
-            엔트로피(무질서)에 맞서는 '네트로피(Netropy, 질서와 생명력)'의 철학을 담아낸 서적들이 가득합니다.
-            과학과 철학의 경계에서: 우주의 법칙부터 인간 내면의 질서까지 다루는 인문·과학 도서들을 엄선했습니다.
-            청소년과 미래 세대를 위한 서가: 경쟁 중심의 교육을 넘어, 스스로 질문을 던지고 삶의 방향을 기획하는 힘을 길러주는 생태·철학·예술 도서를 만나볼 수 있습니다.
-            고요한 사색의 독서실: 창밖으로 펼쳐진 시골 풍경을 바라보며 깊은 사색에 잠길 수 있는 독립된 독서 공간을 제공합니다.
+        <section class="intro-section">
+            <p>급변하는 시대 속에서 세상은 끊임없이 무질서와 혼돈(Entropy)을 향해 달려가는 듯합니다. 하지만 그 흐름 속에서도 우리는 중심을 잡고, 작은 지혜와 온기를 모아 단단한 질서와 안정을 만들어갈 수 있습니다.</p>
+            <p>시골 가을볕의 따스함과 풀벌레 소리가 가득한 한적한 서점마을, 그곳에 자리 잡은 <strong>Netropy Books</strong>는 단순한 책방을 넘어, 흩어진 마음의 결을 바로잡고 자연 속에서 진정한 쉼을 누리는 대안적 배움과 사유의 공간입니다.</p>
+        </section>
 
-            2. 쉼과 민박 (머무는 배움)
-            배움은 쉼 없이 달릴 때가 아니라, 깊이 호흡하고 멈춰 섰을 때 비로소 시작됩니다. Netropy Books는 방문객들이 일상을 내려놓고 온전한 안정을 찾을 수 있도록 아늑한 민박 공간을 함께 운영합니다.
-            흙냄새와 나무 결이 살아있는 스테이: 자연 materials로 지어진 아늑한 객실에서 도시의 소음을 벗어나 온전한 휴식을 취할 수 있습니다.
-            밤하늘 아래의 대화: 저녁이면 모여앉아 책에 대한 단상을 나누고, 미래 세대가 살아갈 세상에 대해 소박하지만 깊이 있는 이야기를 나누는 살롱(Salon) 프로그램이 열립니다.
-            미래 사회를 마주할 청소년과 동반자들에게
-            우리 청소년들이 살아갈 미래는 정답을 빠르게 맞히는 능력보다, 혼돈 속에서 스스로 질서를 찾아내고 타인과 연대하는 힘이 더욱 중요해질 것입니다.
-            Netropy Books는 시골마을의 느린 호흡 속에서 자연의 이치를 배우고, 책을 통해 내면의 뿌리를 깊게 내리는 시간을 선물합니다. 자연이 주는 넉넉한 품 안에서 책장을 넘기며 쉼을 얻고, 다시 일상으로 돌아갈 단단한 안정을 충전해 가시기를 바랍니다.
-          
-            — Netropy Books 일동
-        <p>Netropy Books는 무질서와 혼돈(Entropy) 속에서 의미 있는 질서를 만들어가는 공간입니다.
-            "지혜는 혼돈 속에서 질서를 세우는 힘이며, 참된 배움은 고요한 쉼에서 비롯됩니다."
-        </p>
+        <section class="program-section">
+            <h2>주요 공간 및 프로그램 안내</h2>
+            
+            <div class="program-item">
+                <h3>1. Book (독서와 사유의 공간)</h3>
+                <p>엔트로피(무질서)에 맞서는 <strong>'네트로피(Netropy, 질서와 생명력)'</strong>의 철학을 담아낸 서적들이 가득합니다.</p>
+                <ul>
+                    <li><strong>과학과 철학의 경계에서:</strong> 우주의 법칙부터 인간 내면의 질서까지 다루는 인문·과학 도서들을 엄선했습니다.</li>
+                    <li><strong>청소년과 미래 세대를 위한 서가:</strong> 경쟁 중심의 교육을 넘어, 스스로 질문을 던지고 삶의 방향을 기획하는 힘을 길러주는 생태·철학·예술 도서를 만나볼 수 있습니다.</li>
+                    <li><strong>고요한 사색의 독서실:</strong> 창밖으로 펼쳐진 시골 풍경을 바라보며 깊은 사색에 잠길 수 있는 독립된 독서 공간을 제공합니다.</li>
+                </ul>
+            </div>
+
+            <div class="program-item">
+                <h3>2. 쉼과 민박 (머무는 배움)</h3>
+                <p>배움은 쉼 없이 달릴 때가 아니라, 깊이 호흡하고 멈춰 섰을 때 비로소 시작됩니다. Netropy Books는 방문객들이 일상을 내려놓고 온전한 안정을 찾을 수 있도록 아늑한 민박 공간을 함께 운영합니다.</p>
+                <ul>
+                    <li><strong>흙냄새와 나무 결이 살아있는 스테이:</strong> 자연 소재로 지어진 아늑한 객실에서 도시의 소음을 벗어나 온전한 휴식을 취할 수 있습니다.</li>
+                    <li><strong>밤하늘 아래의 대화:</strong> 저녁이면 모여앉아 책에 대한 단상을 나누고, 미래 세대가 살아갈 세상에 대해 소박하지만 깊이 있는 이야기를 나누는 살롱(Salon) 프로그램이 열립니다.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="future-section">
+            <h2>미래 사회를 마주할 청소년과 동반자들에게</h2>
+            <p>우리 청소년들이 살아갈 미래는 정답을 빠르게 맞히는 능력보다, <strong>혼돈 속에서 스스로 질서를 찾아내고 타인과 연대하는 힘</strong>이 더욱 중요해질 것입니다.</p>
+            <p>Netropy Books는 시골마을의 느린 호흡 속에서 자연의 이치를 배우고, 책을 통해 내면의 뿌리를 깊게 내리는 시간을 선물합니다. 자연이 주는 넉넉한 품 안에서 책장을 넘기며 쉼을 얻고, 다시 일상으로 돌아갈 단단한 안정을 충전해 가시기를 바랍니다.</p>
+        </section>
+
+        <footer class="about-footer">
+            <p class="quote-box">
+                Netropy Books는 무질서와 혼돈(Entropy) 속에서 의미 있는 질서를 만들어가는 공간입니다.<br><br>
+                <em>"지혜는 혼돈 속에서 질서를 세우는 힘이며, 참된 배움은 고요한 쉼에서 비롯됩니다."</em>
+            </p>
+            <p class="signature">— Netropy Books 일동</p>
+        </footer>
     </main>
+
     <footer class="footer-section">
         <p>&copy; 2026 Netropy Books. All rights reserved.</p>
     </footer>
