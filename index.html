@@ -1,144 +1,183 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8">
-        <title>NetropyBooks의 홈페이지</title>
-        <style>
-            body {
-                background-color: #fdf6e3;
-                font-family: 'Arial', sans-serif;
-                text-align: center;
-                margin: 0;
-                padding: 0;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>Netropy Books</title>
+    <style>
+        /* ========================================== */
+        /* 1. 기본 전체 설정 (배경색 및 폰트)           */
+        /* ========================================== */
+        body {
+            background-color: #fdf6e3; /* 따뜻한 책방 분위기의 아이보리 배경색 */
+            font-family: 'Arial', sans-serif; /* 기본 글꼴 설정 */
+            text-align: center; /* 텍스트를 기본적으로 가운데 정렬 */
+            margin: 0;
+            padding: 0;
+        }
 
-            /* 1. 상단 구역 디자인 */
+        /* ========================================== */
+        /* 2. 상단 구역 (Header) 디자인                */
+        /* ========================================== */
+        .header-section {
+            background-color: #eee8d5; /* 헤더 영역만 살짝 진한 배경색으로 구분 */
+            padding: 30px 20px;
+            border-bottom: 2px solid #586e75; /* 아래쪽 경계선 추가 */
+        }
+
+        /* ========================================== */
+        /* 3. 내비게이션 메뉴 바 디자인 (✨ 이번에 추가된 부분!) */
+        /* ========================================== */
+        .nav-bar {
+            margin-top: 20px; /* 로고/제목과 메뉴 사이의 간격 */
+            display: flex;    /* 메뉴 버튼들을 가로로 나란히 배치 */
+            justify-content: center; /* 메뉴를 화면 정중앙에 정렬 */
+            gap: 20px;        /* 메뉴 버튼들 사이의 간격 */
+        }
+
+        /* 개별 메뉴 버튼 링크 디자인 */
+        .nav-bar a {
+            text-decoration: none; /* 밑줄 제거 */
+            color: #268bd2;        /* 신뢰감을 주는 푸른색 글씨 */
+            font-weight: bold;     /* 글자를 굵게 */
+            font-size: 16px;       /* 글자 크기 */
+            padding: 8px 16px;     /* 버튼 안쪽 여백 (클릭하기 편하게 만듦) */
+            background-color: #ffffff; /* 버튼 배경을 하얗게 */
+            border: 1px solid #268bd2; /* 파란색 테두리 */
+            border-radius: 5px;    /* 모서리를 살짝 둥글게 */
+            transition: all 0.3s ease; /* 마우스 올릴 때 부드러운 효과 */
+        }
+
+        /* 마우스를 메뉴 버튼 위에 올렸을 때의 효과 (호버) */
+        .nav-bar a:hover {
+            background-color: #268bd2; /* 배경색이 파란색으로 채워짐 */
+            color: #ffffff;            /* 글자색이 하얗게 반전됨 */
+        }
+
+        /* ========================================== */
+        /* 4. 로고 이미지 디자인                       */
+        /* ========================================== */
+        .main-logo {
+            width: 180px;            /* 로고 가로폭 고정 */
+            height: auto;            /* 비율에 맞춰 세로 자동 조절 */
+            padding: 15px;
+            border: 1px solid #586e75;
+            border-radius: 10px;
+            background-color: #ffffff;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .main-logo:hover {
+            transform: scale(1.05);   /* 마우스 올리면 살짝 확대 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 입체적 그림자 */
+        }
+
+        h1 {
+            margin-top: 10px;
+        }
+
+        .title-line1 {
+            font-size: 20px;
+            color: #657b83;
+            margin-bottom: 5px;
+        }
+
+        .title-line2 {
+            font-size: 30px;
+            color: #b58900;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .title-line3 {
+            font-size: 24px;
+            color: #268bd2;
+        }
+
+        /* ========================================== */
+        /* 5. 본문 및 하단 구역 디자인                 */
+        /* ========================================== */
+        .content-section {
+            padding: 50px 20px;
+            font-size: 18px;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .footer-section {
+            background-color: #073642;
+            color: #93a1a1;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        /* ========================================== */
+        /* 6. 모바일 반응형 디자인 (화면이 작아질 때)   */
+        /* ========================================== */
+        @media screen and (max-width: 768px) {
             .header-section {
-                background-color: #eee8d5; /* 본문과 구분되는 연한 배경색 */
-                padding: 40px 20px;
-                border-bottom: 2px solid #586e75; /* 아래쪽 경계선 */
+                padding: 20px 10px;
             }
 
             .main-logo {
-                width: 180px;
-                height: auto;
-                padding: 15px;
-                border: 1px solid #586e75;
-                border-radius: 10px;
-                background-color: #ffffff;
-                margin-bottom: 20px;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                width: 140px;
             }
 
-            .main-logo:hover {
-                transform: scale(1.25);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            }
+            .title-line1 { font-size: 16px; }
+            .title-line2 { font-size: 22px; }
+            .title-line3 { font-size: 18px; }
 
-            h1 {
-                margin-top: 10px;
+            /* 모바일 화면에서는 메뉴 버튼들을 세로로 쌓거나 크기를 조정할 수 있습니다 */
+            .nav-bar {
+                gap: 10px; /* 버튼 사이 간격을 좁힘 */
             }
-
-            .title-line1 {
-                font-size: 20px;
-                color: #657b83;
-                margin-bottom: 5px;
-            }
-
-            .title-line2 {
-                font-size: 30px;
-                color: #b58900;
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
-
-            .title-line3 {
-                font-size: 24px;
-                color: #268bd2;
-            }
-
-            /* 2. 본문 구역 디자인 */
-            .content-section {
-                padding: 50px 20px;
-                font-size: 18px;
-                color: #333333;
-                line-height: 1.6;
-            }
-
-            /* 3. 하단 구역 디자인 */
-            .footer-section {
-                background-color: #073642; /* 차분한 어두운 색상 */
-                color: #93a1a1;            /* 밝은 회색빛 글씨 */
-                padding: 20px;
+            .nav-bar a {
                 font-size: 14px;
-                position: fixed;           /* 화면 맨 아래에 고정하고 싶을 때 사용 */
-                bottom: 0;
-                width: 100%;
+                padding: 6px 10px;
             }
-        
-            /* ========================================== */
-            /* 모바일 화면 배려 (반응형 디자인 영역)          */
-            /* ========================================== */
-            @media screen and (max-width: 768px) {
-                /* 스마트폰처럼 화면 가로폭이 768픽셀보다 작아질 때 이 속성들이 발동합니다! */
-                
-                .header-section {
-                    padding: 20px 10px; /* 모바일에서는 상단 여백을 줄여서 답답하지 않게 만듭니다 */
-                }
 
-                .main-logo {
-                    width: 140px;       /* 모바일 화면에 맞게 로고 크기를 살짝 줄여줍니다 */
-                }
-
-                .title-line1 {
-                    font-size: 16px;    /* 첫 번째 줄 글자 크기 축소 */
-                }
-
-                .title-line2 {
-                    font-size: 22px;    /* 책방 이름 줄 글자 크기 축소 */
-                }
-
-                .title-line3 {
-                    font-size: 18px;    /* 환영 인사 줄 글자 크기 축소 */
-                }
-
-                .content-section {
-                    padding: 30px 15px; /* 본문 여백 조정 */
-                    font-size: 16px;    /* 모바일에서 읽기 편한 글자 크기로 조절 */
-                }
-                
-                .footer-section {
-                    font-size: 12px;    /* 하단 글자 크기 미세 조정 */
-                    padding: 15px;
-                }
+            .content-section {
+                padding: 30px 15px;
+                font-size: 16px;
             }
-        </style>
+        }
+    </style>
+</head>
+<body>
 
-    </head>
-    
-    <body>
-        <!-- 1. 상단 구역 (Header): 로고나 메뉴가 들어가는 자리 -->
-        <header class="header-section">
-            <a href="index.html">
-                <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="main-logo">
-            </a>
-            <h1>
-                <div class="title-line1">안녕하세요?</div>
-                <div class="title-line2">NetropyBooks의 홈페이지에</div>
-                <div class="title-line3">오신 것을 환영합니다.</div>
-            </h1>
-        </header>
+    <!-- 상단 구역 (Header) -->
+    <header class="header-section">
+        <!-- 로고를 클릭하면 메인(index.html)으로 이동 -->
+        <a href="index.html">
+            <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="main-logo">
+        </a>
 
-        <!-- 2. 본문 구역 (Main Content): 책 소개나 핵심 내용이 들어갈 자리 -->
-        <main class="content-section">
-            <p>VS Code와 GitHub Pages로 제작한 과학 책방입니다.</p>
-            <p>질서와 안정을 찾아가는 다양한 도서들을 만나보세요.</p>
-        </main>
+        <!-- 3문단으로 분할된 환영 인사 -->
+        <h1>
+            <div class="title-line1">안녕하세요?</div>
+            <div class="title-line2">NetropyBooks의 홈페이지에</div>
+            <div class="title-line3">오신 것을 환영합니다.</div>
+        </h1>
 
-        <!-- 3. 하단 구역 (Footer): 저작권이나 연락처가 들어갈 자리 -->
-        <footer class="footer-section">
-            <p>&copy; 2026 Netropy Books. All rights reserved.</p>
-        </footer>
-    </body>
+        <!-- 🧭 상단 내비게이션 메뉴 바 영역 -->
+        <nav class="nav-bar">
+            <a href="index.html">홈</a>
+            <a href="about.html">책방 소개</a>
+            <a href="books.html">도서 목록</a>
+            <a href="contact.html">오시는 길</a>
+        </nav>
+    </header>
 
+    <!-- 본문 구역 (Main Content) -->
+    <main class="content-section">
+        <p>VS Code와 GitHub Pages로 제작한 과학 책방입니다.</p>
+        <p>질서와 안정을 찾아가는 다양한 도서들을 만나보세요.</p>
+    </main>
+
+    <!-- 하단 구역 (Footer) -->
+    <footer class="footer-section">
+        <p>&copy; 2026 Netropy Books. All rights reserved.</p>
+    </footer>
+
+</body>
 </html>
