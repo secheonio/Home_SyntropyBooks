@@ -36,13 +36,22 @@
 </head>
 
 <body>
-    <header class="header-section">
-        <a href="index.html"><img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo"></a>
-        <nav class="nav-bar">
-            <a href="about.html" style="background-color: #268bd2; color: #ffffff;">책방 소개</a>
-            <a href="books.html">도서 목록</a>
-            <a href="contact.html">오시는 길</a>
-        </nav>
+    <header class="header-section" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 40px;">
+        <!-- 왼쪽 칸: 로고 크기에 맞춘 영역 -->
+        <div class="header-left" style="flex-shrink: 0;">
+            <a href="index.html">
+                <img src="images/NB_logo_Black.png" alt="Netropy Books 로고" class="header-logo" style="width: 140px; display: block;">
+            </a>
+        </div>
+        
+        <!-- 오른쪽 칸: 남은 공간을 차지하며 메뉴를 오른쪽으로 정렬 -->
+        <div class="header-right" style="flex-grow: 1; display: flex; justify-content: flex-end;">
+            <nav class="nav-bar">
+                <a href="about.html" style="background-color: #268bd2; color: #ffffff;">책방 소개</a>
+                <a href="books.html">도서 목록</a>
+                <a href="contact.html">오시는 길</a>
+            </nav>
+        </div>
     </header>
 
     <main class="about-container">
