@@ -352,6 +352,15 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* 헤더 소개 문구 제거 후 메뉴를 오른쪽에 배치 */
+.header-bottom-row {
+    justify-content: flex-end;
+}
+
+.header-intro-text {
+    display: none;
+}
+
 /* 하단 영역의 오른쪽: 네비게이션 메뉴의 크기가 찌그러지지 않도록 방어하는 래퍼입니다.[cite: 6] */
 .header-nav-wrap {
     flex-shrink: 0;            /* 화면이 좁아져도 메뉴 버튼 영역은 줄어들지 않도록 고정[cite: 6] */
