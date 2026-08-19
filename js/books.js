@@ -282,7 +282,7 @@ const startBookRotation = () => {
 
             const title = card.querySelector('.book-title')?.textContent.trim();
             if (title) {
-                window.location.href = `book-detail.html?book=${encodeURIComponent(title)}`;
+                window.location.href = `${card.id}.html?book=${encodeURIComponent(title)}`;
             }
         });
     });
@@ -316,19 +316,27 @@ const startBookSearch = () => {
     cards.forEach(syncNewBadge);
 
     input.addEventListener('input', () => {
-        const query = input.value.trim().toLocaleLowerCase();
-        let visibleCount = 0;
-
-        cards.forEach((card) => {
-            syncNewBadge(card);
+        const query = input.value.trim();
+        const visibleCount = query === '' ? cards.length : cards.filter((card) => {
             const searchableText = card.textContent.toLocaleLowerCase();
-            const matches = query === '' || searchableText.includes(query);
-            card.classList.toggle('is-hidden', !matches);
-            visibleCount += matches ? 1 : 0;
-        });
+            return searchableText.includes(query.toLocaleLowerCase());
+        }).length;
 
-        emptyMessage.hidden = visibleCount !== 0;
         status.textContent = query === '' ? `전체 도서 ${cards.length}권` : `검색 결과 ${visibleCount}권`;
+    });
+
+    input.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter') {
+            return;
+        }
+
+        const query = input.value.trim();
+        if (!query) {
+            return;
+        }
+
+        const targetUrl = `search-results.html?q=${encodeURIComponent(query)}`;
+        window.location.href = targetUrl;
     });
 };
 

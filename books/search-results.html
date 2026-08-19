@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서 검색 결과 | Syntropy Books</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/books.css">
+</head>
+<body>
+    <header class="header-section">
+        <div class="header-inner">
+            <div class="header-left">
+                <a href="../index.html">
+                    <img src="../images/SB_logo_White.png" alt="Syntropy Books 로고" class="header-logo">
+                </a>
+            </div>
+            <div class="header-right">
+                <div class="header-top-row">
+                    <div class="main-header-text">Syntropy Books</div>
+                </div>
+                <div class="header-bottom-row">
+                    <div class="header-nav-wrap">
+                        <nav class="nav-bar">
+                            <a href="../about/about.html">책방 소개</a>
+                            <a href="books.html" class="active">도서 관리</a>
+                            <a href="../contact/contact.html">오시는 길</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="search-results-page">
+        <header class="search-results-header">
+            <p class="subtitle">SEARCH RESULTS</p>
+            <h1 id="search-results-heading">검색 결과</h1>
+            <p id="search-results-summary">검색어를 입력해 도서를 찾으세요.</p>
+        </header>
+
+        <section id="search-results-list" class="book-container search-results-container" aria-live="polite"></section>
+    </main>
+
+    <footer class="footer-section">
+        <p>&copy; 2026 Syntropy Books. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/admin-login.js"></script>
+    <script src="../js/search-results.js"></script>
+</body>
+</html>

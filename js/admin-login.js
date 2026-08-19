@@ -36,6 +36,88 @@ const createAdminAccess = () => {
         document.body.append(adminLoginModal);
     }
 
+    const ensureBooksHeaderSearch = () => {
+        const currentPath = window.location.pathname;
+        const isBooksArea = /\/books\//.test(currentPath) || currentPath.endsWith('/books.html') || currentPath.endsWith('/books-new.html') || currentPath.endsWith('/catalog.html');
+
+        if (!isBooksArea) {
+            return;
+        }
+
+        if (document.querySelector('#book-search-input')) {
+            return;
+        }
+
+        const headerBottomRow = document.querySelector('.header-bottom-row');
+        const navWrap = document.querySelector('.header-nav-wrap');
+
+        if (!headerBottomRow || !navWrap) {
+            return;
+        }
+
+        const searchSection = document.createElement('section');
+        searchSection.className = 'book-search';
+        searchSection.setAttribute('aria-label', '도서 검색');
+        searchSection.innerHTML = `
+            <label for="book-search-input">도서 검색</label>
+            <input id="book-search-input" type="search" placeholder="제목, 저자, 카테고리로 검색" autocomplete="off">
+            <p id="book-search-status" class="book-search-status" aria-live="polite">전체 도서 8권</p>
+        `;
+
+        headerBottomRow.insertBefore(searchSection, navWrap);
+    };
+
+    const getAdminDashboardUrl = () => {
+        const currentPath = window.location.pathname;
+        const currentIsAdminPage = currentPath.includes('/admin/');
+        const currentIsNestedPage = /\/(books|about|contact)\//.test(currentPath);
+
+        if (currentIsAdminPage) {
+            return new URL('admin.html', window.location.href).toString();
+        }
+
+        if (currentIsNestedPage) {
+            return new URL('../admin/admin.html', window.location.href).toString();
+        }
+
+        return new URL('admin/admin.html', window.location.href).toString();
+    };
+
+    const updateAdminDashboardLink = () => {
+        const isLoggedIn = sessionStorage.getItem('syntropyAdminLoggedIn') === 'true';
+        const existingLink = document.querySelector('.admin-dashboard-link');
+
+        if (!isLoggedIn) {
+            existingLink?.remove();
+            return;
+        }
+
+        if (existingLink) {
+            return;
+        }
+
+        const dashboardLink = document.createElement('a');
+        dashboardLink.className = 'admin-dashboard-link';
+        dashboardLink.href = getAdminDashboardUrl();
+        dashboardLink.textContent = '관리자센터';
+        dashboardLink.setAttribute('aria-label', '관리자 대시보드로 이동');
+
+        const navBar = document.querySelector('.nav-bar');
+        const footerSection = document.querySelector('.footer-section');
+
+        if (navBar) {
+            navBar.append(dashboardLink);
+            return;
+        }
+
+        if (footerSection) {
+            footerSection.append(dashboardLink);
+            return;
+        }
+
+        document.body.append(dashboardLink);
+    };
+
     const adminLoginForm = document.querySelector('#admin-login-form');
     const adminLoginStatus = document.querySelector('#admin-login-status');
     const closeAdminLogin = () => {
@@ -48,15 +130,33 @@ const createAdminAccess = () => {
         document.querySelector('#admin-login-id')?.focus();
     };
 
+    const DEFAULT_ADMIN_ID = '관리자';
+    const DEFAULT_ADMIN_PASSWORD = 'scipark';
+
     adminTrigger.addEventListener('click', openAdminLogin);
     adminLoginModal.querySelectorAll('[data-admin-close]').forEach((button) => {
         button.addEventListener('click', closeAdminLogin);
     });
     adminLoginForm?.addEventListener('submit', (event) => {
         event.preventDefault();
-        if (adminLoginStatus) {
-            adminLoginStatus.textContent = '관리자 인증 서비스를 연결한 후 로그인할 수 있습니다.';
+        const loginId = adminLoginForm.querySelector('#admin-login-id')?.value.trim();
+        const password = adminLoginForm.querySelector('#admin-login-password')?.value;
+
+        if (!adminLoginStatus) {
+            return;
         }
+
+        if (loginId === DEFAULT_ADMIN_ID && password === DEFAULT_ADMIN_PASSWORD) {
+            adminLoginStatus.textContent = '로그인 성공';
+            adminLoginStatus.style.color = '#2d6a4f';
+            sessionStorage.setItem('syntropyAdminLoggedIn', 'true');
+            updateAdminDashboardLink();
+            window.location.href = getAdminDashboardUrl();
+            return;
+        }
+
+        adminLoginStatus.textContent = '아이디 또는 비밀번호가 올바르지 않습니다.';
+        adminLoginStatus.style.color = '#a64242';
     });
     adminLoginModal.querySelector('.admin-password-toggle')?.addEventListener('click', (event) => {
         const toggle = event.currentTarget;
@@ -71,6 +171,9 @@ const createAdminAccess = () => {
             closeAdminLogin();
         }
     });
+
+    ensureBooksHeaderSearch();
+    updateAdminDashboardLink();
 };
 
 document.addEventListener('DOMContentLoaded', createAdminAccess);

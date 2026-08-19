@@ -24,38 +24,97 @@ const categoryBookMetadata = {
     '자연과 자유': { translator: '', publisher: 'Syntropy Books 큐레이션' }
 };
 
+const categoryCoverByPage = {
+    'life-science.html': 'life-science.svg',
+    'systems-thinking.html': 'systems-thinking.svg',
+    'complexity.html': 'complexity.svg',
+    'cosmos.html': 'cosmos.svg',
+    'evolution.html': 'evolution.svg',
+    'energy.html': 'energy.svg',
+    'ecology.html': 'ecology.svg',
+    'philosophy.html': 'philosophy.svg'
+};
+
 const addCategoryBookMetadata = () => {
-    document.querySelectorAll('.category-book').forEach((card) => {
+    document.querySelectorAll('.category-book').forEach((card, index) => {
         const title = card.querySelector('h2')?.textContent.trim();
-        const author = card.querySelector('.book-author');
+        if (!title) {
+            return;
+        }
+
+        card.classList.add('book-card');
+
+        const categoryTop = card.querySelector('.book-card-top') || document.createElement('div');
+        if (!card.querySelector('.book-card-top')) {
+            categoryTop.className = 'book-card-top';
+            categoryTop.innerHTML = `
+                <span class="book-category">${document.querySelector('.category-page .main-title')?.textContent.trim() || ''}</span>
+                <span class="book-new-badge">신간</span>
+            `;
+            card.prepend(categoryTop);
+        }
+
+        const author = card.querySelector('.book-author') || document.createElement('p');
+        if (!card.querySelector('.book-author')) {
+            author.className = 'book-author';
+            const titleNode = card.querySelector('h2');
+            titleNode.insertAdjacentElement('afterend', author);
+        }
+
         const metadata = categoryBookMetadata[title] || {
             translator: '',
             publisher: 'Syntropy Books 큐레이션'
         };
 
-        if (!author) {
-            return;
+        if (!card.querySelector('.book-translator')) {
+            const translator = document.createElement('p');
+            translator.className = 'book-translator';
+            translator.textContent = metadata.translator ? `옮긴이: ${metadata.translator}` : '';
+            translator.hidden = !metadata.translator;
+            author.insertAdjacentElement('afterend', translator);
         }
 
-        const categoryTop = document.createElement('div');
-        categoryTop.className = 'category-book-top';
-        categoryTop.innerHTML = `<span class="book-category">${document.querySelector('.category-page .main-title')?.textContent.trim() || ''}</span><span class="book-new-badge">신간</span>`;
-        card.prepend(categoryTop);
+        if (!card.querySelector('.book-publisher')) {
+            const publisher = document.createElement('p');
+            publisher.className = 'book-publisher';
+            publisher.textContent = `출판사: ${metadata.publisher}`;
+            const translator = card.querySelector('.book-translator');
+            if (translator) {
+                translator.insertAdjacentElement('afterend', publisher);
+            } else {
+                author.insertAdjacentElement('afterend', publisher);
+            }
+        }
 
-        const translator = document.createElement('p');
-        translator.className = 'category-book-translator';
-        translator.textContent = metadata.translator ? `옮긴이: ${metadata.translator}` : '';
-        translator.hidden = !metadata.translator;
+        if (!card.querySelector('.book-cover')) {
+            const categoryFile = categoryCoverByPage[window.location.pathname.split('/').pop()] || 'category-book.svg';
+            const cover = document.createElement('img');
+            cover.className = 'book-cover';
+            cover.src = `../images/book-covers/${categoryFile}`;
+            cover.alt = `${title} 책표지 미리보기`;
+            cover.loading = 'lazy';
+            card.append(cover);
+        }
 
-        const publisher = document.createElement('p');
-        publisher.className = 'category-book-publisher';
-        publisher.textContent = `출판사: ${metadata.publisher}`;
+        if (!card.querySelector('.book-description')) {
+            const description = card.querySelector('p:not(.book-author):not(.book-translator):not(.book-publisher)') || document.createElement('p');
+            description.className = 'book-description';
+            const currentText = description.textContent?.trim() || '책 소개 정보를 확인해 보세요.';
+            description.textContent = currentText;
+            const publisher = card.querySelector('.book-publisher');
+            if (publisher) {
+                publisher.insertAdjacentElement('afterend', description);
+            } else {
+                author.insertAdjacentElement('afterend', description);
+            }
+        }
 
-        author.insertAdjacentElement('afterend', translator);
-        translator.insertAdjacentElement('afterend', publisher);
         if (typeof addCatalogFields === 'function') {
             addCatalogFields(card, title);
-            categoryTop.querySelector('.book-new-badge').classList.toggle('is-hidden', !getCatalogBookData(title).isNew);
+            const badge = categoryTop.querySelector('.book-new-badge');
+            if (badge) {
+                badge.classList.toggle('is-hidden', !getCatalogBookData(title).isNew);
+            }
         }
     });
 };

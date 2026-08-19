@@ -22,7 +22,7 @@ Home_NetropyBooks 폴더와 같으면 관리하기 편리
     
     ==> git add . && git commit -m "도서 목록 페이지 추가" && git push origin main
 
-    ==> function push { git add . ; git commit -m $args ; git push origin main }
+function push { git add . ; git commit -m $args ; git push origin main }
         push "변경 내용" /* 평상시엔 push "", 에러나면 funtion push { } 한 번 더 실행 */
 
 

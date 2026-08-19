@@ -9,6 +9,18 @@ const categorySlugByPath = {
     'philosophy.html': 'philosophy'
 };
 
+const reflowCategoryBooks = () => {
+    const categoryBooks = document.querySelector('.category-books');
+    if (!categoryBooks) {
+        return;
+    }
+
+    categoryBooks.style.display = 'grid';
+    categoryBooks.style.gridTemplateColumns = 'repeat(4, minmax(0, 1fr))';
+    categoryBooks.style.gridAutoFlow = 'row';
+    categoryBooks.style.alignContent = 'start';
+};
+
 const addCategoryBookLinks = () => {
     const categorySlug = categorySlugByPath[window.location.pathname.split('/').pop()];
     if (!categorySlug) {
@@ -27,30 +39,13 @@ const addCategoryBookLinks = () => {
         }
     }
 
+    reflowCategoryBooks();
+
     document.querySelectorAll('.category-book').forEach((card) => {
         const title = card.querySelector('h2')?.textContent.trim();
         if (!title) {
             return;
         }
-
-        const linkGroup = document.createElement('div');
-        linkGroup.className = 'category-book-link-group';
-
-        const bookListLink = document.createElement('a');
-        bookListLink.className = 'category-book-full-link';
-        bookListLink.href = `books.html#${categorySlug}`;
-        const categoryLabel = document.querySelector('.category-page .main-title')?.textContent.trim() || categorySlug;
-        bookListLink.textContent = `${categoryLabel} 전체보기 >>`;
-        bookListLink.setAttribute('aria-label', `${title} 도서목록 전체보기`);
-
-        const newBookLink = document.createElement('a');
-        newBookLink.className = 'category-book-new-link';
-        newBookLink.href = `books-new.html#${categorySlug}`;
-        newBookLink.textContent = '신간 전체보기 >>';
-        newBookLink.setAttribute('aria-label', `${title} 신간도서코너 전체보기`);
-
-        linkGroup.append(bookListLink, newBookLink);
-        card.append(linkGroup);
 
         card.addEventListener('click', (event) => {
             if (event.target.closest('a')) {

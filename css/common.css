@@ -223,6 +223,36 @@ body {
     font-size: 0.78rem;
 }
 
+.admin-dashboard-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    background: rgba(45, 77, 59, 0.8);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-dashboard-link:hover,
+.admin-dashboard-link:focus-visible {
+    background: rgba(22, 48, 34, 0.95);
+    transform: translateY(-1px);
+}
+
+.nav-bar .admin-dashboard-link {
+    margin-left: 10px;
+}
+
+.footer-section .admin-dashboard-link {
+    margin-bottom: 10px;
+}
+
 /* ==========================================================================
    1. 헤더 바깥쪽 박스: 배경색과 테두리선만 화면 전체(100%)로 확장
    ========================================================================== */

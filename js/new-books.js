@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const title = card.querySelector('.book-title')?.textContent.trim();
             if (title) {
-                window.location.href = `book-detail.html?book=${encodeURIComponent(title)}`;
+                window.location.href = `${card.dataset.categoryId}.html?book=${encodeURIComponent(title)}`;
             }
         });
     });

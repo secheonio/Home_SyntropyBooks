@@ -9,10 +9,37 @@ const bookDetails = {
     '장자': { category: '철학', author: '장자', translator: '김학주', publisher: '을유문화사', price: '출판사별 판본에 따라 다름', description: '고정된 질서에서 벗어나 변화와 관계의 흐름을 바라보는 감각을 일깨웁니다.', preview: '변화하는 세계와 함께 흐를 때 삶은 더 넓어진다.', cover: 'philosophy.svg' }
 };
 
+const categoryPageByName = {
+    '생명과학': 'life-science.html',
+    '시스템 사고': 'systems-thinking.html',
+    '복잡계': 'complexity.html',
+    '우주와 질서': 'cosmos.html',
+    '진화와 협력': 'evolution.html',
+    '문명과 에너지': 'energy.html',
+    '생태철학': 'ecology.html',
+    '철학': 'philosophy.html'
+};
+
 const showBookDetail = () => {
-    const title = new URLSearchParams(window.location.search).get('book');
-    const book = bookDetails[title];
-    if (!book) return;
+    const params = new URLSearchParams(window.location.search);
+    const title = params.get('book') || '도서 소개';
+    const book = bookDetails[title] || {
+        category: '도서 안내',
+        author: 'Syntropy Books 큐레이션',
+        translator: '',
+        publisher: 'Syntropy Books 큐레이션',
+        price: '문의 예정',
+        description: '현재 이 책의 상세 소개를 준비 중입니다. 잠시 후 더 풍부한 정보를 확인하실 수 있습니다.',
+        preview: '좋은 책은 아직 완성된 문장보다, 곧 열릴 여백을 더 많이 남긴다.',
+        cover: 'category-book.svg'
+    };
+
+    const categoryLink = document.querySelector('#book-detail-category-back');
+    const categoryPage = categoryPageByName[book.category];
+    if (categoryLink) {
+        categoryLink.href = categoryPage ? `../books/${categoryPage}` : 'books.html';
+        categoryLink.textContent = book.category === '도서 안내' ? '도서 목록으로 돌아가기' : `${book.category} 카테고리로 돌아가기`;
+    }
 
     document.title = `${title} | Syntropy Books`;
     document.querySelector('#book-detail-title').textContent = title;
@@ -22,9 +49,9 @@ const showBookDetail = () => {
     document.querySelector('#book-detail-publisher').textContent = `출판사: ${book.publisher}`;
     const catalogData = typeof getCatalogBookData === 'function' ? getCatalogBookData(title) : null;
     document.querySelector('#book-detail-price').textContent = `책값: ${catalogData ? formatCatalogPrice(catalogData.price) : book.price}`;
-    document.querySelector('#book-detail-stock').textContent = catalogData ? `재고: ${catalogData.stock}권` : '';
-    document.querySelector('#book-detail-registered').textContent = catalogData ? `등록일: ${formatCatalogDate(catalogData.registeredAt)}` : '';
-    document.querySelector('#book-detail-new-until').textContent = catalogData ? `신간 만료일: ${formatCatalogDate(catalogData.newUntil)}` : '';
+    document.querySelector('#book-detail-stock').textContent = catalogData ? `재고: ${catalogData.stock}권` : '재고 정보 준비 중';
+    document.querySelector('#book-detail-registered').textContent = catalogData ? `등록일: ${formatCatalogDate(catalogData.registeredAt)}` : '등록일: 준비 중';
+    document.querySelector('#book-detail-new-until').textContent = catalogData ? `신간 만료일: ${formatCatalogDate(catalogData.newUntil)}` : '신간 만료일: 준비 중';
     document.querySelector('#book-detail-description').textContent = book.description;
     document.querySelector('#book-detail-preview').textContent = `“${book.preview}”`;
     const cover = document.querySelector('#book-detail-cover');
