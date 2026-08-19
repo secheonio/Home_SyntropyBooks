@@ -3,6 +3,14 @@ Home_NetropyBooks 폴더와 같으면 관리하기 편리
 
 홈페이지 작업
 
+현재 페이지 구조
+- `index.html` : 홈페이지 시작 화면
+- `about/` : 책방 소개, 책방 철학, 이용 안내
+- `books/` : 도서 목록, 신간 도서 코너
+- `contact/` : 오시는 길
+- `css/` : 공통 및 페이지별 스타일시트
+- `images/` : 로고 및 이미지 파일
+
 - VScode 설치
 - Git hub 설치
 - Git 가입
