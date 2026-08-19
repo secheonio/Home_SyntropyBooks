@@ -43,8 +43,31 @@
 
     <!-- 하단 푸터 영역 -->
     <footer class="footer-section">
+        <button class="admin-trigger" type="button" aria-label="관리자 로그인 열기"></button>
         <p>&copy; 2026 Syntropy Books. All rights reserved.</p>
     </footer>
+
+    <div class="admin-modal" id="admin-login-modal" hidden>
+        <div class="admin-modal-backdrop" data-admin-close></div>
+        <section class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-login-title">
+            <button class="admin-dialog-close" type="button" aria-label="관리자 로그인 닫기" data-admin-close>&times;</button>
+            <p class="admin-eyebrow">ADMIN ACCESS</p>
+            <h2 id="admin-login-title">관리자 로그인</h2>
+            <form id="admin-login-form">
+                <label for="admin-login-id">관리자 아이디</label>
+                <input id="admin-login-id" name="loginId" type="text" autocomplete="username" required>
+                <label for="admin-login-password">비밀번호</label>
+                <div class="admin-password-field">
+                    <input id="admin-login-password" name="password" type="password" autocomplete="current-password" required>
+                    <button class="admin-password-toggle" type="button" aria-label="비밀번호 보기" aria-pressed="false">&#128065;</button>
+                </div>
+                <button type="submit">로그인</button>
+                <p class="admin-login-status" id="admin-login-status" aria-live="polite"></p>
+            </form>
+        </section>
+    </div>
+
+    <script src="js/admin-login.js"></script>
 
 </body>
 </html>

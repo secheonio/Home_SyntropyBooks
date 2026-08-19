@@ -37,6 +37,11 @@ const addCategoryBookMetadata = () => {
             return;
         }
 
+        const categoryTop = document.createElement('div');
+        categoryTop.className = 'category-book-top';
+        categoryTop.innerHTML = `<span class="book-category">${document.querySelector('.category-page .main-title')?.textContent.trim() || ''}</span><span class="book-new-badge">신간</span>`;
+        card.prepend(categoryTop);
+
         const translator = document.createElement('p');
         translator.className = 'category-book-translator';
         translator.textContent = metadata.translator ? `옮긴이: ${metadata.translator}` : '';
@@ -48,6 +53,10 @@ const addCategoryBookMetadata = () => {
 
         author.insertAdjacentElement('afterend', translator);
         translator.insertAdjacentElement('afterend', publisher);
+        if (typeof addCatalogFields === 'function') {
+            addCatalogFields(card, title);
+            categoryTop.querySelector('.book-new-badge').classList.toggle('is-hidden', !getCatalogBookData(title).isNew);
+        }
     });
 };
 

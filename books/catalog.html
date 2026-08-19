@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서 등록 현황 | Syntropy Books</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/books.css">
+</head>
+<body>
+    <header class="header-section">
+        <div class="header-inner">
+            <div class="header-left"><a href="../index.html"><img src="../images/SB_logo_White.png" alt="Syntropy Books 로고" class="header-logo"></a></div>
+            <div class="header-right">
+                <div class="header-top-row"><div class="main-header-text">Syntropy Books</div></div>
+                <div class="header-bottom-row"><div class="header-nav-wrap"><nav class="nav-bar"><a href="../about/about.html">책방 소개</a><a href="books.html" class="active">도서 관리</a><a href="../contact/contact.html">오시는 길</a></nav></div></div>
+            </div>
+        </div>
+    </header>
+    <main class="catalog-page">
+        <a class="book-detail-back" href="books.html">도서목록으로 돌아가기</a>
+        <header class="catalog-heading">
+            <p class="subtitle">BOOK CATALOG</p>
+            <h1>도서 등록 현황</h1>
+            <p>현재 연결된 모든 도서 정보를 확인합니다.</p>
+        </header>
+        <div class="catalog-table-wrap">
+            <table class="catalog-table">
+                <caption>전체 등록 도서 목록</caption>
+                <thead><tr><th>표지</th><th>카테고리</th><th>도서 정보</th><th>가격·재고</th><th>등록·신간 기간</th><th>설명</th></tr></thead>
+                <tbody id="catalog-table-body"></tbody>
+            </table>
+        </div>
+    </main>
+    <footer class="footer-section"><p>&copy; 2026 Syntropy Books. All rights reserved.</p></footer>
+    <script src="../js/catalog-data.js"></script>
+    <script src="../js/books.js"></script>
+    <script src="../js/category-metadata.js"></script>
+    <script src="../js/catalog-register.js"></script>
+    <script src="../js/admin-login.js"></script>
+</body>
+</html>
