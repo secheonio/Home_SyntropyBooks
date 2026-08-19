@@ -1,155 +1,157 @@
 @charset "UTF-8";
 
-/* ========================================
-   전역 변수 설정 (값을 한 곳에서 쉽게 관리하기 위함)
-   ======================================== */
-:root {
-    --logo-height-desktop: 120px; /* 데스크톱 로고 높이 */
-    --logo-height-mobile: 80px;   /* 모바일 로고 높이 */
-    --title-ratio: 0.8;           /* 폰트 크기 조절 배율 (언제든 이 숫자만 바꾸면 됩니다!) */
-}
-
-/* ========================================
-   헤더 영역 레이아웃 설정 
-   ======================================== */
-.header-section { 
-    display: flex; 
-    flex-direction: row; 
-    align-items: stretch; /* 좌우 영역의 높이를 동일하게 맞춥니다 */
-    padding: 0 40px; 
-    background-color: #eee8d5; 
-    border-bottom: 2px solid #586e75; 
-    box-sizing: border-box; 
-    gap: 20px;
-}
-
-/* ========================================
-   1. 좌측 로고 (전체 높이의 기준점 역할)
-   ======================================== */
-.header-logo {
-    /* background-color: #073642; /* #ffffff(흰색) 대신 어두운 배경 적용 */ 
-    height: var(--logo-height-desktop); /* 로고의 높이가 전체 헤더 높이의 기준점이 됨, 120% 대신 변수 사용 */
-    width: auto; 
-    display: block; 
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.header-logo:hover { 
-    transform: scale(1.05); 
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-/* ========================================
-   2. 우측 전체 영역 (메인 이미지 + 하단 메뉴)
-   ======================================== */
-.header-right { 
-    flex-grow: 1; 
-    display: flex; 
-    flex-direction: column; 
-    /* 핵심 포인트 1: 내부 자식 요소가 부모의 높이를 강제로 늘리지 못하도록 차단합니다 */
-    min-height: 0; 
-    /* ------------------------------------------------------------- */
-    border: 1px dashed #268bd2; 
-    border-radius: 10px; 
-    background: rgba(255,255,255,0.5); 
-    overflow: hidden; 
+/* 오시는 길 본문 */
+.contact-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
     box-sizing: border-box;
 }
 
-/* ========================================
-   3. 우측 상단 (메인 이미지가 들어갈 박스)
-   ======================================== */
-.header-top-row { 
-    flex: 2; /* 하단 메뉴 영역과 2:1 등의 비율로 공간을 나눕니다 */
-    /* 핵심 포인트 2: 이미지 컨테이너 역시 최소 높이 제한을 해제합니다 */
-    min-height: 0; 
-    /* ------------------------------------------------------------- */
-    display: flex;             /* 1. 텍스트 배치를 위해 Flexbox 선언 */
-    align-items: center;       /* 2. 세로(위아래) 여백의 중앙을 맞춥니다. */
-    justify-content: center;   /* 3. 가로(좌우) 여백의 중앙을 맞춥니다. */
-    position: relative; 
-    border-bottom: 1px dotted #839496; 
-    background-color: #fdf6e3; /* 빈 공간이 허전하지 않도록 따뜻한 배경색 추가 */
-    overflow: hidden;
+.contact-header {
+    padding: 20px 20px 10px;
+    text-align: left;
 }
 
-/* 좌측 로고 박스 (어두운 배경 적용으로 흰색 로고 가독성 확보) */
-.header-left { 
-    flex-shrink: 0; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    background: #073642; 
-    border: 1px dashed #b58900; 
-    padding: 0 15px; 
-    border-radius: 10px; 
-    box-sizing: border-box;
+.contact-header .main-title {
+    margin-bottom: 18px;
 }
 
-.header-bottom-row { 
-    flex: 1;                   /* 1/3 비율 차지 */
-    display: flex; 
-    /* justify-content: flex-end; */
-    align-items: center; 
-    padding: 0 15px;
-    gap: 20px;  /* 텍스트 칸과 메뉴 칸 사이의 최소 안전 간격 */
+.contact-intro {
+    color: #586e75;
+    font-size: 1.05rem;
+    line-height: 1.7;
 }
 
-/* ========================================
-   [왼쪽 칸] Syntropy 소개 문구
-   ======================================== */
-.header-intro-text {
-    flex-grow: 1;      /* 핵심 1: 메뉴가 차지하고 남은 모든 빈 공간을 흡수합니다 */
-    text-align: left;  /* 글씨를 왼쪽으로 정렬합니다 */
-    font-size: 14px; 
+.location-card,
+.driving-guide {
+    margin-top: 24px;
+    padding: 24px;
+    border: 1px solid #eee8d5;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.location-card h2,
+.driving-guide h2 {
+    margin: 0 0 18px;
+    color: #073642;
+    font-size: 1.3rem;
+}
+
+.location-details {
+    margin: 0;
+}
+
+.location-details div {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee8d5;
+}
+
+.location-details dt {
+    color: #859900;
     font-weight: bold;
-    color: #586e75;    /* 부드럽고 차분한 청회색 톤 */
-    letter-spacing: 0.5px;
 }
 
-/* ========================================
-   [오른쪽 칸] 내비게이션 메뉴 래퍼
-   ======================================== */
-.header-nav-wrap {
-    flex-shrink: 0;    /* 핵심 2: 화면이 좁아져도 메뉴 버튼 칸이 찌그러지지 않도록 방어합니다 */
+.location-details dd {
+    margin: 0;
+    color: #586e75;
+    line-height: 1.6;
 }
 
-/* ========================================
-   4. 메인 이미지 자체 스타일
-   ======================================== */
-.main-header-img { 
-    width: 100%; 
-    /* 핵심 포인트 3: 원본 크기가 아닌, 부모 박스의 높이에 100% 맞춥니다 */
-    height: 100%; 
-    object-fit: cover; /* 비율을 유지하면서, 남거나 넘치는 부분을 예쁘게 잘라냅니다 */
-    /* ------------------------------------------------------------- */
+.address-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.address-button {
+    padding: 7px 11px;
+    border: 1px solid #268bd2;
+    border-radius: 4px;
+    background: #268bd2;
+    color: #ffffff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.address-button.secondary {
+    background: #ffffff;
+    color: #268bd2;
+}
+
+.address-button:hover {
+    background: #073642;
+    border-color: #073642;
+    color: #ffffff;
+}
+
+.copy-status {
     display: block;
+    min-height: 1.4em;
+    margin-top: 8px;
+    color: #859900;
+    font-size: 0.85rem;
 }
 
-/* ========================================
-   메인 타이틀 텍스트 스타일
-   ======================================== */
-.main-header-text {
-    /* 데스크톱 로고 높이(120px)의 2/3 크기인 80px의 80%인 로 설정합니다. */
-    font-size: calc(var(--logo-height-desktop) * (2/3) * var(--title-ratio));
+.map-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 11px 18px;
+    border-radius: 5px;
+    background-color: #268bd2;
+    color: #ffffff;
     font-weight: bold;
-    color: #073642; /* 브랜드 특유의 어두운 청록색 통일 */
-    letter-spacing: 2px; /* 글자 간격을 살짝 넓혀 여유롭고 고급스러운 느낌 강조 */
+    text-decoration: none;
 }
 
-/* 오시는 길 중앙 카드 */
-.contact-container { 
-    max-width: 800px; 
-    margin: 40px auto; 
-    padding: 40px; 
-    background: #ffffff; 
-    border-radius: 12px;
-    text-align: center;
+.map-link:hover {
+    background-color: #073642;
+}
+
+.driving-guide p,
+.driving-guide li {
+    color: #586e75;
+    line-height: 1.7;
+}
+
+.driving-guide ol {
+    margin: 16px 0;
+    padding-left: 22px;
+}
+
+.route-note {
+    margin-bottom: 0;
+    padding-top: 14px;
+    border-top: 1px solid #eee8d5;
+    font-size: 0.92rem;
 }
 
 @media (max-width: 768px) {
     .contact-container {
         width: 90%;
-        padding: 20px 15px;
+        padding: 10px;
+    }
+
+    .contact-header {
+        padding: 20px 10px 5px;
+    }
+
+    .location-card,
+    .driving-guide {
+        padding: 18px;
+    }
+
+    .location-details div {
+        grid-template-columns: 1fr;
+        gap: 4px;
     }
 }
