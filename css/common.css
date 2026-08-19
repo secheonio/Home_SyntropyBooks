@@ -82,12 +82,145 @@ body {
    ========================================== */
 /* 모든 페이지 하단에 고정적으로 들어가는 저작권 및 정보 영역입니다.[cite: 6] */
 .footer-section { 
+    position: relative;
     background-color: #073642; /* 어두운 네이비/청록색 톤으로 시각적 안정감 부여[cite: 6] */
     color: #93a1a1;            /* 대비를 낮춘 차분한 회색 폰트 컬러[cite: 6] */
     text-align: center;        /* 텍스트 중앙 정렬[cite: 6] */
     padding: 20px;             /* 상하좌우 여백[cite: 6] */
     margin-top: 60px;          /* 본문 콘텐츠와 푸터 사이의 충분한 간격[cite: 6] */
     font-size: 0.9rem;      /* 최상위 요소의 기본 글자 크기를 기준으로 0.9배(90%) 크기로 지정 */
+}
+
+.admin-trigger {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.admin-modal[hidden] {
+    display: none;
+}
+
+.admin-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+.admin-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(37, 72, 59, 0.5);
+}
+
+.admin-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 360px);
+    padding: 30px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--forest);
+    border-radius: 8px;
+    box-shadow: 0 16px 40px rgba(37, 72, 59, 0.25);
+    box-sizing: border-box;
+}
+
+.admin-dialog-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: 0;
+    background: transparent;
+    color: var(--forest-deep);
+    cursor: pointer;
+    font-size: 1.4rem;
+}
+
+.admin-eyebrow {
+    margin: 0 0 6px;
+    color: var(--earth);
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+}
+
+.admin-dialog h2 {
+    margin: 0 0 22px;
+    color: var(--forest-deep);
+}
+
+#admin-login-form {
+    display: grid;
+    gap: 8px;
+}
+
+#admin-login-form label {
+    color: var(--forest-deep);
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+#admin-login-form input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #ffffff;
+    box-sizing: border-box;
+    font: inherit;
+}
+
+.admin-password-field {
+    position: relative;
+}
+
+.admin-password-field input {
+    padding-right: 42px;
+}
+
+.admin-password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--forest);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transform: translateY(-50%);
+}
+
+#admin-login-form button[type="submit"] {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid var(--forest);
+    border-radius: 4px;
+    background: var(--forest);
+    color: #ffffff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: bold;
+}
+
+.admin-login-status {
+    min-height: 1.4em;
+    margin: 4px 0 0;
+    color: var(--earth);
+    font-size: 0.78rem;
 }
 
 /* ==========================================================================
@@ -179,7 +312,7 @@ body {
     text-decoration: none;
     color: #073642;                /* 눈에 띄는 진한 청록색 톤 */
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 1rem;
     padding: 8px 10px;
     background: var(--surface);
     border: 1px solid var(--forest);
@@ -269,6 +402,124 @@ body {
     background-color: var(--forest-deep);
     color: #ffffff;
     border-color: #073642;
+}
+
+/* 8개 분야 메뉴는 상위 메뉴보다 작고 서로 다른 색으로 구분합니다. */
+.book-category-list .category-item {
+    padding: 5px 8px;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+.book-category-list .category-item:nth-child(1) { color: #3f7656; }
+.book-category-list .category-item:nth-child(2) { color: #39747a; }
+.book-category-list .category-item:nth-child(3) { color: #8a6545; }
+.book-category-list .category-item:nth-child(4) { color: #4f6687; }
+.book-category-list .category-item:nth-child(5) { color: #7a7040; }
+.book-category-list .category-item:nth-child(6) { color: #a35d3f; }
+.book-category-list .category-item:nth-child(7) { color: #4d785e; }
+.book-category-list .category-item:nth-child(8) { color: #6a5878; }
+
+.book-category-list .category-item.active {
+    background-color: var(--forest-deep);
+    color: #ffffff;
+    border-color: var(--forest-deep);
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(1) {
+    background-color: #3f7656;
+    border-color: #3f7656;
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(2) {
+    background-color: #39747a;
+    border-color: #39747a;
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(3) {
+    background-color: #8a6545;
+    border-color: #8a6545;
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(4) {
+    background-color: #4f6687;
+    border-color: #4f6687;
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(5) {
+    background-color: #7a7040;
+    border-color: #7a7040;
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(6) {
+    background-color: #a35d3f;
+    border-color: #a35d3f;
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(7) {
+    background-color: #4d785e;
+    border-color: #4d785e;
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(8) {
+    background-color: #6a5878;
+    border-color: #6a5878;
+}
+
+/* 8개 카테고리에 무지개 7색과 흰색을 순서대로 적용합니다. */
+.book-category-list .category-item:nth-child(1) {
+    background-color: #f4c7c3;
+    border-color: #d9827a;
+    color: #7b302b;
+}
+
+.book-category-list .category-item:nth-child(2) {
+    background-color: #f6d5b3;
+    border-color: #d99a61;
+    color: #75451f;
+}
+
+.book-category-list .category-item:nth-child(3) {
+    background-color: #f4e6a9;
+    border-color: #c7aa3a;
+    color: #665510;
+}
+
+.book-category-list .category-item:nth-child(4) {
+    background-color: #c7e3c0;
+    border-color: #75a96d;
+    color: #2e6130;
+}
+
+.book-category-list .category-item:nth-child(5) {
+    background-color: #c3e1e8;
+    border-color: #6fa9b8;
+    color: #245c6a;
+}
+
+.book-category-list .category-item:nth-child(6) {
+    background-color: #cbd3ed;
+    border-color: #7d8ec5;
+    color: #344576;
+}
+
+.book-category-list .category-item:nth-child(7) {
+    background-color: #dccbea;
+    border-color: #a587bd;
+    color: #5b3d70;
+}
+
+.book-category-list .category-item:nth-child(8) {
+    background-color: #ffffff;
+    border-color: #b8c5b8;
+    color: #25483b;
+}
+
+.book-category-list .category-item.active {
+    box-shadow: inset 0 0 0 2px var(--forest-deep);
+    color: #ffffff !important;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(37, 72, 59, 0.75);
 }
 
 /* ==========================================================================

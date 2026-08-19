@@ -1,6 +1,27 @@
 const MIN_ROTATION_DELAY_MS = 10000;
 const MAX_ROTATION_DELAY_MS = 20000;
 
+const bookCategoryLabels = {
+    'life-science': '생명과학',
+    'systems-thinking': '시스템 사고',
+    complexity: '복잡계',
+    cosmos: '우주와 질서',
+    evolution: '진화와 협력',
+    energy: '문명과 에너지',
+    ecology: '생태철학',
+    philosophy: '철학'
+};
+
+const updateBooksPageHeading = () => {
+    const heading = document.querySelector('#books-page-heading');
+    if (!heading) {
+        return;
+    }
+
+    const category = bookCategoryLabels[window.location.hash.slice(1)];
+    heading.innerHTML = category ? `도서목록 / ${category}` : '질서 있는 선택을 위한<br>도서 큐레이션';
+};
+
 const categoryBooks = {
     'life-science': [
         {
@@ -140,6 +161,48 @@ const categoryBooks = {
     ]
 };
 
+// 신간 상태는 카드의 배열 순서가 아니라 이 목록으로 판단합니다.
+const newBookTitles = new Set([
+    '생명이란 무엇인가',
+    '생명의 그물',
+    '카오스',
+    '코스모스',
+    '이기적 유전자',
+    '엔트로피',
+    '오래된 미래',
+    '장자'
+]);
+
+const updateCatalogFields = (card, title) => {
+    if (typeof getCatalogBookData !== 'function') {
+        return;
+    }
+
+    const metadata = getCatalogBookData(title);
+    let price = card.querySelector('.book-price');
+    let stock = card.querySelector('.book-stock');
+    let registered = card.querySelector('.book-registered');
+    let expiry = card.querySelector('.book-new-until');
+    const publisher = card.querySelector('.book-publisher');
+
+    if (!price || !stock || !registered || !expiry) {
+        price = price || document.createElement('p');
+        stock = stock || document.createElement('p');
+        registered = registered || document.createElement('p');
+        expiry = expiry || document.createElement('p');
+        price.className = 'book-price';
+        stock.className = 'book-stock';
+        registered.className = 'book-registered';
+        expiry.className = 'book-new-until';
+        publisher?.after(price, stock, registered, expiry);
+    }
+
+    price.textContent = `책값: ${formatCatalogPrice(metadata.price)}`;
+    stock.textContent = `재고: ${metadata.stock}권`;
+    registered.textContent = `등록일: ${formatCatalogDate(metadata.registeredAt)}`;
+    expiry.textContent = `신간 만료일: ${formatCatalogDate(metadata.newUntil)}`;
+};
+
 const bookMetadata = {
     '생명이란 무엇인가': { translator: '', publisher: 'Syntropy Books 큐레이션' },
     '생명의 그물': { translator: '', publisher: 'Syntropy Books 큐레이션' },
@@ -162,6 +225,14 @@ const updateBookCard = (card, book) => {
     card.querySelector('.book-translator').textContent = metadata.translator ? `옮긴이: ${metadata.translator}` : '';
     card.querySelector('.book-publisher').textContent = `출판사: ${metadata.publisher}`;
     card.querySelector('.book-description').textContent = book.description;
+    updateCatalogFields(card, book.title);
+    const newBadge = card.querySelector('.book-new-badge');
+    if (newBadge) {
+        const isNewBook = typeof getCatalogBookData === 'function'
+            ? getCatalogBookData(book.title).isNew
+            : newBookTitles.has(book.title);
+        newBadge.classList.toggle('is-hidden', !isNewBook);
+    }
     card.classList.remove('is-changing');
     requestAnimationFrame(() => card.classList.add('is-changing'));
     document.querySelector('#book-search-input')?.dispatchEvent(new Event('input'));
@@ -202,6 +273,18 @@ const startBookRotation = () => {
         }
 
         scheduleCardRotation(card, books, positions);
+        updateCatalogFields(card, card.querySelector('.book-title')?.textContent.trim());
+
+        card.addEventListener('click', (event) => {
+            if (event.target.closest('a')) {
+                return;
+            }
+
+            const title = card.querySelector('.book-title')?.textContent.trim();
+            if (title) {
+                window.location.href = `book-detail.html?book=${encodeURIComponent(title)}`;
+            }
+        });
     });
 };
 
@@ -221,11 +304,23 @@ const startBookSearch = () => {
     emptyMessage.hidden = true;
     container.append(emptyMessage);
 
+    const syncNewBadge = (card) => {
+        const newBadge = card.querySelector('.book-new-badge');
+        const currentTitle = card.querySelector('.book-title')?.textContent.trim();
+        const isNewBook = typeof getCatalogBookData === 'function'
+            ? getCatalogBookData(currentTitle).isNew
+            : newBookTitles.has(currentTitle);
+        newBadge?.classList.toggle('is-hidden', !isNewBook);
+    };
+
+    cards.forEach(syncNewBadge);
+
     input.addEventListener('input', () => {
         const query = input.value.trim().toLocaleLowerCase();
         let visibleCount = 0;
 
         cards.forEach((card) => {
+            syncNewBadge(card);
             const searchableText = card.textContent.toLocaleLowerCase();
             const matches = query === '' || searchableText.includes(query);
             card.classList.toggle('is-hidden', !matches);
@@ -240,4 +335,6 @@ const startBookSearch = () => {
 document.addEventListener('DOMContentLoaded', () => {
     startBookRotation();
     startBookSearch();
+    updateBooksPageHeading();
+    window.addEventListener('hashchange', updateBooksPageHeading);
 });
