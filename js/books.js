@@ -140,12 +140,31 @@ const categoryBooks = {
     ]
 };
 
+const bookMetadata = {
+    '생명이란 무엇인가': { translator: '', publisher: 'Syntropy Books 큐레이션' },
+    '생명의 그물': { translator: '', publisher: 'Syntropy Books 큐레이션' },
+    '카오스': { translator: '박배식', publisher: '승산' },
+    '코스모스': { translator: '홍승수', publisher: '사이언스북스' },
+    '이기적 유전자': { translator: '홍영남, 이상임', publisher: '을유문화사' },
+    '엔트로피': { translator: '', publisher: 'Syntropy Books 큐레이션' },
+    '오래된 미래': { translator: '김태언', publisher: '중앙북스' },
+    '장자': { translator: '김학주', publisher: '을유문화사' }
+};
+
 const updateBookCard = (card, book) => {
+    const metadata = bookMetadata[book.title] || {
+        translator: '',
+        publisher: 'Syntropy Books 큐레이션'
+    };
+
     card.querySelector('.book-title').textContent = book.title;
     card.querySelector('.book-author').textContent = book.author;
+    card.querySelector('.book-translator').textContent = metadata.translator ? `옮긴이: ${metadata.translator}` : '';
+    card.querySelector('.book-publisher').textContent = `출판사: ${metadata.publisher}`;
     card.querySelector('.book-description').textContent = book.description;
     card.classList.remove('is-changing');
     requestAnimationFrame(() => card.classList.add('is-changing'));
+    document.querySelector('#book-search-input')?.dispatchEvent(new Event('input'));
 };
 
 const getRandomDelay = () => {
@@ -186,4 +205,39 @@ const startBookRotation = () => {
     });
 };
 
-document.addEventListener('DOMContentLoaded', startBookRotation);
+const startBookSearch = () => {
+    const input = document.querySelector('#book-search-input');
+    const status = document.querySelector('#book-search-status');
+    const container = document.querySelector('.book-container');
+    const cards = [...document.querySelectorAll('.book-card[id]')];
+
+    if (!input || !status || !container || cards.length === 0) {
+        return;
+    }
+
+    const emptyMessage = document.createElement('p');
+    emptyMessage.className = 'book-search-empty';
+    emptyMessage.textContent = '검색 결과가 없습니다.';
+    emptyMessage.hidden = true;
+    container.append(emptyMessage);
+
+    input.addEventListener('input', () => {
+        const query = input.value.trim().toLocaleLowerCase();
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+            const searchableText = card.textContent.toLocaleLowerCase();
+            const matches = query === '' || searchableText.includes(query);
+            card.classList.toggle('is-hidden', !matches);
+            visibleCount += matches ? 1 : 0;
+        });
+
+        emptyMessage.hidden = visibleCount !== 0;
+        status.textContent = query === '' ? `전체 도서 ${cards.length}권` : `검색 결과 ${visibleCount}권`;
+    });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    startBookRotation();
+    startBookSearch();
+});
