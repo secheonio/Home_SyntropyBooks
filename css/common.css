@@ -1,103 +1,256 @@
 @charset "UTF-8";
 
-/* =========================================
-   1. 전체 페이지 기본 초기화 (Base Styles)
-   ========================================= */
+/* ==========================================================================
+   1. 전역 변수 설정 (:root) 및 기본 초기화 (Base Styles)
+   ========================================================================== */
+/* 
+  웹사이트 전반에서 반복적으로 사용되는 값(로고 높이, 비율 등)을 
+  변수로 선언해 한 곳에서 편리하게 관리합니다.
+*/
+:root {
+    --site-max-width: 1200px; /* 웹사이트 전체가 공유할 최대 가로 폭 기준 */
+    --site-padding: 30px;     /* 웹사이트 전체가 공유할 좌우 안전 여백 */
+    --sidebar-width: 260px;   /* 사이드바 및 헤더 왼쪽 칸의 고정 너비 */
+
+    --logo-height-desktop: 100px; /* 데스크톱 환경에서 기준이 되는 로고 높이[cite: 4, 5, 6, 7] */
+    --logo-height-mobile: 80px;   /* 모바일 환경에서 축소 적용될 로고 높이[cite: 4, 5, 6, 7] */
+    --title-ratio: 0.8;           /* 타이틀 폰트 크기 조절을 위한 세부 배율 계수[cite: 4, 5, 6, 7] */
+    --sidebar-width: 15%;  /* 사이드바의 기본 너비 비율 */
+    --header-left-width: 15%; /* 헤더 좌측 로고 영역의 너비 비율 */
+}
+
+/* 전체 페이지의 기본 배경색, 글꼴, 여백을 초기화합니다. */
 body { 
-    background-color: #fdf6e3; /* 따뜻한 느낌의 아이보리 배경색 */
-    font-family: 'Arial', sans-serif; /* 기본 글꼴 설정 */
-    margin: 0; 
-    padding: 0;
-    color: #333333; /* 기본 텍스트 색상 */
-    box-sizing: border-box;
+    background-color: #fdf6e3; /* 눈이 편안하고 따뜻한 느낌의 아이보리 배경색[cite: 6] */
+    font-family: 'Arial', sans-serif; /* 기본 산세리프 글꼴 지정[cite: 6] */
+    margin: 0;  /* 브라우저 기본 여백 제거[cite: 6] */
+    padding: 0; /* 브라우저 기본 패딩 제거[cite: 6] */
+    color: #333333; /* 가독성을 위한 기본 텍스트 색상[cite: 6] */
+    box-sizing: border-box; /* 패딩이 너비에 영향을 주지 않도록 박스 모델 설정[cite: 6] */
 }
 
-/* =========================================
+
+/* ==========================================================================
    2. 공통 네비게이션 바 (Navigation Bar)
-   ========================================= */
+   ========================================================================== */
+/* 네비게이션 버튼들을 가로로 정렬하고 간격을 제어하는 컨테이너입니다.[cite: 6] */
 .nav-bar { 
-    display: flex;             /* 메뉴 버튼을 가로로 배치 */
-    gap: 10px;                 /* 버튼 사이의 간격 */
-    justify-content: center;   /* 정중앙 정렬 */
+    display: flex;             /* Flexbox를 사용하여 내부 링크들을 가로 배치[cite: 6] */
+    gap: 10px;                 /* 버튼들 사이의 간격[cite: 6] */
+    justify-content: center;   /* 버튼 그룹을 정중앙으로 정렬[cite: 6] */
 }
 
-/* 네비게이션 링크 버튼 스타일 */
+/* 개별 네비게이션 링크 버튼의 디자인 스타일입니다.[cite: 6] */
 .nav-bar a {
-    display: flex;             /* 메뉴 버튼 가로 배치 */
-    justify-content: center;   /* 버튼 그룹 가로 중앙 정렬 */
-    gap: 10px;                 /* 버튼 간격 */
-    text-decoration: none;     /* 밑줄 제거 */
-    color: #268bd2;            /* 푸른색 글씨 */
-    font-weight: bold;         /* 글씨 굵게 */
-    padding: 6px 12px;         /* 클릭 영역을 넓히는 패딩 */
-    background: #ffffff;       /* 흰색 버튼 배경 */
-    border: 1px solid #268bd2; /* 테두리 선 */
-    border-radius: 5px;        /* 부드러운 라운딩 처리 */
-    font-size: 0.85rem; 
-    transition: all 0.3s ease; /* 호버 시 부드러운 전환 효과 */
+    display: flex;             /* 내부 콘텐츠 정렬을 위한 Flex 선언[cite: 6] */
+    justify-content: center;   /* 텍스트 가로 중앙 정렬[cite: 6] */
+    gap: 10px;                 
+    text-decoration: none;     /* 링크 밑줄 제거[cite: 6] */
+    color: #268bd2;            /* 브랜드 포인트 푸른색 글씨[cite: 6] */
+    font-weight: bold;         /* 글씨를 굵게 강조[cite: 6] */
+    padding: 6px 12px;         /* 클릭 영역을 넓혀주는 내부 여백[cite: 6] */
+    background: #ffffff;       /* 깨끗한 흰색 버튼 배경[cite: 6] */
+    border: 1px solid #268bd2; /* 버튼 테두리 선[cite: 6] */
+    border-radius: 5px;        /* 테두리를 둥글게 처리[cite: 6] */
+    font-size: 0.85rem;        /* 본문보다 살짝 작은 글자 크기[cite: 6] */
+    transition: all 0.3s ease; /* 마우스 호버 시 색상이 부드럽게 바뀌도록 설정[cite: 6] */
     text-align: center;
 } 
 
-/* 현재 활성화된 페이지 메뉴 버튼 */
+/* 현재 사용자가 보고 있는 페이지에 해당하는 메뉴 버튼의 스타일입니다.[cite: 6] */
 .nav-bar a.active {
-    background-color: #268bd2; /* 활성화 배경색 */
-    color: #ffffff;            /* 흰색 글자 */
+    background-color: #268bd2; /* 버튼 배경을 푸른색으로 채움[cite: 6] */
+    color: #ffffff;            /* 글자 색상을 흰색으로 반전[cite: 6] */
 }
 
-/* 마우스 호버 효과 */
+/* 마우스를 올렸을 때(Hover)의 상호작용 효과입니다.[cite: 6] */
 .nav-bar a:hover { 
     background-color: #268bd2; 
     color: #ffffff; 
 }
 
-/* =========================================
+
+/* ==========================================================================
    3. 공통 푸터 영역 (Footer Section)
-   ========================================= */
+   ========================================== */
+/* 모든 페이지 하단에 고정적으로 들어가는 저작권 및 정보 영역입니다.[cite: 6] */
 .footer-section { 
-    background-color: #073642; /* 어두운 톤의 딥블루 배경 */
-    color: #93a1a1;            /* 밝은 회색 글자 */
-    text-align: center;        /* 텍스트 중앙 정렬 */
-    padding: 20px;             /* 내부 여백 */
-    margin-top: 60px;          /* 본문과의 여백 차이 */
-    font-size: 0.9rem;
+    background-color: #073642; /* 어두운 네이비/청록색 톤으로 시각적 안정감 부여[cite: 6] */
+    color: #93a1a1;            /* 대비를 낮춘 차분한 회색 폰트 컬러[cite: 6] */
+    text-align: center;        /* 텍스트 중앙 정렬[cite: 6] */
+    padding: 20px;             /* 상하좌우 여백[cite: 6] */
+    margin-top: 60px;          /* 본문 콘텐츠와 푸터 사이의 충분한 간격[cite: 6] */
+    font-size: 0.9rem;      /* 최상위 요소의 기본 글자 크기를 기준으로 0.9배(90%) 크기로 지정 */
 }
 
-/* =========================================
-   4. 공통 모바일 반응형 미디어 쿼리 (768px 이하)
-   ========================================= */
-@media screen and (max-width: 768px) {
-    /* 모바일 환경에서 메뉴 버튼을 폭에 맞게 자동 조절 */
-    .nav-bar {
-        width: 100%;
-        gap: 8px;
-    }
-
-    .nav-bar a {
-        flex: 1;               /* 동일 비율로 분할 */
-        padding: 6px 4px;      /* 좁은 화면에 맞춰 패딩 축소 */
-        font-size: 0.8rem;
-    }
-}
-
-/* =========================================
-   공통 헤더 영역 스타일 (모듈화)
-   ========================================= */
-
-/* 1. 전체 헤더 상자 (2단 구조 틀) */
+/* ==========================================================================
+   1. 헤더 바깥쪽 박스: 배경색과 테두리선만 화면 전체(100%)로 확장
+   ========================================================================== */
 .header-section { 
-    display: flex; 
-    flex-direction: row; 
-    align-items: stretch; 
-    padding: 0 40px; 
-    background-color: #eee8d5; 
-    border-bottom: 2px solid #586e75; 
-    box-sizing: border-box; 
-    gap: 20px;
+    width: 100%;               /* 화면 가로폭을 가득 채웁니다 */
+    background-color: #eee8d5; /* 헤더 전체 배경색 */
+    border-bottom: 2px solid #586e75; /* 하단 경계선 */
+    box-sizing: border-box;
 }
 
-/* 2. 좌측 로고 박스 (어두운 배경 적용으로 흰색 로고 가독성 확보) */
+/* ==========================================================================
+   2. 헤더 안쪽 컨테이너: 본문(.content-wrapper)과 완벽하게 동일한 폭과 여백 공유
+   ========================================================================== */
+.header-inner {
+    display: flex;             
+    flex-direction: row;       /* 좌우 2단 구조 배치 */
+    align-items: stretch;      /* 세로 높이 일치 */
+    
+    /* [핵심] 본문 컨테이너와 동일한 변수를 사용하여 완벽한 수직 정렬 유지 */
+    max-width: var(--site-max-width); /* 전체 최대 너비 기준 통일 (예: 1200px) */
+    margin: 0 auto;                   /* 화면 중앙 배치 */
+    padding: 0 var(--site-padding);   /* 좌우 안전 여백 통일 */
+    
+    gap: 20px;                 /* 왼쪽 로고 박스와 오른쪽 영역 사이 간격 */
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   3. 본문 전체 컨테이너 (.content-wrapper) - 비교 확인용
+   ========================================================================== */
+.content-wrapper {
+    display: flex;             
+    flex-direction: row;       
+    gap: 20px;                 
+    
+    /* 헤더 안쪽(.header-inner)과 완전히 동일한 규격을 가집니다 */
+    max-width: var(--site-max-width); 
+    margin: 40px auto;                
+    padding: 0 var(--site-padding);   
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   1. 사이드바 전체 박스 디자인
+   ========================================================================== */
+.sidebar {
+    flex: 0 0 var(--sidebar-width); /* 헤더 왼쪽 로고 박스와 너비 연동 */
+    background-color: #eee8d5;     /* 따뜻한 베이지 배경 톤 */
+    padding: 20px;                 /* 내부 여백 */
+    border-radius: 10px;           /* 둥근 모서리 */
+    box-sizing: border-box;
+    border: 1px dashed #b58900;    /* 헤더와 일체감을 주는 테두리선 */
+    height: fit-content;           /* 내용물 높이에 맞게 자동 조절 */
+}
+
+/* 사이드바 내부 타이틀 ('Menu') */
+.sidebar-title {
+    font-size: 1rem;
+    color: #073642;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #586e75;
+    padding-bottom: 8px;
+}
+
+/* ==========================================================================
+   2. 사이드바 네비게이션: 세로 정렬 구조
+   ========================================================================== */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;        /* 모든 메뉴를 세로로 하나씩 정렬 */
+    gap: 12px;                     /* 메뉴 그룹들 사이의 간격 */
+}
+
+/* ==========================================================================
+   3. 하부 메뉴를 포함하는 상위 카테고리 그룹
+   ========================================================================== */
+.menu-category {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;                      /* 상위 메뉴와 하부 메뉴 리스트 사이 간격 */
+}
+
+/* 상위 메뉴 링크 (클릭 가능) */
+.menu-parent-link {
+    display: block;
+    text-decoration: none;
+    color: #073642;                /* 눈에 띄는 진한 청록색 톤 */
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 8px 10px;
+    background: #ffffff;
+    border: 1px solid #268bd2;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.menu-parent-link:hover {
+    background-color: #268bd2;
+    color: #ffffff;
+}
+
+/* 단독 메뉴 (예: 오시는 길) 스타일 */
+.menu-single {
+    display: block;
+    text-decoration: none;
+    color: #268bd2;
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 8px 10px;
+    background: #ffffff;
+    border: 1px solid #268bd2;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.menu-single:hover {
+    background-color: #268bd2;
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   4. 하부 메뉴 영역 (나뭇가지 계층 구조 표현)
+   ========================================================================== */
+.submenu-list {
+    display: flex;
+    flex-direction: column;        /* 하부 메뉴들도 세로 정렬 */
+    gap: 4px;                      /* 하부 메뉴 간격 */
+    padding-left: 14px;            /* 오른쪽으로 들여쓰기하여 계층 표현 */
+    margin-left: 6px;
+    border-left: 2px solid #2aa198;/* 나무 줄기를 연상시키는 세로 포인트 연결선 (|) */
+}
+
+/* 개별 하부 메뉴 아이템 */
+.submenu-item {
+    display: block;
+    text-decoration: none;
+    color: #586e75;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.6); /* 은은한 반투명 흰색 */
+    border-radius: 4px;
+    border: 1px solid #d3cdc7;
+    transition: all 0.2s ease;
+}
+
+/* 하부 메뉴 마우스 호버 효과 */
+.submenu-item:hover {
+    background-color: #2aa198;
+    color: #ffffff;
+    border-color: #2aa198;
+    transform: translateX(3px);    /* 부드럽게 우측으로 이동하는 인터랙션 */
+}
+
+/* 현재 선택된 활성 상태 표시 */
+.menu-parent-link.active,
+.submenu-item.active,
+.menu-single.active {
+    background-color: #073642;
+    color: #ffffff;
+    border-color: #073642;
+}
+
+/* ==========================================================================
+   헤더 왼쪽 로고 영역의 너비를 변수로 고정
+   ========================================================================== */
 .header-left { 
-    flex-shrink: 0; 
+    flex: 0 0 var(--sidebar-width); /* 사이드바와 정확히 같은 너비(260px)로 고정 */
     display: flex; 
     align-items: center; 
     justify-content: center; 
@@ -108,107 +261,136 @@ body {
     box-sizing: border-box;
 }
 
-/* 3. 로고 이미지 컨트롤러 */
+/* 헤더 내부의 로고 이미지 태그 스타일입니다.[cite: 6] */
 .header-logo { 
-    height: 120px; 
-    width: auto; 
+    height: var(--logo-height-desktop); /* 루트 변수에서 정의한 높이를 상속[cite: 6] */
+    width: auto;                       /* 이미지 비율 유지를 위해 너비는 자동 조절[cite: 6] */
     display: block; 
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s; /* 마우스 호버 시 애니메이션 효과[cite: 6] */
 }
 
+/* 로고에 마우스가 올라갔을 때 살짝 커지는 인터랙션입니다.[cite: 6] */
 .header-logo:hover { 
     transform: scale(1.05); 
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* 4. 우측 전체 영역 (상단 타이틀 + 하단 메뉴) */
+/* 헤더의 오른쪽 영역: 타이틀과 하단 메뉴를 수직으로 품는 컨테이너입니다.[cite: 6] */
 .header-right { 
-    flex-grow: 1; 
+    flex-grow: 1;              /* 남은 공간을 가득 채우도록 확장[cite: 6] */
     display: flex; 
-    flex-direction: column; 
-    min-height: 0; 
+    flex-direction: column;    /* 상단(타이틀)과 하단(메뉴)을 세로로 배치[cite: 6] */
+    min-height: 0;             /* 내부 콘텐츠로 인해 레이아웃이 깨지는 현상 방지[cite: 6] */
     border: 1px dashed #268bd2; 
     border-radius: 10px; 
-    background: rgba(255,255,255,0.5); 
-    overflow: hidden; 
+    background: rgba(255,255,255,0.5); /* 반투명한 흰색 배경[cite: 6] */
+    overflow: hidden;          /* 넘치는 콘텐츠가 모서리 밖으로 나가지 않도록 차단[cite: 6] */
     box-sizing: border-box;
 }
 
-/* 5. 우측 상단 (메인 텍스트가 들어가는 칸) */
+/* 우측 영역의 상단부: 메인 타이틀(브랜드명)이 위치하는 곳입니다.[cite: 6] */
 .header-top-row { 
-    flex: 2;                   
+    flex: 2;                   /* 하단 영역 대비 2배의 공간 비율 차지[cite: 6] */
     display: flex;             
-    align-items: center;       
-    justify-content: center;   
+    align-items: center;       /* 세로 중앙 정렬[cite: 6] */
+    justify-content: center;   /* 가로 중앙 정렬[cite: 6] */
     min-height: 0; 
     position: relative; 
-    border-bottom: 1px dotted #839496; 
+    border-bottom: 1px dotted #839496; /* 상단과 하단을 구분하는 점선[cite: 6] */
     background-color: #fdf6e3; 
     overflow: hidden;
 }
 
-/* 6. 메인 타이틀 텍스트 스타일 */
+/* 메인 타이틀 텍스트: 로고 높이에 비례하여 반응형으로 크기가 조절되는 수식 적용[cite: 6] */
 .main-header-text {
-    font-size: calc(120px * (2 / 3) * 0.4); /* 로고 높이 기준 비율 계산식 */
+    font-size: calc(var(--logo-height-desktop) * (2 / 3) * var(--title-ratio)); 
     font-weight: bold;
     color: #073642; 
-    letter-spacing: 2px; 
+    letter-spacing: 2px; /* 글자 간격을 넓혀 고급스러운 느낌 연출[cite: 6] */
 }
 
-/* 7. 우측 하단 (개념 소개 + 메뉴 버튼을 나누는 칸) */
+/* 우측 영역의 하단부: 개념 소개 글과 네비게이션 메뉴를 좌우로 나누는 곳입니다.[cite: 6] */
 .header-bottom-row { 
-    flex: 1;                   
+    flex: 1;                   /* 1의 비율 공간 차지[cite: 6] */
     display: flex; 
-    align-items: center;       
+    align-items: center;       /* 세로 중앙 정렬[cite: 6] */
     padding: 0 20px;
-    gap: 20px;                 
+    gap: 20px;                 /* 소개 문구와 메뉴 바 사이의 안전 거리[cite: 6] */
 }
 
-/* 8. 하단 왼쪽 칸 (개념 소개 문구) */
+/* 하단 영역의 왼쪽: 슬로건이나 책방 핵심 개념을 설명하는 텍스트 영역입니다.[cite: 6] */
 .header-intro-text {
-    flex-grow: 1;      
-    text-align: left;  
+    flex-grow: 1;              /* 메뉴가 차지하고 남은 잔여 공간을 모두 흡수[cite: 6] */
+    text-align: left;          /* 왼쪽 정렬[cite: 6] */
     font-size: 14px; 
     color: #586e75;    
     letter-spacing: 0.5px;
 }
 
-/* 9. 하단 오른쪽 칸 (메뉴 버튼 그룹 방어막) */
+/* 하단 영역의 오른쪽: 네비게이션 메뉴의 크기가 찌그러지지 않도록 방어하는 래퍼입니다.[cite: 6] */
 .header-nav-wrap {
-    flex-shrink: 0;    
+    flex-shrink: 0;            /* 화면이 좁아져도 메뉴 버튼 영역은 줄어들지 않도록 고정[cite: 6] */
 }
 
-/* =========================================
-   공통 헤더 모바일 반응형 미디어 쿼리 (768px 이하)
-   ========================================= */
+/* ==========================================================================
+   5. 모바일 반응형 미디어 쿼리 (Max-width: 768px 이하)
+   ========================================================================== */
 @media screen and (max-width: 768px) {
+    /* 모바일 환경에서는 네비게이션 바가 화면 전체 너비를 쓰도록 설정[cite: 6] */
+    .content-wrapper {
+        flex-direction: column; /* 세로 방향으로 쌓기 */
+    }
+    .sidebar {
+        flex: none;             /* 고정 너비 해제 */
+        width: 100%;            /* 전체 너비 사용 */
+    }
+    
+    .nav-bar {
+        width: 100%;
+        gap: 8px;
+    }
+
+    /* 모바일 버튼들이 균등한 비율(1:1:1)로 공간을 나눠 가지도록 설정[cite: 6] */
+    .nav-bar a {
+        flex: 1;               
+        padding: 6px 4px;      
+        font-size: 0.8rem;
+    }
+
+    /* 헤더 방향을 가로(row)에서 세로(column) 쌓기 구조로 변경[cite: 6] */
     .header-section { 
         flex-direction: column; 
         padding: 10px 20px; 
         gap: 15px; 
     }
     
+    /* 좌측 로고 박스 너비를 모바일 화면에 맞게 100%로 확장[cite: 6] */
     .header-left { 
         width: 100%; 
         padding: 10px 0; 
     }
     
+    /* 모바일 환경에서 로고 높이를 축소된 변수값으로 변경[cite: 6] */
     .header-logo { 
-        height: 80px; 
+        height: var(--logo-height-mobile); 
     } 
     
+    /* 우측 영역 너비도 100%로 확장[cite: 6] */
     .header-right { 
         width: 100%; 
     }
     
+    /* 모바일 상단 타이틀 박스의 고정 높이 설정[cite: 6] */
     .header-top-row { 
         height: 100px; 
     }
     
+    /* 모바일 로고 높이 기준으로 타이틀 폰트 크기 재계산[cite: 6] */
     .main-header-text {
-        font-size: calc(80px * (2 / 3) * 0.4); /* 모바일 로고 높이 기준 비율 적용 */
+        font-size: calc(var(--logo-height-mobile) * (2 / 3) * var(--title-ratio));
     }
     
+    /* 하단 영역 내 요소들을 위아래로 쌓이도록 변경[cite: 6] */
     .header-bottom-row {
         flex-direction: column; 
         gap: 10px;
@@ -216,8 +398,44 @@ body {
         justify-content: center;
     }
     
+    /* 모바일에서는 소개 문구를 중앙 정렬하여 시각적 안정감 부여[cite: 6] */
     .header-intro-text {
         text-align: center; 
         font-size: 12px;
     }
 }
+
+/* 
+   모바일 반응형 처리 
+   화면이 좁아지면(768px 이하) 2단을 1단으로 쌓습니다.
+*/
+
+/* 
+   2단 레이아웃을 위한 컨테이너 설정 
+   Flexbox를 사용하여 자식 요소(사이드바, 메인)를 가로로 배치합니다.
+*/
+.content-wrapper {
+    display: flex;             /* 내부 요소를 가로 정렬(Flex) 상태로 만듭니다 */
+    flex-direction: row;       /* 가로 배치 방향을 설정합니다 */
+    gap: 20px;                 /* 사이드바와 본문 사이의 간격을 20px로 줍니다 */
+    max-width: 1200px;         /* 전체 너비를 1200px로 제한하여 가독성을 높입니다 */
+    margin: 40px auto;         /* 화면 중앙에 배치합니다 */
+    padding: 0 20px;           /* 화면 양 끝의 여백을 확보합니다 */
+}
+
+/* 좌측 사이드바 스타일 */
+.sidebar {
+    flex: 0 0 15%;           /* 크기가 변하지 않게 너비를 250px로 고정합니다 */
+    background-color: #eee8d5; /* 배경색을 연한 베이지로 설정 */
+    padding: 20px;             /* 내부 여백 */
+    border-radius: 10px;       /* 모서리를 둥글게 처리 */
+}
+
+/* 우측 메인 콘텐츠 스타일 */
+.main-content {
+    flex: 1;                   /* 남은 공간을 모두 차지하도록 자동 확장합니다 */
+    background-color: #ffffff; /* 흰색 배경으로 본문을 강조 */
+    padding: 20px;             /* 내부 여백 */
+    border-radius: 10px;       /* 모서리를 둥글게 처리 */
+}
+

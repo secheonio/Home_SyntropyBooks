@@ -40,7 +40,7 @@
                     <nav class="nav-bar">
                         <!-- '오시는 길'에 active 클래스 적용 -->
                         <a href="../about/about.html">책방 소개</a>
-                        <a href="../books/books.html">도서 목록</a>
+                        <a href="../books/books.html">도서 관리</a>
                         <a href="contact.html" class="active">오시는 길</a>
                     </nav>
                 </div>
@@ -48,16 +48,117 @@
         </div>
     </header>
 
-    <!-- 위치 정보 카드 본문  -->
-    <main class="contact-container">
-        <h2>오시는 길</h2>
-        <p>오프라인 공간 위치 및 이용 안내 페이지입니다.</p>
-    </main>
+    <div class="content-wrapper">
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Menu</h3>
+            <nav class="sidebar-nav">
+                <div class="menu-category">
+                    <a href="../about/about.html" class="menu-parent-link">책방 소개</a>
+                    <div class="submenu-list">
+                        <a href="../about/bookstore-philosophy.html" class="submenu-item">책방 철학</a>
+                        <a href="../about/bookstore-guide.html" class="submenu-item">이용 안내</a>
+                    </div>
+                </div>
+                <div class="menu-category">
+                    <a href="../books/books.html" class="menu-parent-link">도서 관리</a>
+                    <div class="submenu-list">
+                        <a href="../books/books.html" class="submenu-item">도서 목록</a>
+                        <a href="../books/books-new.html" class="submenu-item">신간 도서 코너</a>
+                    </div>
+                </div>
+                <a href="contact.html" class="menu-single active" aria-current="page">오시는 길</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section class="contact-container">
+                <header class="contact-header">
+                    <p class="subtitle">SYNTROPY BOOKS LOCATION</p>
+                    <h1 class="main-title">고창서점마을로<br>찾아오세요</h1>
+                    <p class="contact-intro">고창의 조용한 길 끝에서 책과 사유를 만나는 공간입니다.</p>
+                </header>
+
+                <section class="location-card">
+                    <h2>방문 장소</h2>
+                    <dl class="location-details">
+                        <div>
+                            <dt>장소명</dt>
+                            <dd>고창서점마을</dd>
+                        </div>
+                        <div>
+                            <dt>주소</dt>
+                            <dd>
+                                <span id="address-text">전북특별자치도 고창군 대산면 지석남당길 106-6</span>
+                                <span class="address-actions">
+                                    <button type="button" class="address-button" id="copy-address">주소 복사</button>
+                                    <button type="button" class="address-button secondary" id="share-address">공유하기</button>
+                                </span>
+                                <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
+                            </dd>
+                        </div>
+                    </dl>
+                    <a class="map-link" href="https://map.kakao.com/?q=%EA%B3%A0%EC%B0%BD%EC%84%9C%EC%A0%90%EB%A7%88%EC%9D%84" target="_blank" rel="noopener noreferrer">카카오맵에서 길찾기</a>
+                </section>
+
+                <section class="driving-guide">
+                    <h2>자차 이용 안내</h2>
+                    <p>대중교통 이용이 어려운 위치이므로 방문 시 자차 이용을 권장합니다.</p>
+                    <ol>
+                        <li>위 주소를 내비게이션 목적지로 입력합니다.</li>
+                        <li>카카오맵에서 출발지를 설정한 뒤 자동차 경로를 확인합니다.</li>
+                        <li>농촌 지역 도로 특성상 도착 전 실제 도로 안내와 주변 표지판을 함께 확인해 주세요.</li>
+                    </ol>
+                    <p class="route-note">출발지가 정해져 있다면 카카오맵의 길찾기 화면에서 출발지를 입력하면 가장 정확한 경로와 예상 소요 시간을 확인할 수 있습니다.</p>
+                </section>
+            </section>
+        </main>
+    </div>
 
     <!-- 공통 푸터 -->
     <footer class="footer-section">
         <p>&copy; 2026 Syntropy Books. All rights reserved.</p>
     </footer>
+
+    <script>
+        const address = document.getElementById('address-text').textContent;
+        const status = document.getElementById('copy-status');
+
+        async function copyAddress() {
+            try {
+                await navigator.clipboard.writeText(address);
+            } catch (error) {
+                const textArea = document.createElement('textarea');
+                textArea.value = address;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                textArea.remove();
+            }
+            status.textContent = '주소가 복사되었습니다.';
+        }
+
+        async function shareAddress() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: '고창서점마을 오시는 길',
+                        text: `고창서점마을 주소: ${address}`,
+                        url: window.location.href
+                    });
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                        status.textContent = '공유할 수 없습니다. 주소 복사를 이용해 주세요.';
+                    }
+                }
+                return;
+            }
+            await copyAddress();
+            status.textContent = '주소를 복사했습니다. 카카오톡에 붙여 넣어 전송해 주세요.';
+        }
+
+        document.getElementById('copy-address').addEventListener('click', copyAddress);
+        document.getElementById('share-address').addEventListener('click', shareAddress);
+    </script>
 
 </body>
 </html>
