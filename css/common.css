@@ -8,6 +8,13 @@
   변수로 선언해 한 곳에서 편리하게 관리합니다.
 */
 :root {
+    --page-bg: #e7efe5;
+    --surface: #f7f4ea;
+    --surface-muted: #dce8dc;
+    --forest-deep: #25483b;
+    --forest: #4f7658;
+    --earth: #b27a4b;
+    --border: #a8b9a6;
     --site-max-width: 1200px; /* 웹사이트 전체가 공유할 최대 가로 폭 기준 */
     --site-padding: 30px;     /* 웹사이트 전체가 공유할 좌우 안전 여백 */
     --sidebar-width: 260px;   /* 사이드바 및 헤더 왼쪽 칸의 고정 너비 */
@@ -21,7 +28,7 @@
 
 /* 전체 페이지의 기본 배경색, 글꼴, 여백을 초기화합니다. */
 body { 
-    background-color: #fdf6e3; /* 눈이 편안하고 따뜻한 느낌의 아이보리 배경색[cite: 6] */
+    background-color: var(--page-bg); /* 생태적이고 차분한 연한 세이지 배경 */
     font-family: 'Arial', sans-serif; /* 기본 산세리프 글꼴 지정[cite: 6] */
     margin: 0;  /* 브라우저 기본 여백 제거[cite: 6] */
     padding: 0; /* 브라우저 기본 패딩 제거[cite: 6] */
@@ -49,8 +56,8 @@ body {
     color: #268bd2;            /* 브랜드 포인트 푸른색 글씨[cite: 6] */
     font-weight: bold;         /* 글씨를 굵게 강조[cite: 6] */
     padding: 6px 12px;         /* 클릭 영역을 넓혀주는 내부 여백[cite: 6] */
-    background: #ffffff;       /* 깨끗한 흰색 버튼 배경[cite: 6] */
-    border: 1px solid #268bd2; /* 버튼 테두리 선[cite: 6] */
+    background: var(--surface);       /* 따뜻한 종이 질감의 표면 */
+    border: 1px solid var(--forest); /* 숲색 포인트 테두리 */
     border-radius: 5px;        /* 테두리를 둥글게 처리[cite: 6] */
     font-size: 0.85rem;        /* 본문보다 살짝 작은 글자 크기[cite: 6] */
     transition: all 0.3s ease; /* 마우스 호버 시 색상이 부드럽게 바뀌도록 설정[cite: 6] */
@@ -59,13 +66,13 @@ body {
 
 /* 현재 사용자가 보고 있는 페이지에 해당하는 메뉴 버튼의 스타일입니다.[cite: 6] */
 .nav-bar a.active {
-    background-color: #268bd2; /* 버튼 배경을 푸른색으로 채움[cite: 6] */
+    background-color: var(--forest); /* 버튼 배경을 숲색으로 채움 */
     color: #ffffff;            /* 글자 색상을 흰색으로 반전[cite: 6] */
 }
 
 /* 마우스를 올렸을 때(Hover)의 상호작용 효과입니다.[cite: 6] */
 .nav-bar a:hover { 
-    background-color: #268bd2; 
+    background-color: var(--forest); 
     color: #ffffff; 
 }
 
@@ -88,8 +95,8 @@ body {
    ========================================================================== */
 .header-section { 
     width: 100%;               /* 화면 가로폭을 가득 채웁니다 */
-    background-color: #eee8d5; /* 헤더 전체 배경색 */
-    border-bottom: 2px solid #586e75; /* 하단 경계선 */
+    background-color: var(--surface-muted); /* 헤더 전체 배경색 */
+    border-bottom: 2px solid var(--border); /* 하단 경계선 */
     box-sizing: border-box;
 }
 
@@ -130,11 +137,11 @@ body {
    ========================================================================== */
 .sidebar {
     flex: 0 0 var(--sidebar-width); /* 헤더 왼쪽 로고 박스와 너비 연동 */
-    background-color: #eee8d5;     /* 따뜻한 베이지 배경 톤 */
+    background-color: var(--surface-muted);     /* 잎과 흙을 연상시키는 표면 톤 */
     padding: 20px;                 /* 내부 여백 */
     border-radius: 10px;           /* 둥근 모서리 */
     box-sizing: border-box;
-    border: 1px dashed #b58900;    /* 헤더와 일체감을 주는 테두리선 */
+    border: 1px dashed var(--earth);    /* 흙빛 포인트 테두리선 */
     height: fit-content;           /* 내용물 높이에 맞게 자동 조절 */
 }
 
@@ -174,14 +181,14 @@ body {
     font-weight: bold;
     font-size: 0.95rem;
     padding: 8px 10px;
-    background: #ffffff;
-    border: 1px solid #268bd2;
+    background: var(--surface);
+    border: 1px solid var(--forest);
     border-radius: 6px;
     transition: all 0.2s ease;
 }
 
 .menu-parent-link:hover {
-    background-color: #268bd2;
+    background-color: var(--forest);
     color: #ffffff;
 }
 
@@ -193,14 +200,14 @@ body {
     font-weight: bold;
     font-size: 0.95rem;
     padding: 8px 10px;
-    background: #ffffff;
-    border: 1px solid #268bd2;
+    background: var(--surface);
+    border: 1px solid var(--forest);
     border-radius: 6px;
     transition: all 0.2s ease;
 }
 
 .menu-single:hover {
-    background-color: #268bd2;
+    background-color: var(--forest);
     color: #ffffff;
 }
 
@@ -213,7 +220,25 @@ body {
     gap: 4px;                      /* 하부 메뉴 간격 */
     padding-left: 14px;            /* 오른쪽으로 들여쓰기하여 계층 표현 */
     margin-left: 6px;
-    border-left: 2px solid #2aa198;/* 나무 줄기를 연상시키는 세로 포인트 연결선 (|) */
+    border-left: 2px solid var(--forest);/* 나무 줄기를 연상시키는 세로 포인트 연결선 (|) */
+}
+
+.book-category-list {
+    display: none;
+    flex-direction: column;
+    gap: 3px;
+    margin: 0 0 2px 8px;
+    padding-left: 8px;
+    border-left: 1px solid var(--border);
+}
+
+.submenu-item.active + .book-category-list {
+    display: flex;
+}
+
+.category-item {
+    padding: 5px 8px;
+    font-size: 0.78rem;
 }
 
 /* 개별 하부 메뉴 아이템 */
@@ -223,15 +248,15 @@ body {
     color: #586e75;
     font-size: 0.85rem;
     padding: 6px 10px;
-    background: rgba(255, 255, 255, 0.6); /* 은은한 반투명 흰색 */
+    background: rgba(247, 244, 234, 0.72); /* 은은한 종이색 표면 */
     border-radius: 4px;
-    border: 1px solid #d3cdc7;
+    border: 1px solid var(--border);
     transition: all 0.2s ease;
 }
 
 /* 하부 메뉴 마우스 호버 효과 */
 .submenu-item:hover {
-    background-color: #2aa198;
+    background-color: var(--forest);
     color: #ffffff;
     border-color: #2aa198;
     transform: translateX(3px);    /* 부드럽게 우측으로 이동하는 인터랙션 */
@@ -241,7 +266,7 @@ body {
 .menu-parent-link.active,
 .submenu-item.active,
 .menu-single.active {
-    background-color: #073642;
+    background-color: var(--forest-deep);
     color: #ffffff;
     border-color: #073642;
 }
@@ -254,8 +279,8 @@ body {
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    background: #073642; 
-    border: 1px dashed #b58900; 
+    background: var(--forest-deep); 
+    border: 1px dashed var(--earth); 
     padding: 0 15px; 
     border-radius: 10px; 
     box-sizing: border-box;
@@ -281,9 +306,9 @@ body {
     display: flex; 
     flex-direction: column;    /* 상단(타이틀)과 하단(메뉴)을 세로로 배치[cite: 6] */
     min-height: 0;             /* 내부 콘텐츠로 인해 레이아웃이 깨지는 현상 방지[cite: 6] */
-    border: 1px dashed #268bd2; 
+    border: 1px dashed var(--forest); 
     border-radius: 10px; 
-    background: rgba(255,255,255,0.5); /* 반투명한 흰색 배경[cite: 6] */
+    background: rgba(247, 244, 234, 0.76); /* 반투명한 종이색 배경 */
     overflow: hidden;          /* 넘치는 콘텐츠가 모서리 밖으로 나가지 않도록 차단[cite: 6] */
     box-sizing: border-box;
 }
@@ -297,7 +322,7 @@ body {
     min-height: 0; 
     position: relative; 
     border-bottom: 1px dotted #839496; /* 상단과 하단을 구분하는 점선[cite: 6] */
-    background-color: #fdf6e3; 
+    background-color: var(--surface); 
     overflow: hidden;
 }
 
@@ -426,7 +451,7 @@ body {
 /* 좌측 사이드바 스타일 */
 .sidebar {
     flex: 0 0 15%;           /* 크기가 변하지 않게 너비를 250px로 고정합니다 */
-    background-color: #eee8d5; /* 배경색을 연한 베이지로 설정 */
+    background-color: var(--surface-muted); /* 배경색을 연한 세이지로 설정 */
     padding: 20px;             /* 내부 여백 */
     border-radius: 10px;       /* 모서리를 둥글게 처리 */
 }
@@ -434,7 +459,7 @@ body {
 /* 우측 메인 콘텐츠 스타일 */
 .main-content {
     flex: 1;                   /* 남은 공간을 모두 차지하도록 자동 확장합니다 */
-    background-color: #ffffff; /* 흰색 배경으로 본문을 강조 */
+    background-color: var(--surface); /* 종이색 배경으로 본문을 강조 */
     padding: 20px;             /* 내부 여백 */
     border-radius: 10px;       /* 모서리를 둥글게 처리 */
 }

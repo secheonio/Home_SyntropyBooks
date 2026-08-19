@@ -7,7 +7,7 @@
     max-width: none;
     margin: 0 auto;
     padding: 12px;
-    background: #ffffff;
+    background: var(--surface);
     border-radius: 10px;
     box-sizing: border-box;
 }
@@ -53,7 +53,7 @@
     align-items: center;
     justify-content: center;
     padding: 16px;
-    background: #fdf6e3;
+    background: var(--surface-muted);
     text-align: center;
 }
 
@@ -82,7 +82,7 @@
 .location-card,
 .driving-guide {
     padding: 14px;
-    background: #ffffff;
+    background: var(--surface);
     text-align: left;
 }
 
@@ -117,7 +117,7 @@
     padding: 7px 4px;
     border: 1px solid #d3cdc7;
     border-radius: 4px;
-    background: #fdf6e3;
+    background: var(--surface-muted);
     color: #586e75;
     cursor: pointer;
     font-size: 0.82rem;
@@ -180,7 +180,7 @@
 }
 
 .address-button.secondary {
-    background: #ffffff;
+    background: var(--surface);
     color: #268bd2;
 }
 

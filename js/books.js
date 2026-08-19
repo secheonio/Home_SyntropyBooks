@@ -1,0 +1,189 @@
+const MIN_ROTATION_DELAY_MS = 10000;
+const MAX_ROTATION_DELAY_MS = 20000;
+
+const categoryBooks = {
+    'life-science': [
+        {
+            title: '생명이란 무엇인가',
+            author: '에르빈 슈뢰딩거',
+            description: '물리학의 언어로 생명과 질서의 근원을 탐구하며, 살아 있는 세계를 새롭게 바라보게 하는 고전입니다.'
+        },
+        {
+            title: '다윈의 위험한 생각',
+            author: '대니얼 데닛',
+            description: '진화라는 관점이 생명과 마음, 질서를 이해하는 방식을 어떻게 바꾸는지 살펴봅니다.'
+        },
+        {
+            title: '생명의 그물',
+            author: '프리초프 카프라',
+            description: '생명체와 생태계가 관계의 망 속에서 질서를 만들어 가는 과정을 설명합니다.'
+        }
+    ],
+    'systems-thinking': [
+        {
+            title: '생명의 그물',
+            author: '프리초프 카프라',
+            description: '생태계와 사회를 서로 연결된 네트워크로 읽으며, 관계 속에서 생겨나는 질서를 설명합니다.'
+        },
+        {
+            title: '시스템 사고',
+            author: '피터 센게',
+            description: '부분의 합을 넘어 조직과 사회 전체의 구조와 흐름을 바라보는 사고법을 소개합니다.'
+        },
+        {
+            title: '전체를 보는 방법',
+            author: '시스템 사고 큐레이션',
+            description: '복잡한 문제를 요소가 아닌 상호작용과 순환의 관점에서 다시 읽어보는 안내서입니다.'
+        }
+    ],
+    'complexity': [
+        {
+            title: '카오스',
+            author: '제임스 글릭',
+            description: '작은 변화가 거대한 패턴을 만드는 과정을 따라가며 혼돈 속의 질서를 보여줍니다.'
+        },
+        {
+            title: '복잡계 개론',
+            author: '복잡계 큐레이션',
+            description: '상호작용하는 요소들이 자기조직화를 통해 새로운 패턴을 만드는 원리를 살펴봅니다.'
+        },
+        {
+            title: '세상을 바꾼 17가지 방정식',
+            author: '이언 스튜어트',
+            description: '수학적 구조가 자연과 사회의 복잡한 현상을 이해하는 틀이 되는 순간을 소개합니다.'
+        }
+    ],
+    cosmos: [
+        {
+            title: '코스모스',
+            author: '칼 세이건',
+            description: '우주의 시간과 생명의 진화를 연결해 바라보며 지식의 질서를 보여주는 책입니다.'
+        },
+        {
+            title: '시간의 역사',
+            author: '스티븐 호킹',
+            description: '우주의 시작과 변화에 대한 질문을 통해 시간과 공간의 구조를 탐구합니다.'
+        },
+        {
+            title: '창백한 푸른 점',
+            author: '칼 세이건',
+            description: '우주 속 작은 행성에서 살아가는 인간의 위치와 책임을 성찰하게 합니다.'
+        }
+    ],
+    evolution: [
+        {
+            title: '이기적 유전자',
+            author: '리처드 도킨스',
+            description: '생명체의 행동과 진화를 유전자 관점에서 살피며 생명 시스템의 유지를 질문합니다.'
+        },
+        {
+            title: '협력의 진화',
+            author: '로버트 액설로드',
+            description: '경쟁하는 존재들 사이에서 협력이 어떻게 안정적인 질서로 자리 잡는지 탐구합니다.'
+        },
+        {
+            title: '생명체의 협력',
+            author: '린 마굴리스',
+            description: '공생과 상호의존을 통해 진화가 만들어 온 생명의 연결 구조를 바라봅니다.'
+        }
+    ],
+    energy: [
+        {
+            title: '엔트로피',
+            author: '제러미 리프킨',
+            description: '에너지의 흐름과 문명의 방향을 돌아보며 지속 가능한 전환을 생각하게 합니다.'
+        },
+        {
+            title: '에너지와 문명',
+            author: '바츨라프 스밀',
+            description: '인류 문명의 변화가 에너지의 생산과 사용 방식과 어떻게 연결되는지 분석합니다.'
+        },
+        {
+            title: '지속 가능한 에너지',
+            author: '데이비드 맥케이',
+            description: '에너지 선택의 현실적인 조건을 수치와 시스템의 관점에서 차분하게 살펴봅니다.'
+        }
+    ],
+    ecology: [
+        {
+            title: '오래된 미래',
+            author: '헬레나 노르베리 호지',
+            description: '지역 공동체의 삶을 통해 성장 중심 문명을 성찰하고 미래의 단서를 찾습니다.'
+        },
+        {
+            title: '침묵의 봄',
+            author: '레이첼 카슨',
+            description: '자연의 연결망을 무너뜨리는 화학물질의 영향을 알리며 생태적 책임을 일깨웁니다.'
+        },
+        {
+            title: '숲은 생각한다',
+            author: '에두아르도 콘',
+            description: '인간 너머의 생명들과 함께 살아가는 세계를 새롭게 이해하는 생태인류학 책입니다.'
+        }
+    ],
+    philosophy: [
+        {
+            title: '장자',
+            author: '장자',
+            description: '고정된 질서에서 벗어나 변화와 관계의 흐름을 바라보는 감각을 일깨웁니다.'
+        },
+        {
+            title: '스피노자 철학',
+            author: '스피노자',
+            description: '인간과 자연을 하나의 연결된 질서로 바라보며 함께 존재하는 방식을 생각합니다.'
+        },
+        {
+            title: '자연과 자유',
+            author: '철학 큐레이션',
+            description: '자연과 함께 살아가는 삶의 태도와 판단의 기준을 탐구하는 책들을 소개합니다.'
+        }
+    ]
+};
+
+const updateBookCard = (card, book) => {
+    card.querySelector('.book-title').textContent = book.title;
+    card.querySelector('.book-author').textContent = book.author;
+    card.querySelector('.book-description').textContent = book.description;
+    card.classList.remove('is-changing');
+    requestAnimationFrame(() => card.classList.add('is-changing'));
+};
+
+const getRandomDelay = () => {
+    const delayRange = MAX_ROTATION_DELAY_MS - MIN_ROTATION_DELAY_MS;
+    return MIN_ROTATION_DELAY_MS + Math.random() * delayRange;
+};
+
+const scheduleCardRotation = (card, books, positions) => {
+    window.setTimeout(() => {
+        const currentPosition = positions.get(card.id);
+        let nextPosition = Math.floor(Math.random() * books.length);
+
+        while (nextPosition === currentPosition) {
+            nextPosition = Math.floor(Math.random() * books.length);
+        }
+
+        positions.set(card.id, nextPosition);
+        updateBookCard(card, books[nextPosition]);
+        scheduleCardRotation(card, books, positions);
+    }, getRandomDelay());
+};
+
+const startBookRotation = () => {
+    const cards = [...document.querySelectorAll('.book-card[id]')];
+    const positions = new Map(cards.map((card) => [card.id, 0]));
+
+    if (cards.length === 0) {
+        return;
+    }
+
+    cards.forEach((card) => {
+        const books = categoryBooks[card.id];
+        if (!books || books.length < 2) {
+            return;
+        }
+
+        scheduleCardRotation(card, books, positions);
+    });
+};
+
+document.addEventListener('DOMContentLoaded', startBookRotation);

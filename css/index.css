@@ -6,9 +6,9 @@
     flex-direction: column;  /* 1. 내부 요소들을 세로(위->아래) 방향으로 나열 */
     align-items: center;     /* 2. 나열된 모든 요소를 가로 중앙으로 정렬 */
     text-align: center;      /* 3. 텍스트 자체도 가운데 정렬 */
-    background-color: #eee8d5;
+    background-color: var(--surface-muted);
     padding: 30px 20px;
-    border-bottom: 2px solid #586e75;
+    border-bottom: 2px solid var(--border);
 }
 
 /* 메인 로고 이미지 스타일 */
@@ -16,9 +16,9 @@
     width: 180px;
     height: auto;
     padding: 15px;
-    border: 1px solid #586e75;
+    border: 1px solid var(--forest);
     border-radius: 10px;
-    background-color: #ffffff;
+    background-color: var(--forest-deep);
     /* background-color: #073642; /* #ffffff(흰색) 대신 어두운 배경 적용 */
     margin-bottom: 15px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
