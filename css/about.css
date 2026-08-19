@@ -5,7 +5,7 @@
     max-width: 800px; 
     margin: 40px auto; 
     padding: 40px; 
-    background: #ffffff; 
+    background: var(--surface); 
     border-radius: 12px; 
     box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
     line-height: 1.8; 
@@ -46,7 +46,7 @@
 }
 
 .value-item { 
-    background-color: #fdf6e3; 
+    background-color: var(--surface-muted); 
     padding: 20px; 
     margin-bottom: 15px; 
     border-radius: 8px; 
