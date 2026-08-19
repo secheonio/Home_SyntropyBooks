@@ -1,44 +1,89 @@
 @charset "UTF-8";
 
-/* 오시는 길 본문 */
 .contact-container {
-    max-width: 800px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    max-width: none;
     margin: 0 auto;
-    padding: 20px;
+    padding: 12px;
     background: #ffffff;
     border-radius: 10px;
     box-sizing: border-box;
 }
 
-.contact-header {
-    padding: 20px 20px 10px;
-    text-align: left;
+.contact-page .content-wrapper {
+    margin-top: 10px;
+    margin-bottom: 6px;
 }
 
-.contact-header .main-title {
-    margin-bottom: 18px;
+.contact-page .footer-section {
+    margin-top: 6px;
+    padding: 8px;
+}
+
+.contact-title-row {
+    padding: 0 10px;
+}
+
+.contact-title-row .subtitle {
+    margin: 0;
+}
+
+.contact-intro-row,
+.contact-details-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: stretch;
+}
+
+.contact-heading-cell,
+.contact-intro,
+.location-card,
+.driving-guide {
+    box-sizing: border-box;
+    min-width: 0;
+    border: 1px solid #eee8d5;
+    border-radius: 8px;
+}
+
+.contact-heading-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: #fdf6e3;
+    text-align: center;
+}
+
+.main-title {
+    margin: 0;
+    color: #073642;
+    font-size: 1.45rem;
+    line-height: 1.35;
 }
 
 .contact-intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 16px;
+    border-color: #2aa198;
     color: #586e75;
-    font-size: 1.05rem;
-    line-height: 1.7;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    text-align: center;
 }
 
 .location-card,
 .driving-guide {
-    margin-top: 24px;
-    padding: 24px;
-    border: 1px solid #eee8d5;
-    border-radius: 8px;
+    padding: 14px;
+    background: #ffffff;
     text-align: left;
-}
-
-.location-card h2,
-.driving-guide h2 {
-    margin: 0 0 18px;
-    color: #073642;
-    font-size: 1.3rem;
 }
 
 .location-details {
@@ -48,8 +93,8 @@
 .location-details div {
     display: grid;
     grid-template-columns: 70px 1fr;
-    gap: 14px;
-    padding: 12px 0;
+    gap: 8px;
+    padding: 6px 0;
     border-bottom: 1px solid #eee8d5;
 }
 
@@ -58,20 +103,71 @@
     font-weight: bold;
 }
 
+
+.bookstore-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.bookstore-list span,
+.bookstore-list a {
+    display: block;
+    padding: 7px 4px;
+    border: 1px solid #d3cdc7;
+    border-radius: 4px;
+    background: #fdf6e3;
+    color: #586e75;
+    cursor: pointer;
+    font-size: 0.82rem;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.bookstore-list > :hover {
+    position: relative;
+    z-index: 1;
+    background: #268bd2;
+    border-color: #268bd2;
+    color: #ffffff;
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 6px 12px rgba(7, 54, 66, 0.2);
+}
+
+.bookstore-list > :nth-child(2n):hover {
+    background: #2aa198;
+    border-color: #2aa198;
+    transform: translateX(4px) rotate(1deg);
+}
+
+.bookstore-list > :nth-child(3n):hover {
+    background: #859900;
+    border-color: #859900;
+    transform: translateY(3px) scale(1.06);
+}
+
+.bookstore-list > :nth-child(5n):hover {
+    background: #b58900;
+    border-color: #b58900;
+    transform: rotate(-2deg) scale(1.05);
+}
 .location-details dd {
     margin: 0;
     color: #586e75;
-    line-height: 1.6;
+    line-height: 1.45;
 }
 
 .address-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 12px;
+    margin-top: 7px;
 }
 
 .address-button {
+    display: inline-block;
     padding: 7px 11px;
     border: 1px solid #268bd2;
     border-radius: 4px;
@@ -97,42 +193,43 @@
 .copy-status {
     display: block;
     min-height: 1.4em;
-    margin-top: 8px;
+    margin-top: 3px;
     color: #859900;
     font-size: 0.85rem;
 }
 
 .map-link {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 11px 18px;
-    border-radius: 5px;
-    background-color: #268bd2;
-    color: #ffffff;
-    font-weight: bold;
     text-decoration: none;
 }
 
-.map-link:hover {
-    background-color: #073642;
+.driving-guide h2 {
+    margin: 0 0 8px;
+    color: #073642;
+    font-size: 1.1rem;
 }
 
 .driving-guide p,
 .driving-guide li {
     color: #586e75;
-    line-height: 1.7;
+    line-height: 1.45;
+}
+
+.driving-guide p {
+    margin-top: 0;
 }
 
 .driving-guide ol {
-    margin: 16px 0;
+    margin: 8px 0 0;
     padding-left: 22px;
 }
 
 .route-note {
-    margin-bottom: 0;
-    padding-top: 14px;
+    margin: 0;
+    padding: 10px 14px 0;
     border-top: 1px solid #eee8d5;
+    color: #586e75;
     font-size: 0.92rem;
+    text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -141,17 +238,28 @@
         padding: 10px;
     }
 
-    .contact-header {
-        padding: 20px 10px 5px;
+    .contact-intro-row,
+    .contact-details-row {
+        grid-template-columns: 1fr;
     }
 
+    .contact-heading-cell,
+    .contact-intro,
     .location-card,
     .driving-guide {
-        padding: 18px;
+        padding: 12px;
+    }
+
+    .main-title {
+        font-size: 1.4rem;
     }
 
     .location-details div {
         grid-template-columns: 1fr;
         gap: 4px;
+    }
+
+    .bookstore-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }

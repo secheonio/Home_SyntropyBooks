@@ -11,9 +11,10 @@
     <!-- 2. 오시는 길 전용 스타일시트 연결 -->
     <link rel="stylesheet" href="../css/contact.css">
 </head>
-<body>
+<body class="contact-page">
     <!-- 상단 헤더 영역 (2단 구조: 좌측 로고, 우측 메인텍스트+메뉴) [cite: 24] -->
     <header class="header-section">
+        <div class="header-inner">
         <!-- [좌측] 어두운 배경의 브랜드 로고 박스 -->
         <div class="header-left">
             <a href="../index.html">
@@ -46,6 +47,7 @@
                 </div>
             </div>          
         </div>
+        </div>
     </header>
 
     <div class="content-wrapper">
@@ -72,44 +74,65 @@
 
         <main class="main-content">
             <section class="contact-container">
-                <header class="contact-header">
+                <header class="contact-title-row">
                     <p class="subtitle">SYNTROPY BOOKS LOCATION</p>
-                    <h1 class="main-title">고창서점마을로<br>찾아오세요</h1>
-                    <p class="contact-intro">고창의 조용한 길 끝에서 책과 사유를 만나는 공간입니다.</p>
                 </header>
 
-                <section class="location-card">
-                    <h2>방문 장소</h2>
-                    <dl class="location-details">
-                        <div>
-                            <dt>장소명</dt>
-                            <dd>고창서점마을</dd>
-                        </div>
-                        <div>
-                            <dt>주소</dt>
-                            <dd>
-                                <span id="address-text">전북특별자치도 고창군 대산면 지석남당길 106-6</span>
-                                <span class="address-actions">
-                                    <button type="button" class="address-button" id="copy-address">주소 복사</button>
-                                    <button type="button" class="address-button secondary" id="share-address">공유하기</button>
-                                </span>
-                                <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
-                            </dd>
-                        </div>
-                    </dl>
-                    <a class="map-link" href="https://map.kakao.com/?q=%EA%B3%A0%EC%B0%BD%EC%84%9C%EC%A0%90%EB%A7%88%EC%9D%84" target="_blank" rel="noopener noreferrer">카카오맵에서 길찾기</a>
+                <section class="contact-intro-row">
+                    <div class="contact-heading-cell">
+                        <h1 class="main-title">고창서점마을로 찾아오세요</h1>
+                    </div>
+                    <p class="contact-intro">고창의 조용한 길 끝에서<br>책과 사유를 만나는 공간입니다.</p>
                 </section>
 
-                <section class="driving-guide">
-                    <h2>자차 이용 안내</h2>
-                    <p>대중교통 이용이 어려운 위치이므로 방문 시 자차 이용을 권장합니다.</p>
-                    <ol>
-                        <li>위 주소를 내비게이션 목적지로 입력합니다.</li>
-                        <li>카카오맵에서 출발지를 설정한 뒤 자동차 경로를 확인합니다.</li>
-                        <li>농촌 지역 도로 특성상 도착 전 실제 도로 안내와 주변 표지판을 함께 확인해 주세요.</li>
-                    </ol>
-                    <p class="route-note">출발지가 정해져 있다면 카카오맵의 길찾기 화면에서 출발지를 입력하면 가장 정확한 경로와 예상 소요 시간을 확인할 수 있습니다.</p>
+                <section class="contact-details-row">
+                    <section class="location-card">
+                        <dl class="location-details">
+                            <div>
+                                <dt>장소명</dt>
+                                <dd>고창서점마을</dd>
+                            </div>
+                            <div>
+                                <dt>주소</dt>
+                                <dd>
+                                    <span id="address-text">전북특별자치도 고창군 대산면 지석남당길 106-6</span>
+                                    <span class="address-actions">
+                                        <button type="button" class="address-button" id="copy-address">주소 복사</button>
+                                        <button type="button" class="address-button secondary" id="share-address">공유하기</button>
+                                        <a class="address-button map-link" href="https://map.kakao.com/?q=%EA%B3%A0%EC%B0%BD%EC%84%9C%EC%A0%90%EB%A7%88%EC%9D%84" target="_blank" rel="noopener noreferrer">카카오맵에서 길찾기</a>
+                                    </span>
+                                    <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
+                                </dd>
+                            </div>
+                        </dl>
+                        <div class="bookstore-list" aria-label="고창서점마을 책방 목록">
+                            <a href="https://secheonio.github.io/Home_SyntropyBooks/">Syntropy Books</a>
+                            <span>느티나무책방</span>
+                            <span>문장수집</span>
+                            <span>책마루</span>
+                            <span>페이지사이</span>
+                            <span>소담서가</span>
+                            <span>마을책방</span>
+                            <span>책과창</span>
+                            <span>오후의서점</span>
+                            <span>읽는정원</span>
+                            <span>책방다락</span>
+                            <span>한줄서가</span>
+                        </div>
+                    </section>
+
+                    <section class="driving-guide">
+                        <h2>자차 이용 안내</h2>
+                        <p>대중교통 이용이 어려운 위치이므로 방문 시 자차 이용을 권장합니다.</p>
+                        <ol>
+                            <li>위 주소를 내비게이션 목적지로 입력합니다.</li>
+                            <li>카카오맵에서 출발지를 설정한 뒤 자동차 경로를 확인합니다.</li>
+                            <li>농촌 지역 도로 특성상 도착 전 실제 도로 안내와 주변 표지판을 함께 확인해 주세요.</li>
+                        </ol>
+                    </section>
                 </section>
+
+                <p class="route-note">출발지가 정해져 있다면 카카오맵의 길찾기 화면에서 출발지를 입력하면 가장 정확한 경로와 예상 소요 시간을 확인할 수 있습니다.</p>
             </section>
         </main>
     </div>
@@ -124,7 +147,6 @@
         const status = document.getElementById('copy-status');
 
         async function copyAddress() {
-            try {
                 await navigator.clipboard.writeText(address);
             } catch (error) {
                 const textArea = document.createElement('textarea');
