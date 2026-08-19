@@ -11,20 +11,22 @@ Home_NetropyBooks 폴더와 같으면 관리하기 편리
 - `css/` : 공통 및 페이지별 스타일시트
 - `images/` : 로고 및 이미지 파일
 
-- VScode 설치
-- Git hub 설치
-- Git 가입
-- VScode 실행
-∙깃과 연동
-    ==> git add .
-        git commit -m "변경내용"
-        git push origin main
-    
-    ==> git add . && git commit -m "도서 목록 페이지 추가" && git push origin main
+- VS Code 설치
+- Git 설치
+- GitHub 계정 가입
+- VS Code 실행
 
-function push { git add . ; git commit -m $args ; git push origin main }
-        push "변경 내용" /* 평상시엔 push "", 에러나면 funtion push { } 한 번 더 실행 */
+Git 연동 기본 명령
+    git add .
+    git commit -m "변경 내용"
+    git push origin main
 
+한 줄로 실행하기
+    git add . && git commit -m "도서 목록 페이지 추가" && git push origin main
+
+PowerShell에서 자주 쓰는 함수
+    function push { git add . ; git commit -m $args ; git push origin main }
+    push "변경 내용"
 
 홈페이지 작업
 - open folder 클릭 – 홈페이지 루트폴더
@@ -133,4 +135,121 @@ function push { git add . ; git commit -m $args ; git push origin main }
     이제부터는 말씀드렸던 대로 [About] 영역에 지구본 모양 아이콘과 함께 홈페이지 주소가 항상 고정되어 나타나게 됩니다.
 
 정말 잘하셨습니다! 이제 클릭 한 번으로 나만의 웹사이트를 확인할 수 있게 되었습니다.
+
+====================================
+배포용 설명서: GitHub Pages로 공개하기
+====================================
+
+이 프로젝트는 정적 HTML/CSS/JavaScript로 구성된 책방 홈페이지입니다.
+브라우저에서 바로 열 수 있지만, 인터넷에 공개하려면 GitHub Pages를 통해 배포하면 됩니다.
+
+1. 저장소 준비하기
+    - GitHub에 로그인합니다.
+    - 오른쪽 위 [+] 버튼을 누르고 [New repository]를 선택합니다.
+    - 저장소 이름을 예시로 Home_NetropyBooks 로 만듭니다.
+    - Public 옵션을 선택합니다.
+    - [Create repository]를 누릅니다.
+
+2. 로컬 프로젝트와 연결하기
+    터미널에서 현재 프로젝트 폴더로 이동한 뒤 아래 명령을 실행합니다.
+
+    git init
+    git branch -M main
+    git remote add origin https://github.com/본인아이디/Home_NetropyBooks.git
+    git remote -v
+
+    참고:
+    - 본인아이디 부분은 GitHub 아이디로 바꿔서 입력합니다.
+    - 저장소 주소는 GitHub 저장소의 Code 버튼에서 확인할 수 있습니다.
+
+3. 파일 업로드하기
+    git add .
+    git commit -m "first commit"
+    git push -u origin main
+
+    만약 커밋 메시지가 잘 안 먹거나 브랜치 문제가 있으면 아래처럼 다시 시도합니다.
+    git branch -M main
+    git push -u origin main
+
+4. GitHub Pages 설정하기
+    - GitHub 저장소 페이지로 이동합니다.
+    - [Settings] 메뉴를 클릭합니다.
+    - 왼쪽 메뉴에서 [Pages]를 선택합니다.
+    - Source 항목에서 [Deploy from a branch]를 선택합니다.
+    - Branch에서 main을 선택합니다.
+    - 폴더는 보통 /root 를 선택합니다.
+    - [Save] 버튼을 누릅니다.
+
+5. 배포 완료 확인
+    1~2분 정도 기다린 뒤 페이지를 새로고침합니다.
+    화면 상단에 Your site is live at ... 문구가 보이면 배포가 완료된 것입니다.
+
+    공개 주소 예시:
+    https://본인아이디.github.io/Home_NetropyBooks/
+
+6. 홈페이지 주소 등록하기
+    저장소 페이지에서 [About] 섹션에 들어가서
+    [Website] 항목이 있다면 방금 생성한 GitHub Pages 주소를 넣어두면 좋습니다.
+
+    예:
+    https://secheonio.github.io/Home_NetropyBooks/
+
+7. 프로젝트를 운영할 때 유의할 점
+    - 이 사이트는 정적 페이지라서 서버 없이 GitHub Pages로 바로 배포됩니다.
+    - 관리자 로그인은 브라우저의 sessionStorage를 사용하므로, 새로고침 또는 다른 브라우저 환경에서는 다시 로그인해야 할 수 있습니다.
+    - 도서 목록과 신간 도서 코너의 데이터는 localStorage를 사용하므로, 브라우저 저장소가 비워지면 등록된 내용이 사라질 수 있습니다.
+    - 실제 서비스용으로 오래 유지하려면 서버 기반 DB 저장 방식으로 전환하는 것이 더 안정적입니다.
+
+8. 배포 전 체크리스트
+    - [ ] index.html 이 정상적으로 존재하는가
+    - [ ] 모든 링크 경로가 올바른가
+    - [ ] 이미지 경로가 깨지지 않았는가
+    - [ ] admin 페이지 진입이 가능한가
+    - [ ] 관리자 로그인 정보가 정상인가
+    - [ ] GitHub Pages 주소가 정상적으로 표시되는가
+
+배포 환경에서 가장 중요한 점은 이 프로젝트가 정적 웹사이트라는 것입니다.
+즉, 서버 설치 없이도 GitHub Pages에서 그대로 운영할 수 있으며,
+관리자 기능은 브라우저 안에서 동작하는 방식으로 구성되어 있습니다.
+
+이제 본인 저장소에 업로드 후 GitHub Pages를 켜면,
+웹사이트를 인터넷에서 바로 확인할 수 있습니다.
+
+====================================
+프로젝트 완료 현황
+====================================
+
+현재 이 프로젝트는 다음 기능까지 구현되어 있습니다.
+
+- 홈페이지 메인 페이지 구성
+- 책방 소개 / 도서 관리 / 오시는 길 페이지 구성
+- 도서 목록 페이지와 신간 도서 코너 페이지 구성
+- 좌측 메뉴 하위 항목 구조 정리
+- 관리자 로그인 기능
+- 관리자 전용 대시보드
+- 도서 추가 / 수정 / 삭제 기능
+- localStorage 기반 데이터 저장
+- 페이지 간 동기화 기능
+- GitHub Pages 배포 설명서 정리
+
+주요 관리자 정보
+    관리자 아이디: 관리자
+    비밀번호: scipark
+
+운영상 주의점
+    - 저장소는 정적 페이지라서 GitHub Pages에서 바로 호스팅됩니다.
+    - 관리자 로그아웃 상태와 도서 데이터는 브라우저 로컬 저장소에 저장됩니다.
+    - 다른 브라우저나 다른 기기에서는 데이터가 공유되지 않습니다.
+    - 장기 운영 서비스로 확장할 경우, 서버 API와 데이터베이스 구조로 전환하는 것이 적합합니다.
+
+다음 단계 추천
+    1. GitHub 저장소에 최종 코드 업로드
+    2. GitHub Pages 활성화
+    3. 실제 공개 URL 확인
+    4. 관리자 로그인 테스트
+    5. 도서 추가/삭제 기능 실제 검증
+    6. 필요 시 관리자 UI와 디자인 보완
+
+이 문서만 따라가면, 프로젝트를 GitHub에 올리고 공개용 웹사이트로 연결하는 흐름을 모두 정리할 수 있습니다.
+
 

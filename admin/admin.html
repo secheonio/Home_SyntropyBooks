@@ -21,7 +21,6 @@
             </div>
 
             <nav class="admin-nav" aria-label="관리자 메뉴">
-                <a href="admin.html" class="active">대시보드</a>
                 <a href="../books/books.html">도서 목록</a>
                 <button id="admin-logout" type="button" class="admin-logout-btn">로그아웃</button>
             </nav>
@@ -38,15 +37,15 @@
         <section class="admin-stats" aria-label="관리자 요약 통계">
             <article class="admin-card">
                 <span class="stat-label">총 도서 수</span>
-                <strong class="stat-value" data-stat="total-books">28권</strong>
+                <strong class="stat-value" data-stat="total-books">0권</strong>
             </article>
             <article class="admin-card">
                 <span class="stat-label">신간 코너</span>
-                <strong class="stat-value" data-stat="new-books">6권</strong>
+                <strong class="stat-value" data-stat="new-books">0권</strong>
             </article>
             <article class="admin-card">
                 <span class="stat-label">카테고리</span>
-                <strong class="stat-value" data-stat="categories">8개</strong>
+                <strong class="stat-value" data-stat="categories">0개</strong>
             </article>
             <article class="admin-card">
                 <span class="stat-label">접속 상태</span>
@@ -57,33 +56,49 @@
         <section class="admin-panel">
             <div class="admin-panel-header">
                 <h3>최근 도서 관리</h3>
-                <button type="button" class="admin-action-btn">도서 추가</button>
+                <button type="button" class="admin-action-btn" id="open-book-form-btn">도서 추가</button>
             </div>
 
-            <div class="admin-book-list">
-                <div class="admin-book-row">
-                    <span>통합적 사고</span>
-                    <span>시스템 사고</span>
-                    <span>활성</span>
-                </div>
-                <div class="admin-book-row">
-                    <span>생태학의 미래</span>
-                    <span>생태학</span>
-                    <span>활성</span>
-                </div>
-                <div class="admin-book-row">
-                    <span>우주와 시간</span>
-                    <span>우주론</span>
-                    <span>검토 중</span>
-                </div>
-                <div class="admin-book-row">
-                    <span>인간과 진화</span>
-                    <span>진화</span>
-                    <span>활성</span>
-                </div>
-            </div>
+            <div class="admin-book-list" id="admin-book-list"></div>
         </section>
     </main>
+
+    <div class="admin-modal" id="book-form-modal" hidden>
+        <div class="admin-modal-backdrop" data-close-book-form></div>
+        <section class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="book-form-title">
+            <button class="admin-dialog-close" type="button" aria-label="도서 추가 창 닫기" data-close-book-form>&times;</button>
+            <p class="admin-eyebrow">BOOK ENTRY</p>
+            <h2 id="book-form-title">도서 추가</h2>
+            <form id="book-form">
+                <label for="book-title">제목</label>
+                <input id="book-title" name="title" type="text" maxlength="80" required>
+
+                <label for="book-author">저자</label>
+                <input id="book-author" name="author" type="text" maxlength="80" required>
+
+                <label for="book-category">카테고리</label>
+                <select id="book-category" name="category" required>
+                    <option value="생명과학">생명과학</option>
+                    <option value="시스템 사고">시스템 사고</option>
+                    <option value="복잡계">복잡계</option>
+                    <option value="우주와 질서">우주와 질서</option>
+                    <option value="진화와 협력">진화와 협력</option>
+                    <option value="문명과 에너지">문명과 에너지</option>
+                    <option value="생태철학">생태철학</option>
+                    <option value="철학">철학</option>
+                </select>
+
+                <label for="book-publisher">출판사</label>
+                <input id="book-publisher" name="publisher" type="text" maxlength="80" required>
+
+                <label for="book-description">설명</label>
+                <textarea id="book-description" name="description" rows="4" maxlength="220" required></textarea>
+
+                <button type="submit" class="admin-form-submit">저장</button>
+                <p id="book-form-status" class="admin-login-status" aria-live="polite"></p>
+            </form>
+        </section>
+    </div>
 
     <script src="../js/admin-page.js"></script>
 </body>

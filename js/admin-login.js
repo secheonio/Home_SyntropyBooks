@@ -83,16 +83,43 @@ const createAdminAccess = () => {
         return new URL('admin/admin.html', window.location.href).toString();
     };
 
+    const getMainPageUrl = () => {
+        const currentPath = window.location.pathname;
+        const currentIsAdminPage = currentPath.includes('/admin/');
+        const currentIsNestedPage = /\/(books|about|contact)\//.test(currentPath);
+
+        if (currentIsAdminPage) {
+            return new URL('../index.html', window.location.href).toString();
+        }
+
+        if (currentIsNestedPage) {
+            return new URL('../index.html', window.location.href).toString();
+        }
+
+        return new URL('index.html', window.location.href).toString();
+    };
+
+    const logoutAdmin = () => {
+        sessionStorage.removeItem('syntropyAdminLoggedIn');
+        const existingLink = document.querySelector('.admin-dashboard-link');
+        const existingLogoutButton = document.querySelector('.admin-logout-link');
+        existingLink?.remove();
+        existingLogoutButton?.remove();
+        window.location.href = getMainPageUrl();
+    };
+
     const updateAdminDashboardLink = () => {
         const isLoggedIn = sessionStorage.getItem('syntropyAdminLoggedIn') === 'true';
         const existingLink = document.querySelector('.admin-dashboard-link');
+        const existingLogoutButton = document.querySelector('.admin-logout-link');
 
         if (!isLoggedIn) {
             existingLink?.remove();
+            existingLogoutButton?.remove();
             return;
         }
 
-        if (existingLink) {
+        if (existingLink && existingLogoutButton) {
             return;
         }
 
@@ -102,20 +129,27 @@ const createAdminAccess = () => {
         dashboardLink.textContent = '관리자센터';
         dashboardLink.setAttribute('aria-label', '관리자 대시보드로 이동');
 
+        const logoutButton = document.createElement('button');
+        logoutButton.type = 'button';
+        logoutButton.className = 'admin-logout-link';
+        logoutButton.textContent = '로그아웃';
+        logoutButton.setAttribute('aria-label', '관리자 로그아웃');
+        logoutButton.addEventListener('click', logoutAdmin);
+
         const navBar = document.querySelector('.nav-bar');
         const footerSection = document.querySelector('.footer-section');
 
         if (navBar) {
-            navBar.append(dashboardLink);
+            navBar.append(dashboardLink, logoutButton);
             return;
         }
 
         if (footerSection) {
-            footerSection.append(dashboardLink);
+            footerSection.append(dashboardLink, logoutButton);
             return;
         }
 
-        document.body.append(dashboardLink);
+        document.body.append(dashboardLink, logoutButton);
     };
 
     const adminLoginForm = document.querySelector('#admin-login-form');

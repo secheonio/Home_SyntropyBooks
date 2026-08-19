@@ -22,6 +22,58 @@ const updateBooksPageHeading = () => {
     heading.innerHTML = category ? `도서목록 / ${category}` : '질서 있는 선택을 위한<br>도서 큐레이션';
 };
 
+const syncCatalogWithBooksPage = () => {
+    const libraryBooks = (() => {
+        try {
+            return JSON.parse(localStorage.getItem('syntropyBooksCatalog') || '[]');
+        } catch (error) {
+            return [];
+        }
+    })();
+
+    const container = document.querySelector('.book-container');
+    if (!container || !Array.isArray(libraryBooks) || libraryBooks.length === 0) {
+        return;
+    }
+
+    const categoryCoverMap = {
+        '생명과학': 'life-science.svg',
+        '시스템 사고': 'systems-thinking.svg',
+        '복잡계': 'complexity.svg',
+        '우주와 질서': 'cosmos.svg',
+        '진화와 협력': 'evolution.svg',
+        '문명과 에너지': 'energy.svg',
+        '생태철학': 'ecology.svg',
+        '철학': 'philosophy.svg'
+    };
+
+    [...document.querySelectorAll('.book-card[data-generated="true"]')].forEach((card) => card.remove());
+
+    libraryBooks.forEach((book) => {
+        const article = document.createElement('article');
+        article.className = 'book-card';
+        article.dataset.generated = 'true';
+        article.dataset.categoryLabel = book.category || '도서';
+        article.innerHTML = `
+            <div class="book-card-top">
+                <span class="book-category">${book.category || '도서'}</span>
+                <span class="book-new-badge">신간</span>
+            </div>
+            <h2 class="book-title">${book.title}</h2>
+            <p class="book-author">${book.author || '미상'}</p>
+            <p class="book-translator"></p>
+            <p class="book-publisher">출판사: ${book.publisher || 'Syntropy Books'}</p>
+            <p class="book-description">${book.description || '새로 추가된 도서입니다.'}</p>
+            <img class="book-cover" src="../images/book-covers/${categoryCoverMap[book.category] || 'book.svg'}" alt="${book.title} 책표지 미리보기">
+        `;
+
+        const categoryValue = article.querySelector('.book-category')?.textContent.trim();
+        article.dataset.categoryLabel = categoryValue;
+        article.setAttribute('data-category-label', categoryValue);
+        container.append(article);
+    });
+};
+
 const categoryBooks = {
     'life-science': [
         {
@@ -341,8 +393,10 @@ const startBookSearch = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    syncCatalogWithBooksPage();
     startBookRotation();
     startBookSearch();
     updateBooksPageHeading();
     window.addEventListener('hashchange', updateBooksPageHeading);
 });
+window.addEventListener('syntropyCatalogUpdated', syncCatalogWithBooksPage);
