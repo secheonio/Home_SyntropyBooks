@@ -3,7 +3,7 @@
 /* 도서 그리드 컨테이너 (자동 그리드 컬럼 설정) */
 .book-container { 
     display: grid; 
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: none;
     grid-auto-flow: row;
     gap: 10px; 
@@ -370,6 +370,100 @@
     object-fit: cover;
     border-radius: 4px;
     box-shadow: 3px 5px 12px rgba(37, 72, 59, 0.2);
+}
+
+.book-detail-cover--editable {
+    cursor: pointer;
+}
+
+.book-detail-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.book-detail-form-cover-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.book-detail-cover-upload {
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.book-detail-form-body {
+    display: grid;
+    gap: 12px;
+}
+
+.book-detail-form-row {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+}
+
+.book-detail-form-row--full {
+    grid-template-columns: 120px minmax(0, 1fr);
+}
+
+.book-detail-form-label {
+    color: var(--forest-deep);
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.book-detail-form input,
+.book-detail-form select,
+.book-detail-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(37, 72, 59, 0.18);
+    border-radius: 8px;
+    padding: 9px 12px;
+    background: #ffffff;
+    color: var(--forest-deep);
+    font: inherit;
+}
+
+.book-detail-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.book-detail-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 8px;
+}
+
+.book-detail-action-btn,
+.book-detail-back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(37, 72, 59, 0.18);
+    text-decoration: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+.book-detail-action-btn--secondary {
+    background: rgba(37, 72, 59, 0.06);
+    color: var(--forest-deep);
+}
+
+.book-detail-back-link {
+    background: #ffffff;
+    color: var(--forest-deep);
 }
 
 .book-detail-content h1 {

@@ -30,33 +30,54 @@
     <main class="admin-main">
         <section class="admin-hero">
             <p class="admin-eyebrow">BOOKSTORE OPERATIONS</p>
-            <h2>도서관 운영 대시보드</h2>
-            <p class="admin-summary">오늘의 도서 현황과 관리 상태를 한눈에 확인할 수 있습니다.</p>
+            <h2>Syntropy Books 도서 상황</h2>
+            <p class="admin-summary">현재 등록된 도서 현황과 임시 등록 상태를 한눈에 확인할 수 있습니다.</p>
         </section>
 
         <section class="admin-stats" aria-label="관리자 요약 통계">
-            <article class="admin-card">
+            <article class="admin-card admin-card--total-books">
                 <span class="stat-label">총 도서 수</span>
-                <strong class="stat-value" data-stat="total-books">0권</strong>
+                <strong class="stat-value stat-value--stacked stat-value--total-books" data-stat="total-books">
+                    <span class="stat-value-line">16종</span>
+                    <span class="stat-value-line">147권</span>
+                </strong>
             </article>
-            <article class="admin-card">
-                <span class="stat-label">신간 코너</span>
-                <strong class="stat-value" data-stat="new-books">0권</strong>
+            <article class="admin-card admin-card--secondary-stat">
+                <span class="stat-label">등록 도서 수</span>
+                <strong class="stat-value stat-value--stacked stat-value--secondary-stat" data-stat="registered-books">
+                    <span class="stat-value-line">0종</span>
+                    <span class="stat-value-line">0권</span>
+                </strong>
             </article>
-            <article class="admin-card">
-                <span class="stat-label">카테고리</span>
-                <strong class="stat-value" data-stat="categories">0개</strong>
+            <article class="admin-card admin-card--secondary-stat">
+                <span class="stat-label">신간 도서 수</span>
+                <strong class="stat-value stat-value--stacked stat-value--secondary-stat" data-stat="new-books">
+                    <span class="stat-value-line">0종</span>
+                    <span class="stat-value-line">0권</span>
+                </strong>
             </article>
-            <article class="admin-card">
-                <span class="stat-label">접속 상태</span>
-                <strong class="stat-value success" data-stat="status">정상</strong>
+            <article class="admin-card admin-card--secondary-stat">
+                <span class="stat-label">임시 등록 도서 수</span>
+                <strong class="stat-value stat-value--stacked stat-value--secondary-stat" data-stat="draft-books">
+                    <span class="stat-value-line">0종</span>
+                    <span class="stat-value-line">0권</span>
+                </strong>
+            </article>
+            <article class="admin-card admin-category-card">
+                <div class="stat-value stat-value--category" data-stat="categories" aria-label="카테고리 목록"></div>
             </article>
         </section>
 
+        <section class="admin-category-summary" id="admin-category-summary" aria-label="카테고리별 도서 현황"></section>
+
         <section class="admin-panel">
             <div class="admin-panel-header">
-                <h3>최근 도서 관리</h3>
-                <button type="button" class="admin-action-btn" id="open-book-form-btn">도서 추가</button>
+                <h3>등록 대기 도서 관리</h3>
+                <div class="admin-action-group">
+                    <button type="button" class="admin-action-btn" id="open-book-form-btn">도서 추가</button>
+                    <button type="button" class="admin-action-btn admin-action-btn--secondary" data-open-mode="barcode">바코드로 등록</button>
+                    <button type="button" class="admin-action-btn admin-action-btn--secondary" data-open-mode="excel">엑셀로 등록</button>
+                </div>
             </div>
 
             <div class="admin-book-list" id="admin-book-list"></div>
@@ -69,32 +90,87 @@
             <button class="admin-dialog-close" type="button" aria-label="도서 추가 창 닫기" data-close-book-form>&times;</button>
             <p class="admin-eyebrow">BOOK ENTRY</p>
             <h2 id="book-form-title">도서 추가</h2>
-            <form id="book-form">
-                <label for="book-title">제목</label>
-                <input id="book-title" name="title" type="text" maxlength="80" required>
+            <form id="book-form" data-entry-mode="manual">
+                <div class="book-entry-mode-group" aria-label="도서 입력 방식">
+                    <button type="button" class="entry-mode-btn is-active" data-entry-mode="manual">수기 입력</button>
+                    <button type="button" class="entry-mode-btn" data-entry-mode="barcode">바코드</button>
+                    <button type="button" class="entry-mode-btn" data-entry-mode="excel">엑셀</button>
+                </div>
 
-                <label for="book-author">저자</label>
-                <input id="book-author" name="author" type="text" maxlength="80" required>
+                <div class="entry-mode-panel is-visible" data-panel="manual">
+                    <label for="book-cover">책표지 이미지</label>
+                    <input id="book-cover" name="cover" type="file" accept="image/*">
 
-                <label for="book-category">카테고리</label>
-                <select id="book-category" name="category" required>
-                    <option value="생명과학">생명과학</option>
-                    <option value="시스템 사고">시스템 사고</option>
-                    <option value="복잡계">복잡계</option>
-                    <option value="우주와 질서">우주와 질서</option>
-                    <option value="진화와 협력">진화와 협력</option>
-                    <option value="문명과 에너지">문명과 에너지</option>
-                    <option value="생태철학">생태철학</option>
-                    <option value="철학">철학</option>
-                </select>
+                    <label for="book-title">제목</label>
+                    <input id="book-title" name="title" type="text" maxlength="80">
 
-                <label for="book-publisher">출판사</label>
-                <input id="book-publisher" name="publisher" type="text" maxlength="80" required>
+                    <label for="book-author">지은이</label>
+                    <input id="book-author" name="author" type="text" maxlength="80">
 
-                <label for="book-description">설명</label>
-                <textarea id="book-description" name="description" rows="4" maxlength="220" required></textarea>
+                    <label for="book-translator">옮긴이</label>
+                    <input id="book-translator" name="translator" type="text" maxlength="80" placeholder="없음">
 
-                <button type="submit" class="admin-form-submit">저장</button>
+                    <label for="book-category">카테고리</label>
+                    <select id="book-category" name="category">
+                        <option value="생명과학">생명과학</option>
+                        <option value="시스템 사고">시스템 사고</option>
+                        <option value="복잡계">복잡계</option>
+                        <option value="우주와 질서">우주와 질서</option>
+                        <option value="진화와 협력">진화와 협력</option>
+                        <option value="문명과 에너지">문명과 에너지</option>
+                        <option value="생태철학">생태철학</option>
+                        <option value="철학">철학</option>
+                    </select>
+
+                    <label for="book-publisher">출판사</label>
+                    <input id="book-publisher" name="publisher" type="text" maxlength="80">
+
+                    <label for="book-price">책값</label>
+                    <input id="book-price" name="price" type="number" min="0" step="100" value="15000">
+
+                    <label for="book-stock">재고 수량</label>
+                    <input id="book-stock" name="stock" type="number" min="0" step="1" value="5">
+
+                    <label for="book-incoming-date">입고일</label>
+                    <input id="book-incoming-date" name="incomingDate" type="date">
+
+                    <label for="book-registered-at">등록일</label>
+                    <input id="book-registered-at" name="registeredAt" type="date">
+
+                    <label for="book-new-until">신간 만료일</label>
+                    <input id="book-new-until" name="newUntil" type="date">
+
+                    <label for="book-classification">상태 분류</label>
+                    <select id="book-classification" name="classification">
+                        <option value="구매중">구매중</option>
+                        <option value="대기중">대기중</option>
+                        <option value="신규책">신규책</option>
+                        <option value="등록완료">등록완료</option>
+                        <option value="발송예정">발송예정</option>
+                        <option value="반품처리">반품처리</option>
+                        <option value="품절">품절</option>
+                    </select>
+
+                    <label for="book-description">책 소개</label>
+                    <textarea id="book-description" name="description" rows="4" maxlength="220"></textarea>
+
+                    <label for="book-preview">미리보기 문장</label>
+                    <textarea id="book-preview" name="preview" rows="3" maxlength="220"></textarea>
+                </div>
+
+                <div class="entry-mode-panel" data-panel="barcode">
+                    <label for="book-barcode">바코드 / ISBN</label>
+                    <input id="book-barcode" name="barcode" type="text" maxlength="40" placeholder="예: 9788990000001">
+                    <p class="entry-hint">코드에 등록된 정보를 기준으로 도서 정보를 자동 채웁니다.</p>
+                </div>
+
+                <div class="entry-mode-panel" data-panel="excel">
+                    <label for="book-excel-file">엑셀 파일 업로드</label>
+                    <input id="book-excel-file" name="excelFile" type="file" accept=".csv,.xlsx,.xls">
+                    <p class="entry-hint">제목, 저자, 카테고리, 출판사, 설명 컬럼이 포함된 파일을 올려 한 번에 임시 등록합니다.</p>
+                </div>
+
+                <button type="submit" class="admin-form-submit">임시 등록</button>
                 <p id="book-form-status" class="admin-login-status" aria-live="polite"></p>
             </form>
         </section>

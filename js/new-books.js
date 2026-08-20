@@ -6,7 +6,8 @@ const newBookCategories = [
     'evolution',
     'energy',
     'ecology',
-    'philosophy'
+    'philosophy',
+    'uncategorized'
 ];
 
 const newBookCategoryLabels = {
@@ -17,7 +18,8 @@ const newBookCategoryLabels = {
     evolution: '진화와 협력',
     energy: '문명과 에너지',
     ecology: '생태철학',
-    philosophy: '철학'
+    philosophy: '철학',
+    uncategorized: '미분류'
 };
 
 const newCategoryBooks = {
@@ -60,11 +62,87 @@ const newCategoryBooks = {
         ['장자', '장자', '김학주', '을유문화사', '변화와 관계의 흐름을 바라보며 함께 살아가는 감각을 일깨웁니다.', 'philosophy.svg'],
         ['스피노자 철학', '스피노자', '', 'Syntropy Books 큐레이션', '인간과 자연을 하나의 연결된 질서로 바라봅니다.', 'philosophy.svg'],
         ['자연과 자유', '철학 큐레이션', '', 'Syntropy Books 큐레이션', '자연과 함께 살아가는 삶의 태도와 기준을 탐구합니다.', 'philosophy.svg']
+    ],
+    uncategorized: [
+        ['미분류 샘플 도서', '분류 대기', '', 'Syntropy Books 큐레이션', '카테고리 분류 검토 중인 도서입니다.', 'book.svg'],
+        ['분류 보류 자료집', '큐레이션 팀', '', 'Syntropy Books 큐레이션', '분류 기준 확정 전 임시 보관된 도서 목록입니다.', 'book.svg'],
+        ['카테고리 검토 노트', '편집부', '', 'Syntropy Books 큐레이션', '주제 재정의가 필요한 도서를 모아둔 검토 기록입니다.', 'book.svg']
     ]
 };
 
+const getCatalogBooks = () => {
+    try {
+        const parsedBooks = JSON.parse(localStorage.getItem('syntropyBooksCatalog') || '[]');
+        return Array.isArray(parsedBooks) ? parsedBooks : [];
+    } catch (error) {
+        return [];
+    }
+};
+
+const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
+    if (!book || typeof book !== 'object') {
+        return null;
+    }
+
+    const title = String(book.title || '').trim();
+    if (!title) {
+        return null;
+    }
+
+    return {
+        title,
+        author: String(book.author || '미상').trim(),
+        translator: String(book.translator || '').trim(),
+        publisher: String(book.publisher || 'Syntropy Books').trim(),
+        description: String(book.description || '새로 추가된 도서입니다.').trim(),
+        cover: String(book.cover || '').trim(),
+        category: String(book.category || categoryLabel || '').trim()
+    };
+};
+
+const getBooksForCategory = (categorySlug, categoryLabel) => {
+    const catalogBooks = getCatalogBooks()
+        .map((book) => normalizeCatalogBook(book, categorySlug, categoryLabel))
+        .filter(Boolean);
+
+    const matchingCatalogBooks = catalogBooks.filter((book) => {
+        if (!categoryLabel) {
+            return true;
+        }
+        return book.category === categoryLabel;
+    });
+
+    if (matchingCatalogBooks.length > 0) {
+        return matchingCatalogBooks;
+    }
+
+    return (newCategoryBooks[categorySlug] || []).map((book) => ({
+        title: book[0],
+        author: book[1],
+        translator: book[2],
+        publisher: book[3],
+        description: book[4],
+        cover: book[5]
+    }));
+};
+
 const updateNewBookCard = (card, book) => {
-    const [title, author, translator, publisher, description, cover] = book;
+    const normalizedBook = Array.isArray(book)
+        ? {
+            title: book[0],
+            author: book[1],
+            translator: book[2],
+            publisher: book[3],
+            description: book[4],
+            cover: book[5]
+        }
+        : book;
+
+    if (!normalizedBook) {
+        return;
+    }
+
+    const { title, author, translator, publisher, description, cover } = normalizedBook;
     card.querySelector('.book-title').textContent = title;
     card.querySelector('.book-author').textContent = author;
     const translatorElement = card.querySelector('.book-translator');
@@ -79,7 +157,8 @@ const updateNewBookCard = (card, book) => {
     card.querySelector('.book-description').textContent = description;
     const coverElement = card.querySelector('.book-cover');
     if (coverElement) {
-        coverElement.src = `../images/book-covers/${cover}`;
+        const coverPath = cover ? `../images/book-covers/${cover}` : '../images/book-covers/book.svg';
+        coverElement.src = coverPath;
         coverElement.alt = `${title} 책표지 미리보기`;
     }
     card.classList.remove('is-changing');
@@ -89,7 +168,7 @@ const updateNewBookCard = (card, book) => {
 const startNewBookRotation = () => {
     const positions = new Map();
     document.querySelectorAll('.new-book-card[data-category-id]').forEach((card) => {
-        const books = newCategoryBooks[card.dataset.categoryId];
+        const books = getBooksForCategory(card.dataset.categoryId, newBookCategoryLabels[card.dataset.categoryId] || card.dataset.categoryLabel);
         if (!books || books.length < 2) return;
         positions.set(card.dataset.categoryId, 0);
         updateNewBookCard(card, books[0]);
@@ -114,55 +193,23 @@ const updateNewBooksHeading = (selectedCategory) => {
     }
 
     const categoryLabel = newBookCategoryLabels[selectedCategory];
-    heading.textContent = categoryLabel ? `신간 도서 코너 / ${categoryLabel}` : '신간 도서 코너';
+    heading.textContent = categoryLabel ? `신간도서 / ${categoryLabel}` : '신간도서';
 };
 
 const syncCatalogWithNewBooksPage = () => {
-    const libraryBooks = (() => {
-        try {
-            return JSON.parse(localStorage.getItem('syntropyBooksCatalog') || '[]');
-        } catch (error) {
-            return [];
-        }
-    })();
-
     const container = document.querySelector('.new-book-container');
-    if (!container || !Array.isArray(libraryBooks) || libraryBooks.length === 0) {
+    if (!container) {
         return;
     }
 
-    const categoryCoverMap = {
-        '생명과학': 'life-science.svg',
-        '시스템 사고': 'systems-thinking.svg',
-        '복잡계': 'complexity.svg',
-        '우주와 질서': 'cosmos.svg',
-        '진화와 협력': 'evolution.svg',
-        '문명과 에너지': 'energy.svg',
-        '생태철학': 'ecology.svg',
-        '철학': 'philosophy.svg'
-    };
-
     [...document.querySelectorAll('.new-book-card[data-generated="true"]')].forEach((card) => card.remove());
 
-    libraryBooks.forEach((book) => {
-        const categoryId = Object.keys(newBookCategoryLabels).find((key) => newBookCategoryLabels[key] === book.category) || 'philosophy';
-        const article = document.createElement('article');
-        article.className = 'book-card new-book-card';
-        article.dataset.generated = 'true';
-        article.dataset.categoryId = categoryId;
-        article.dataset.categoryLabel = book.category || '도서';
-        article.innerHTML = `
-            <div class="book-card-top">
-                <span class="book-category">${book.category || '도서'}</span>
-                <span class="book-number">NEW</span>
-            </div>
-            <h2 class="book-title">${book.title}</h2>
-            <p class="book-author">${book.author || '미상'}</p>
-            <p class="book-publisher">출판사: ${book.publisher || 'Syntropy Books'}</p>
-            <p class="book-description">${book.description || '새로 추가된 도서입니다.'}</p>
-            <img class="book-cover" src="../images/book-covers/${categoryCoverMap[book.category] || 'book.svg'}" alt="${book.title} 책표지 미리보기">
-        `;
-        container.append(article);
+    document.querySelectorAll('.new-book-card').forEach((card) => {
+        const categoryId = card.dataset.categoryId;
+        const categoryLabel = newBookCategoryLabels[categoryId] || card.dataset.categoryLabel || '도서';
+        const books = getBooksForCategory(categoryId, categoryLabel);
+        const featuredBook = books[Math.floor(Math.random() * books.length)] || null;
+        updateNewBookCard(card, featuredBook);
     });
 };
 
@@ -170,7 +217,7 @@ const filterNewBooks = () => {
     const selectedCategory = window.location.hash.slice(1);
     const isValidCategory = newBookCategories.includes(selectedCategory);
     const cards = [...document.querySelectorAll('.new-book-card[data-category-id]')];
-    const categoryLinks = [...document.querySelectorAll('.book-category-list[aria-label="신간 도서 카테고리"] .category-item')];
+    const categoryLinks = [...document.querySelectorAll('.book-category-list[aria-label="신간도서 카테고리"] .category-item')];
 
     updateNewBooksHeading(isValidCategory ? selectedCategory : '');
 
@@ -205,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     filterNewBooks();
-    startNewBookRotation();
     window.addEventListener('hashchange', filterNewBooks);
 });
 window.addEventListener('syntropyCatalogUpdated', syncCatalogWithNewBooksPage);

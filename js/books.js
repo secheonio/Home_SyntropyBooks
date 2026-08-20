@@ -1,6 +1,43 @@
 const MIN_ROTATION_DELAY_MS = 10000;
 const MAX_ROTATION_DELAY_MS = 20000;
 
+const BOOK_STATUS = Object.freeze({
+    PURCHASE: '구매중',
+    WAITING: '대기중',
+    NEW: '신규책',
+    COMPLETE: '등록완료',
+    SHIPPING: '발송예정',
+    RETURNED: '반품처리',
+    SOLD_OUT: '품절'
+});
+
+const normalizeBookStatusValue = (book = {}) => {
+    const classification = String(book.classification || '').trim();
+    if (classification && Object.values(BOOK_STATUS).includes(classification)) {
+        return classification;
+    }
+
+    if (book.status === 'preorder') {
+        return BOOK_STATUS.PURCHASE;
+    }
+    if (book.status === 'draft') {
+        return BOOK_STATUS.WAITING;
+    }
+    if (book.status === 'shipping') {
+        return BOOK_STATUS.SHIPPING;
+    }
+    if (book.status === 'returned') {
+        return BOOK_STATUS.RETURNED;
+    }
+    if (Number(book.stock || 0) === 0) {
+        return BOOK_STATUS.SOLD_OUT;
+    }
+    if (book.newUntil && new Date(book.newUntil) > new Date()) {
+        return BOOK_STATUS.NEW;
+    }
+    return BOOK_STATUS.COMPLETE;
+};
+
 const bookCategoryLabels = {
     'life-science': '생명과학',
     'systems-thinking': '시스템 사고',
@@ -9,7 +46,56 @@ const bookCategoryLabels = {
     evolution: '진화와 협력',
     energy: '문명과 에너지',
     ecology: '생태철학',
-    philosophy: '철학'
+    philosophy: '철학',
+    uncategorized: '미분류'
+};
+
+const categoryPageBySlug = Object.freeze({
+    'life-science': 'life-science.html',
+    'systems-thinking': 'systems-thinking.html',
+    complexity: 'complexity.html',
+    cosmos: 'cosmos.html',
+    evolution: 'evolution.html',
+    energy: 'energy.html',
+    ecology: 'ecology.html',
+    philosophy: 'philosophy.html'
+});
+
+const goToBookDetailFromCard = (card) => {
+    const title = card.querySelector('.book-title')?.textContent.trim();
+    if (!title) {
+        return;
+    }
+
+    window.location.href = `book-detail.html?book=${encodeURIComponent(title)}`;
+};
+
+const setupGeneratedCardNavigation = () => {
+    const container = document.querySelector('.book-container');
+    if (!container || container.dataset.generatedNavBound === 'true') {
+        return;
+    }
+
+    container.dataset.generatedNavBound = 'true';
+
+    container.addEventListener('click', (event) => {
+        const card = event.target.closest('.book-card[data-generated="true"]');
+        if (!card || !container.contains(card) || event.target.closest('a')) {
+            return;
+        }
+        goToBookDetailFromCard(card);
+    });
+
+    container.addEventListener('keydown', (event) => {
+        const card = event.target.closest('.book-card[data-generated="true"]');
+        if (!card || !container.contains(card)) {
+            return;
+        }
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            goToBookDetailFromCard(card);
+        }
+    });
 };
 
 const updateBooksPageHeading = () => {
@@ -22,56 +108,173 @@ const updateBooksPageHeading = () => {
     heading.innerHTML = category ? `도서목록 / ${category}` : '질서 있는 선택을 위한<br>도서 큐레이션';
 };
 
-const syncCatalogWithBooksPage = () => {
-    const libraryBooks = (() => {
-        try {
-            return JSON.parse(localStorage.getItem('syntropyBooksCatalog') || '[]');
-        } catch (error) {
-            return [];
-        }
-    })();
+const getFallbackCatalogBooks = () => Object.entries(categoryBooks).flatMap(([categorySlug, books]) => books.map((book) => ({
+    title: String(book.title || '').trim(),
+    author: String(book.author || '미상').trim(),
+    translator: String(book.translator || '').trim(),
+    publisher: String(book.publisher || 'Syntropy Books 큐레이션').trim(),
+    description: String(book.description || '').trim(),
+    cover: String(book.cover || '').trim(),
+    category: bookCategoryLabels[categorySlug] || categorySlug,
+    categorySlug
+})));
 
+const getCatalogBooks = () => {
+    const fallbackBooks = getFallbackCatalogBooks();
+    try {
+        const parsedBooks = JSON.parse(localStorage.getItem('syntropyBooksCatalog') || '[]');
+        if (!Array.isArray(parsedBooks) || parsedBooks.length === 0) {
+            return fallbackBooks;
+        }
+
+        if (parsedBooks.length < fallbackBooks.length) {
+            return fallbackBooks;
+        }
+
+        return parsedBooks;
+    } catch (error) {
+        return fallbackBooks;
+    }
+};
+
+const getAvailableCatalogBooks = () => getCatalogBooks();
+
+const getTotalBookCount = () => getAvailableCatalogBooks().length;
+
+const getCategoryBookCount = (categorySlug, categoryLabel) => getAvailableCatalogBooks().filter((book) => {
+    const bookCategory = String(book.category || '').trim();
+    const matchesCategoryLabel = categoryLabel ? bookCategory === categoryLabel : false;
+    const matchesCategorySlug = String(book.categorySlug || '').trim() === String(categorySlug || '');
+    return matchesCategoryLabel || matchesCategorySlug || (bookCategory === (categoryLabel || bookCategoryLabels[categorySlug] || ''));
+}).length;
+
+const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
+    if (!book || typeof book !== 'object') {
+        return null;
+    }
+
+    const title = String(book.title || '').trim();
+    if (!title) {
+        return null;
+    }
+
+    return {
+        title,
+        author: String(book.author || '미상').trim(),
+        translator: String(book.translator || '').trim(),
+        publisher: String(book.publisher || 'Syntropy Books').trim(),
+        description: String(book.description || '새로 추가된 도서입니다.').trim(),
+        cover: String(book.cover || '').trim(),
+        category: String(book.category || categoryLabel || '').trim(),
+        categorySlug
+    };
+};
+
+const getBooksForCategory = (categorySlug, categoryLabel) => {
+    const catalogBooks = getCatalogBooks()
+        .map((book) => normalizeCatalogBook(book, categorySlug, categoryLabel))
+        .filter(Boolean);
+
+    const matchingCatalogBooks = catalogBooks.filter((book) => {
+        if (!categoryLabel) {
+            return true;
+        }
+        return book.category === categoryLabel;
+    });
+
+    if (matchingCatalogBooks.length > 0) {
+        return matchingCatalogBooks;
+    }
+
+    return (categoryBooks[categorySlug] || []).map((book) => ({
+        title: book.title,
+        author: book.author,
+        description: book.description,
+        category: categoryLabel,
+        categorySlug,
+        cover: book.cover || ''
+    }));
+};
+
+const getRandomFeaturedBook = (categorySlug, categoryLabel) => {
+    const books = getBooksForCategory(categorySlug, categoryLabel);
+    if (!books.length) {
+        return null;
+    }
+
+    return books[Math.floor(Math.random() * books.length)];
+};
+
+const updateOverviewBookCard = (card, featuredBook, categoryLabel) => {
+    const resolvedCategoryLabel = categoryLabel || card.dataset.categoryLabel || '도서';
+    const categoryElement = card.querySelector('.book-category');
+    if (categoryElement) {
+        categoryElement.textContent = resolvedCategoryLabel;
+    }
+
+    card.dataset.categoryLabel = resolvedCategoryLabel;
+    card.setAttribute('data-category-label', resolvedCategoryLabel);
+
+    const titleElement = card.querySelector('.book-title');
+    const authorElement = card.querySelector('.book-author');
+    const translatorElement = card.querySelector('.book-translator');
+    const publisherElement = card.querySelector('.book-publisher');
+    const descriptionElement = card.querySelector('.book-description');
+    const coverElement = card.querySelector('.book-cover');
+
+    if (featuredBook) {
+        if (titleElement) {
+            titleElement.textContent = featuredBook.title;
+        }
+        if (authorElement) {
+            authorElement.textContent = featuredBook.author || '미상';
+        }
+        if (translatorElement) {
+            translatorElement.textContent = featuredBook.translator ? `옮긴이: ${featuredBook.translator}` : '';
+            translatorElement.hidden = !featuredBook.translator;
+        }
+        if (publisherElement) {
+            publisherElement.textContent = `출판사: ${featuredBook.publisher || 'Syntropy Books'}`;
+        }
+        if (descriptionElement) {
+            descriptionElement.textContent = featuredBook.description || '새로 추가된 도서입니다.';
+        }
+        if (coverElement) {
+            const coverPath = featuredBook.cover ? `../images/book-covers/${featuredBook.cover}` : `../images/book-covers/book.svg`;
+            coverElement.src = coverPath;
+            coverElement.alt = `${featuredBook.title} 책표지 미리보기`;
+        }
+    }
+};
+
+const filterBooksOverview = () => {
+    const selectedCategory = window.location.hash.slice(1);
+    const isValidCategory = Object.prototype.hasOwnProperty.call(bookCategoryLabels, selectedCategory);
+    const cards = [...document.querySelectorAll('.book-container .book-card')];
+
+    cards.forEach((card) => {
+        const shouldShow = !isValidCategory || card.id === selectedCategory;
+        card.classList.toggle('is-hidden', !shouldShow);
+    });
+};
+
+const syncCatalogWithBooksPage = () => {
     const container = document.querySelector('.book-container');
-    if (!container || !Array.isArray(libraryBooks) || libraryBooks.length === 0) {
+    if (!container) {
         return;
     }
 
-    const categoryCoverMap = {
-        '생명과학': 'life-science.svg',
-        '시스템 사고': 'systems-thinking.svg',
-        '복잡계': 'complexity.svg',
-        '우주와 질서': 'cosmos.svg',
-        '진화와 협력': 'evolution.svg',
-        '문명과 에너지': 'energy.svg',
-        '생태철학': 'ecology.svg',
-        '철학': 'philosophy.svg'
-    };
+    setupGeneratedCardNavigation();
+    [...document.querySelectorAll('.book-container .book-card[data-generated="true"]')].forEach((card) => card.remove());
 
-    [...document.querySelectorAll('.book-card[data-generated="true"]')].forEach((card) => card.remove());
-
-    libraryBooks.forEach((book) => {
-        const article = document.createElement('article');
-        article.className = 'book-card';
-        article.dataset.generated = 'true';
-        article.dataset.categoryLabel = book.category || '도서';
-        article.innerHTML = `
-            <div class="book-card-top">
-                <span class="book-category">${book.category || '도서'}</span>
-                <span class="book-new-badge">신간</span>
-            </div>
-            <h2 class="book-title">${book.title}</h2>
-            <p class="book-author">${book.author || '미상'}</p>
-            <p class="book-translator"></p>
-            <p class="book-publisher">출판사: ${book.publisher || 'Syntropy Books'}</p>
-            <p class="book-description">${book.description || '새로 추가된 도서입니다.'}</p>
-            <img class="book-cover" src="../images/book-covers/${categoryCoverMap[book.category] || 'book.svg'}" alt="${book.title} 책표지 미리보기">
-        `;
-
-        const categoryValue = article.querySelector('.book-category')?.textContent.trim();
-        article.dataset.categoryLabel = categoryValue;
-        article.setAttribute('data-category-label', categoryValue);
-        container.append(article);
+    [...container.querySelectorAll('.book-card')].forEach((card) => {
+        const categorySlug = card.id || card.dataset.categoryId;
+        const categoryLabel = bookCategoryLabels[categorySlug] || card.dataset.categoryLabel || '도서';
+        const featuredBook = getRandomFeaturedBook(categorySlug, categoryLabel);
+        updateOverviewBookCard(card, featuredBook, categoryLabel);
     });
+
+    filterBooksOverview();
 };
 
 const categoryBooks = {
@@ -210,6 +413,23 @@ const categoryBooks = {
             author: '철학 큐레이션',
             description: '자연과 함께 살아가는 삶의 태도와 판단의 기준을 탐구하는 책들을 소개합니다.'
         }
+    ],
+    uncategorized: [
+        {
+            title: '미분류 샘플 도서',
+            author: '분류 대기',
+            description: '카테고리 분류가 아직 완료되지 않은 도서입니다.'
+        },
+        {
+            title: '분류 보류 자료집',
+            author: '큐레이션 팀',
+            description: '검토 중인 도서 정보를 임시 보관한 분류 대기 목록입니다.'
+        },
+        {
+            title: '카테고리 검토 노트',
+            author: '편집부',
+            description: '주제 재정의가 필요한 도서를 모아 분류 기준을 정리합니다.'
+        }
     ]
 };
 
@@ -263,7 +483,10 @@ const bookMetadata = {
     '이기적 유전자': { translator: '홍영남, 이상임', publisher: '을유문화사' },
     '엔트로피': { translator: '', publisher: 'Syntropy Books 큐레이션' },
     '오래된 미래': { translator: '김태언', publisher: '중앙북스' },
-    '장자': { translator: '김학주', publisher: '을유문화사' }
+    '장자': { translator: '김학주', publisher: '을유문화사' },
+    '미분류 샘플 도서': { translator: '', publisher: 'Syntropy Books 큐레이션' },
+    '분류 보류 자료집': { translator: '', publisher: 'Syntropy Books 큐레이션' },
+    '카테고리 검토 노트': { translator: '', publisher: 'Syntropy Books 큐레이션' }
 };
 
 const updateBookCard = (card, book) => {
@@ -312,11 +535,17 @@ const scheduleCardRotation = (card, books, positions) => {
 
 const startBookRotation = () => {
     const cards = [...document.querySelectorAll('.book-card[id]')];
-    const positions = new Map(cards.map((card) => [card.id, 0]));
 
     if (cards.length === 0) {
         return;
     }
+
+    if (document.body.dataset.bookRotationStarted === 'true') {
+        return;
+    }
+    document.body.dataset.bookRotationStarted = 'true';
+
+    const positions = new Map(cards.map((card) => [card.id, 0]));
 
     cards.forEach((card) => {
         const books = categoryBooks[card.id];
@@ -334,7 +563,12 @@ const startBookRotation = () => {
 
             const title = card.querySelector('.book-title')?.textContent.trim();
             if (title) {
-                window.location.href = `${card.id}.html?book=${encodeURIComponent(title)}`;
+                const categoryPage = categoryPageBySlug[card.id];
+                if (categoryPage) {
+                    window.location.href = `${categoryPage}?book=${encodeURIComponent(title)}`;
+                } else {
+                    window.location.href = `book-detail.html?book=${encodeURIComponent(title)}`;
+                }
             }
         });
     });
@@ -344,7 +578,7 @@ const startBookSearch = () => {
     const input = document.querySelector('#book-search-input');
     const status = document.querySelector('#book-search-status');
     const container = document.querySelector('.book-container');
-    const cards = [...document.querySelectorAll('.book-card[id]')];
+    const cards = [...document.querySelectorAll('.book-card')];
 
     if (!input || !status || !container || cards.length === 0) {
         return;
@@ -355,6 +589,8 @@ const startBookSearch = () => {
     emptyMessage.textContent = '검색 결과가 없습니다.';
     emptyMessage.hidden = true;
     container.append(emptyMessage);
+
+    const totalBookCount = getTotalBookCount();
 
     const syncNewBadge = (card) => {
         const newBadge = card.querySelector('.book-new-badge');
@@ -369,12 +605,12 @@ const startBookSearch = () => {
 
     input.addEventListener('input', () => {
         const query = input.value.trim();
-        const visibleCount = query === '' ? cards.length : cards.filter((card) => {
+        const visibleCount = query === '' ? totalBookCount : cards.filter((card) => {
             const searchableText = card.textContent.toLocaleLowerCase();
             return searchableText.includes(query.toLocaleLowerCase());
         }).length;
 
-        status.textContent = query === '' ? `전체 도서 ${cards.length}권` : `검색 결과 ${visibleCount}권`;
+        status.textContent = query === '' ? `전체 도서 ${totalBookCount}권` : `검색 결과 ${visibleCount}권`;
     });
 
     input.addEventListener('keydown', (event) => {
@@ -392,11 +628,19 @@ const startBookSearch = () => {
     });
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+const initBooksPage = () => {
     syncCatalogWithBooksPage();
+    setupGeneratedCardNavigation();
     startBookRotation();
     startBookSearch();
     updateBooksPageHeading();
     window.addEventListener('hashchange', updateBooksPageHeading);
-});
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBooksPage);
+} else {
+    initBooksPage();
+}
+
 window.addEventListener('syntropyCatalogUpdated', syncCatalogWithBooksPage);

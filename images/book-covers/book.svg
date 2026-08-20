@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" role="img" aria-label="Syntropy Books book cover">
+  <rect width="120" height="180" fill="#1f3d35"/>
+  <rect x="10" y="10" width="100" height="160" fill="none" stroke="#dfe8df" stroke-width="2"/>
+  <path d="M32 62h56M32 76h56M32 90h42" fill="none" stroke="#d9b36c" stroke-width="4" stroke-linecap="round"/>
+  <path d="M38 113c8-12 17-18 24-18 10 0 18 8 24 18v16H38v-16Z" fill="#d9b36c" opacity="0.9"/>
+  <text x="60" y="146" text-anchor="middle" fill="#f4efe7" font-size="11" font-family="sans-serif" letter-spacing="1">SYNTROPY</text>
+  <text x="60" y="159" text-anchor="middle" fill="#f4efe7" font-size="8" font-family="sans-serif" letter-spacing="2">BOOKS</text>
+</svg>

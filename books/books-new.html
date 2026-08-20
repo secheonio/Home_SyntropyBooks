@@ -1,10 +1,9 @@
-<script src="../js/admin-login.js"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신간 도서 코너 | Syntropy Books</title>
+    <title>신간도서 | Syntropy Books</title>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/books.css">
 </head>
@@ -58,9 +57,10 @@
                             <a href="energy.html" class="submenu-item category-item">문명과 에너지</a>
                             <a href="ecology.html" class="submenu-item category-item">생태철학</a>
                             <a href="philosophy.html" class="submenu-item category-item">철학</a>
+                            <a href="books-new.html#uncategorized" class="submenu-item category-item">미분류</a>
                         </div>
-                        <a href="books-new.html" class="submenu-item active" aria-current="page">신간 도서 코너</a>
-                        <div class="book-category-list" aria-label="신간 도서 카테고리">
+                        <a href="books-new.html" class="submenu-item active" aria-current="page">신간도서</a>
+                        <div class="book-category-list" aria-label="신간도서 카테고리">
                             <a href="books-new.html#life-science" class="submenu-item category-item">생명과학</a>
                             <a href="books-new.html#systems-thinking" class="submenu-item category-item">시스템 사고</a>
                             <a href="books-new.html#complexity" class="submenu-item category-item">복잡계</a>
@@ -69,6 +69,7 @@
                             <a href="books-new.html#energy" class="submenu-item category-item">문명과 에너지</a>
                             <a href="books-new.html#ecology" class="submenu-item category-item">생태철학</a>
                             <a href="books-new.html#philosophy" class="submenu-item category-item">철학</a>
+                            <a href="books-new.html#uncategorized" class="submenu-item category-item">미분류</a>
                         </div>
                     </div>
                 </div>
@@ -79,9 +80,9 @@
         <main class="main-content">
             <header class="about-header">
                 <p class="subtitle">NEW BOOKS</p>
-                <h1 class="main-title">새롭게 만나는<br>이번 달의 책</h1>
+                <h1 class="main-title" id="new-books-heading">새롭게 만나는<br>이번 달의 책</h1>
             </header>
-            <section class="book-container new-book-container" aria-label="신간 도서 목록">
+            <section class="book-container new-book-container" aria-label="신간도서 목록">
                 <article class="book-card new-book-card" data-category-id="life-science" data-category-label="생명과학">
                     <div class="book-card-top"><span class="book-category">생명과학</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">생명이란 무엇인가</h2><p class="book-author">에르빈 슈뢰딩거</p><p class="book-publisher">출판사: Syntropy Books 큐레이션</p><p class="book-description">물리학의 언어로 생명과 질서의 근원을 탐구하는 고전입니다.</p>
@@ -121,6 +122,11 @@
                     <div class="book-card-top"><span class="book-category">철학</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">장자</h2><p class="book-author">장자</p><p class="book-translator">옮긴이: 김학주</p><p class="book-publisher">출판사: 을유문화사</p><p class="book-description">변화와 관계의 흐름을 바라보며 함께 살아가는 감각을 일깨웁니다.</p>
                     <img class="book-cover" src="../images/book-covers/philosophy.svg" alt="철학 책표지 미리보기">
+                </article>
+                <article class="book-card new-book-card" data-category-id="uncategorized" data-category-label="미분류">
+                    <div class="book-card-top"><span class="book-category">미분류</span><span class="book-number">NEW</span></div>
+                    <h2 class="book-title">미분류 샘플 도서</h2><p class="book-author">분류 대기</p><p class="book-publisher">출판사: Syntropy Books 큐레이션</p><p class="book-description">카테고리 검토 중인 신간 도서를 임시로 모아 안내합니다.</p>
+                    <img class="book-cover" src="../images/book-covers/book.svg" alt="미분류 책표지 미리보기">
                 </article>
             </section>
         </main>
