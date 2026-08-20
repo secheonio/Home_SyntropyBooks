@@ -50,7 +50,7 @@
                 </strong>
             </article>
             <article class="admin-card admin-card--secondary-stat">
-                <span class="stat-label">신간 도서 수</span>
+                <span class="stat-label">신간도서 수</span>
                 <strong class="stat-value stat-value--stacked stat-value--secondary-stat" data-stat="new-books">
                     <span class="stat-value-line">0종</span>
                     <span class="stat-value-line">0권</span>
@@ -77,6 +77,7 @@
                     <button type="button" class="admin-action-btn" id="open-book-form-btn">도서 추가</button>
                     <button type="button" class="admin-action-btn admin-action-btn--secondary" data-open-mode="barcode">바코드로 등록</button>
                     <button type="button" class="admin-action-btn admin-action-btn--secondary" data-open-mode="excel">엑셀로 등록</button>
+                    <button type="button" class="admin-action-btn admin-action-btn--secondary" id="export-books-btn">엑셀 내보내기</button>
                 </div>
             </div>
 
@@ -98,19 +99,10 @@
                 </div>
 
                 <div class="entry-mode-panel is-visible" data-panel="manual">
-                    <label for="book-cover">책표지 이미지</label>
-                    <input id="book-cover" name="cover" type="file" accept="image/*">
+                    <label for="book-id">ID</label>
+                    <input id="book-id" name="id" type="text" readonly placeholder="자동 생성">
 
-                    <label for="book-title">제목</label>
-                    <input id="book-title" name="title" type="text" maxlength="80">
-
-                    <label for="book-author">지은이</label>
-                    <input id="book-author" name="author" type="text" maxlength="80">
-
-                    <label for="book-translator">옮긴이</label>
-                    <input id="book-translator" name="translator" type="text" maxlength="80" placeholder="없음">
-
-                    <label for="book-category">카테고리</label>
+                    <label for="book-category">주 카테고리</label>
                     <select id="book-category" name="category">
                         <option value="생명과학">생명과학</option>
                         <option value="시스템 사고">시스템 사고</option>
@@ -122,14 +114,55 @@
                         <option value="철학">철학</option>
                     </select>
 
+                    <fieldset class="book-category-checkboxes">
+                        <legend>복수 카테고리</legend>
+                        <div class="book-category-checkbox-grid">
+                            <label><input type="checkbox" name="categories" value="생명과학"> 생명과학</label>
+                            <label><input type="checkbox" name="categories" value="시스템 사고"> 시스템 사고</label>
+                            <label><input type="checkbox" name="categories" value="복잡계"> 복잡계</label>
+                            <label><input type="checkbox" name="categories" value="우주와 질서"> 우주와 질서</label>
+                            <label><input type="checkbox" name="categories" value="진화와 협력"> 진화와 협력</label>
+                            <label><input type="checkbox" name="categories" value="문명과 에너지"> 문명과 에너지</label>
+                            <label><input type="checkbox" name="categories" value="생태철학"> 생태철학</label>
+                            <label><input type="checkbox" name="categories" value="철학"> 철학</label>
+                        </div>
+                    </fieldset>
+
+                    <label for="book-title">제목</label>
+                    <input id="book-title" name="title" type="text" maxlength="80">
+
+                    <label for="book-author">저자</label>
+                    <input id="book-author" name="author" type="text" maxlength="80">
+
+                    <label for="book-translator">옮긴이</label>
+                    <input id="book-translator" name="translator" type="text" maxlength="80" placeholder="없음">
+
                     <label for="book-publisher">출판사</label>
                     <input id="book-publisher" name="publisher" type="text" maxlength="80">
 
-                    <label for="book-price">책값</label>
+                    <label for="book-cover">표지</label>
+                    <input id="book-cover" name="cover" type="file" accept="image/*">
+
+                    <label for="book-price">가격</label>
                     <input id="book-price" name="price" type="number" min="0" step="100" value="15000">
 
-                    <label for="book-stock">재고 수량</label>
+                    <label for="book-stock">재고</label>
                     <input id="book-stock" name="stock" type="number" min="0" step="1" value="5">
+
+                    <label for="book-description">책소개</label>
+                    <textarea id="book-description" name="description" rows="4" maxlength="220"></textarea>
+
+                    <label for="book-preview">안내글</label>
+                    <textarea id="book-preview" name="preview" rows="3" maxlength="220"></textarea>
+
+                    <label for="book-barcode">바코드</label>
+                    <input id="book-barcode" name="barcode" type="text" maxlength="40" placeholder="예: 9788990000001">
+
+                    <label for="book-isbn">ISBN</label>
+                    <input id="book-isbn" name="isbn" type="text" maxlength="40" placeholder="예: 9788990000001">
+
+                    <label for="book-qrcode">QR</label>
+                    <input id="book-qrcode" name="qrcode" type="text" maxlength="80" placeholder="QR 코드 URL">
 
                     <label for="book-incoming-date">입고일</label>
                     <input id="book-incoming-date" name="incomingDate" type="date">
@@ -137,11 +170,11 @@
                     <label for="book-registered-at">등록일</label>
                     <input id="book-registered-at" name="registeredAt" type="date">
 
-                    <label for="book-new-until">신간 만료일</label>
+                    <label for="book-new-until">만료일</label>
                     <input id="book-new-until" name="newUntil" type="date">
 
-                    <label for="book-classification">상태 분류</label>
-                    <select id="book-classification" name="classification">
+                    <label for="book-status">상태</label>
+                    <select id="book-status" name="status">
                         <option value="구매중">구매중</option>
                         <option value="대기중">대기중</option>
                         <option value="신규책">신규책</option>
@@ -151,11 +184,8 @@
                         <option value="품절">품절</option>
                     </select>
 
-                    <label for="book-description">책 소개</label>
-                    <textarea id="book-description" name="description" rows="4" maxlength="220"></textarea>
-
-                    <label for="book-preview">미리보기 문장</label>
-                    <textarea id="book-preview" name="preview" rows="3" maxlength="220"></textarea>
+                    <label for="book-note">비고</label>
+                    <textarea id="book-note" name="note" rows="3" maxlength="220"></textarea>
                 </div>
 
                 <div class="entry-mode-panel" data-panel="barcode">

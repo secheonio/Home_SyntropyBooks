@@ -70,13 +70,17 @@ const incompleteDraftSeedBooks = [
 ];
 
 const seedIncompleteDraftBooks = () => {
-    if (getDraftBooksFromStorage().length) {
+    const currentDrafts = getDraftBooksFromStorage();
+    if (currentDrafts.length >= incompleteDraftSeedBooks.length) {
         return;
     }
 
-    const draftBooks = incompleteDraftSeedBooks.map((book, index) => buildDraftBook({
+    const existingTitleSet = new Set(currentDrafts.map((book) => String(book.title || '').trim().toLowerCase()));
+    const missingDrafts = incompleteDraftSeedBooks.filter((book) => !existingTitleSet.has(String(book.title || '').trim().toLowerCase()));
+
+    const draftBooks = [...currentDrafts, ...missingDrafts.map((book, index) => buildDraftBook({
         ...book,
-        id: `draft-seed-${index + 1}`,
+        id: `draft-seed-${Date.now()}-${index + 1}`,
         status: 'draft',
         registeredAt: book.registeredAt || new Date().toISOString(),
         stock: Number(book.stock || 0),
@@ -86,36 +90,146 @@ const seedIncompleteDraftBooks = () => {
         cover: String(book.cover || '').trim(),
         translator: String(book.translator || '').trim(),
         newUntil: ''
-    }));
+    }))];
 
     saveDraftBooksToStorage(draftBooks);
 };
 
+const ensureBaselineCatalogBooks = () => {
+    try {
+        const publishedRaw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        const draftRaw = JSON.parse(localStorage.getItem(DRAFT_STORAGE_KEY) || 'null');
+
+        if (!Array.isArray(publishedRaw) || publishedRaw.length < defaultBooks.length) {
+            const publishedBooks = normalizeBooks(defaultBooks, 'published');
+            const merged = Array.isArray(publishedRaw) ? publishedBooks.filter((seed) => !publishedRaw.some((book) => String(book.title || '').trim().toLowerCase() === String(seed.title || '').trim().toLowerCase()))
+                .concat(publishedRaw) : publishedBooks;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeBooks(merged, 'published')));
+        }
+
+        if (!Array.isArray(draftRaw) || draftRaw.length < incompleteDraftSeedBooks.length) {
+            const existingDrafts = Array.isArray(draftRaw) ? draftRaw : [];
+            const draftBooks = incompleteDraftSeedBooks.map((book, index) => buildDraftBook({
+                ...book,
+                id: `draft-seed-${Date.now()}-${index + 1}`,
+                status: 'draft',
+                registeredAt: book.registeredAt || new Date().toISOString(),
+                stock: Number(book.stock || 0),
+                price: book.price === '' ? 0 : Number(book.price || 0),
+                category: String(book.category || '').trim(),
+                description: String(book.description || '').trim(),
+                cover: String(book.cover || '').trim(),
+                translator: String(book.translator || '').trim(),
+                newUntil: ''
+            }));
+            const mergedDrafts = [...existingDrafts, ...draftBooks.filter((seed) => !existingDrafts.some((book) => String(book.title || '').trim().toLowerCase() === String(seed.title || '').trim().toLowerCase()))];
+            saveDraftBooksToStorage(mergedDrafts);
+        }
+    } catch (error) {
+        console.warn('기본 도서 데이터 보강 중 오류가 발생했습니다.', error);
+    }
+};
+
+const BOOK_FIELD_DEFINITIONS = Object.freeze([
+    { key: 'id', label: 'ID', aliases: ['id', 'ID', '도서id', '도서 ID'] },
+    { key: 'category', label: '카테고리', aliases: ['category', '카테고리'] },
+    { key: 'title', label: '제목', aliases: ['title', '제목', 'booktitle'] },
+    { key: 'author', label: '저자', aliases: ['author', '저자', 'writer'] },
+    { key: 'translator', label: '옮긴이', aliases: ['translator', '옮긴이', '역자'] },
+    { key: 'publisher', label: '출판사', aliases: ['publisher', '출판사'] },
+    { key: 'cover', label: '표지', aliases: ['cover', '표지', '표지 이미지', 'coverimage'] },
+    { key: 'price', label: '가격', aliases: ['price', '가격', '책값'] },
+    { key: 'stock', label: '재고', aliases: ['stock', '재고', '수량'] },
+    { key: 'description', label: '책소개', aliases: ['description', '책소개', '소개'] },
+    { key: 'preview', label: '안내글', aliases: ['preview', '안내글', '미리보기', 'previewtext'] },
+    { key: 'barcode', label: '바코드', aliases: ['barcode', 'barCode', 'BARcode', '바코드'] },
+    { key: 'isbn', label: 'ISBN', aliases: ['isbn', 'ISBN', '국제표준도서번호'] },
+    { key: 'qrcode', label: 'QR', aliases: ['qrcode', 'QRcode', 'QR', 'QR 코드', 'qr코드'] },
+    { key: 'incomingDate', label: '입고일', aliases: ['incomingDate', 'incomingdate', '입고일', '입고 날짜'] },
+    { key: 'registeredAt', label: '등록일', aliases: ['registeredAt', 'registeredat', '등록일', '등록 날짜'] },
+    { key: 'newUntil', label: '만료일', aliases: ['newUntil', 'newuntil', '만료일', '신간 만료일', '신간 종료일'] },
+    { key: 'status', label: '상태', aliases: ['status', '상태', 'bookstatus'] },
+    { key: 'note', label: '비고', aliases: ['note', '노트', '비고', 'remark'] }
+]);
+
+const BOOK_FIELD_LABELS = Object.freeze(Object.fromEntries(BOOK_FIELD_DEFINITIONS.map((field) => [field.key, field.label])));
+
+const normalizeBookFieldKey = (rawKey = '') => {
+    const cleaned = String(rawKey || '').trim().toLowerCase();
+    const match = BOOK_FIELD_DEFINITIONS.find((field) => field.aliases.some((alias) => String(alias).trim().toLowerCase() === cleaned));
+    if (match) {
+        return match.key;
+    }
+
+    const fallback = cleaned.replace(/[^a-z0-9]/g, '');
+    return BOOK_FIELD_DEFINITIONS.find((field) => field.key.replace(/[^a-z0-9]/g, '') === fallback)?.key || rawKey;
+};
+
 const generateBookId = () => `book-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
 
-const normalizeBooks = (books, fallbackStatus = 'published') => books.map((book, index) => ({
-    ...book,
-    id: book.id || `book-${Date.now()}-${index}-${Math.random().toString(16).slice(2, 8)}`,
-    title: String(book.title || '').trim(),
-    author: String(book.author || '').trim(),
-    category: String(book.category || '').trim(),
-    publisher: String(book.publisher || '').trim(),
-    description: String(book.description || '').trim(),
-    barcode: String(book.barcode || '').trim(),
-    isbn: String(book.isbn || '').trim(),
-    translator: String(book.translator || '').trim(),
-    cover: String(book.cover || '').trim(),
-    status: book.status === 'draft' ? 'draft' : fallbackStatus,
-    price: Number(book.price || 0),
-    stock: Number(book.stock || 0),
-    incomingDate: String(book.incomingDate || book.arrivalDate || '').trim(),
-    registeredAt: String(book.registeredAt || new Date().toISOString()).trim(),
-    newUntil: String(book.newUntil || '').trim(),
-    classification: String(book.classification || (Number(book.stock || 0) === 0 ? BOOK_STATUS.SOLD_OUT : BOOK_STATUS.COMPLETE)).trim(),
-    preview: String(book.preview || '').trim()
-}));
+const normalizeCategoryList = (value) => {
+    const rawValues = Array.isArray(value) ? value : String(value ?? '').split(/[\n,;]+/);
+    const categories = rawValues
+        .flatMap((item) => {
+            if (Array.isArray(item)) {
+                return normalizeCategoryList(item);
+            }
+            return String(item ?? '').split('/').map((part) => part.trim());
+        })
+        .map((item) => String(item || '').trim())
+        .filter(Boolean)
+        .filter((category, index, list) => list.indexOf(category) === index);
+
+    return categories.map((category) => category.replace(/\s+/g, ' '));
+};
+
+const getBookCategories = (book = {}) => {
+    const rawCategories = Array.isArray(book?.categories)
+        ? book.categories
+        : (Array.isArray(book?.categoryList)
+            ? book.categoryList
+            : book?.category ?? book?.categories ?? '');
+    const categories = normalizeCategoryList(rawCategories);
+    if (categories.length) {
+        return categories;
+    }
+
+    const fallbackCategory = String(book?.category || '').trim();
+    return fallbackCategory ? [fallbackCategory] : [];
+};
+
+const getPrimaryCategory = (book = {}) => getBookCategories(book)[0] || String(book?.category || '').trim() || '미분류';
+
+const normalizeBooks = (books, fallbackStatus = 'published') => books.map((book, index) => {
+    const categories = getBookCategories(book);
+    const primaryCategory = getPrimaryCategory(book);
+
+    return {
+        ...book,
+        id: book.id || `book-${Date.now()}-${index}-${Math.random().toString(16).slice(2, 8)}`,
+        title: String(book.title || '').trim(),
+        author: String(book.author || '').trim(),
+        category: primaryCategory,
+        categories,
+        publisher: String(book.publisher || '').trim(),
+        description: String(book.description || '').trim(),
+        barcode: String(book.barcode || '').trim(),
+        isbn: String(book.isbn || '').trim(),
+        translator: String(book.translator || '').trim(),
+        cover: String(book.cover || '').trim(),
+        status: book.status === 'draft' ? 'draft' : fallbackStatus,
+        price: Number(book.price || 0),
+        stock: Number(book.stock || 0),
+        incomingDate: String(book.incomingDate || book.arrivalDate || '').trim(),
+        registeredAt: String(book.registeredAt || new Date().toISOString()).trim(),
+        newUntil: String(book.newUntil || '').trim(),
+        classification: String(book.classification || (Number(book.stock || 0) === 0 ? BOOK_STATUS.SOLD_OUT : BOOK_STATUS.COMPLETE)).trim(),
+        preview: String(book.preview || '').trim()
+    };
+});
 
 const getBooksFromStorage = () => {
+    ensureBaselineCatalogBooks();
     try {
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
         if (Array.isArray(stored) && stored.length > 0) {
@@ -135,6 +249,7 @@ const getBooksFromStorage = () => {
 };
 
 const getDraftBooksFromStorage = () => {
+    ensureBaselineCatalogBooks();
     try {
         const stored = JSON.parse(localStorage.getItem(DRAFT_STORAGE_KEY) || 'null');
         if (Array.isArray(stored)) {
@@ -163,27 +278,33 @@ const saveDraftBooksToStorage = (books) => {
     return normalized;
 };
 
-const buildDraftBook = (book = {}) => ({
-    ...book,
-    id: book.id || generateBookId(),
-    status: 'draft',
-    title: String(book.title || '').trim(),
-    author: String(book.author || '').trim(),
-    category: String(book.category || '').trim(),
-    publisher: String(book.publisher || '').trim(),
-    description: String(book.description || '').trim(),
-    barcode: String(book.barcode || '').trim(),
-    isbn: String(book.isbn || '').trim(),
-    translator: String(book.translator || '').trim(),
-    cover: String(book.cover || '').trim(),
-    price: Number(book.price || 0),
-    stock: Number(book.stock || 0),
-    incomingDate: String(book.incomingDate || book.arrivalDate || '').trim(),
-    registeredAt: String(book.registeredAt || new Date().toISOString()).trim(),
-    newUntil: String(book.newUntil || '').trim(),
-    classification: String(book.classification || (Number(book.stock || 0) === 0 ? BOOK_STATUS.SOLD_OUT : BOOK_STATUS.COMPLETE)).trim(),
-    preview: String(book.preview || '').trim()
-});
+const buildDraftBook = (book = {}) => {
+    const categories = getBookCategories(book);
+    const primaryCategory = getPrimaryCategory(book);
+
+    return {
+        ...book,
+        id: book.id || generateBookId(),
+        status: 'draft',
+        title: String(book.title || '').trim(),
+        author: String(book.author || '').trim(),
+        category: primaryCategory,
+        categories,
+        publisher: String(book.publisher || '').trim(),
+        description: String(book.description || '').trim(),
+        barcode: String(book.barcode || '').trim(),
+        isbn: String(book.isbn || '').trim(),
+        translator: String(book.translator || '').trim(),
+        cover: String(book.cover || '').trim(),
+        price: Number(book.price || 0),
+        stock: Number(book.stock || 0),
+        incomingDate: String(book.incomingDate || book.arrivalDate || '').trim(),
+        registeredAt: String(book.registeredAt || new Date().toISOString()).trim(),
+        newUntil: String(book.newUntil || '').trim(),
+        classification: String(book.classification || (Number(book.stock || 0) === 0 ? BOOK_STATUS.SOLD_OUT : BOOK_STATUS.COMPLETE)).trim(),
+        preview: String(book.preview || '').trim()
+    };
+};
 
 const parseBarcodeIntoBook = (value) => {
     const cleaned = String(value || '').replace(/\D/g, '');
@@ -236,7 +357,7 @@ const parseCsvRows = (text) => {
         return values;
     };
 
-    const header = parseLine(lines[0]).map((value) => value.toLowerCase().replace(/\s+/g, ''));
+    const header = parseLine(lines[0]).map((value) => normalizeBookFieldKey(value));
     return lines.slice(1).map((line) => {
         const row = parseLine(line);
         const object = {};
@@ -275,14 +396,34 @@ const parseUploadedExcelRows = async (file) => {
 
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = window.XLSX.utils.sheet_to_json(sheet, { defval: '' });
-        return rows.map((row) => ({
-            title: row.title || row.제목 || '',
-            author: row.author || row.저자 || '',
-            category: row.category || row.카테고리 || '',
-            publisher: row.publisher || row.출판사 || '',
-            description: row.description || row.설명 || '',
-            stock: Number(row.stock || row.재고 || 0)
-        }));
+        return rows.map((row) => {
+            const normalized = {};
+            Object.entries(row).forEach(([key, value]) => {
+                const mappedKey = normalizeBookFieldKey(key);
+                normalized[mappedKey] = value;
+            });
+
+            return {
+                title: normalized.title || normalized.제목 || '',
+                author: normalized.author || normalized.저자 || '',
+                category: normalized.category || normalized.카테고리 || '',
+                publisher: normalized.publisher || normalized.출판사 || '',
+                description: normalized.description || normalized.설명 || '',
+                stock: Number(normalized.stock || normalized.재고 || 0),
+                price: Number(normalized.price || normalized.가격 || 0),
+                translator: normalized.translator || normalized.옮긴이 || '',
+                barcode: normalized.barcode || normalized.바코드 || '',
+                isbn: normalized.isbn || normalized.ISBN || '',
+                qrcode: normalized.qrcode || normalized['QR 코드'] || normalized['QRcode'] || '',
+                incomingDate: normalized.incomingDate || normalized.입고일 || '',
+                registeredAt: normalized.registeredAt || normalized.등록일 || '',
+                newUntil: normalized.newUntil || normalized['신간 만료일'] || '',
+                classification: normalized.classification || normalized.분류 || '',
+                preview: normalized.preview || normalized.미리보기 || '',
+                cover: normalized.cover || normalized.표지 || '',
+                note: normalized.note || normalized.비고 || ''
+            };
+        });
     }
 
     return [];
@@ -350,6 +491,11 @@ const getSummaryCategoryKey = (bookCategory) => {
     return CATEGORY_ORDER.includes(normalized) ? normalized : UNCATEGORIZED_CATEGORY;
 };
 
+const getCategoryCountBuckets = (book) => {
+    const categories = getBookCategories(book);
+    return categories.length ? categories : [UNCATEGORIZED_CATEGORY];
+};
+
 const ADMIN_STATUS_LABELS = Object.freeze({
     preorder: BOOK_STATUS.PURCHASE,
     draft: BOOK_STATUS.WAITING,
@@ -414,41 +560,47 @@ const getCategorySummary = (publishedBooks, draftBooks) => {
     }]));
 
     publishedBooks.forEach((book) => {
-        const category = getSummaryCategoryKey(book.category);
-        if (!summary[category]) {
-            summary[category] = {
-                published: 0,
-                publishedStock: 0,
-                draft: 0,
-                draftStock: 0,
-                new: 0,
-                newStock: 0
-            };
-        }
-        const stock = Math.max(0, Number(book.stock || 0));
-        summary[category].published += 1;
-        summary[category].publishedStock += stock;
-        if (isNewBook(book)) {
-            summary[category].new += 1;
-            summary[category].newStock += stock;
-        }
+        const categories = getCategoryCountBuckets(book);
+        categories.forEach((categoryName) => {
+            const category = getSummaryCategoryKey(categoryName);
+            if (!summary[category]) {
+                summary[category] = {
+                    published: 0,
+                    publishedStock: 0,
+                    draft: 0,
+                    draftStock: 0,
+                    new: 0,
+                    newStock: 0
+                };
+            }
+            const stock = Math.max(0, Number(book.stock || 0));
+            summary[category].published += 1;
+            summary[category].publishedStock += stock;
+            if (isNewBook(book)) {
+                summary[category].new += 1;
+                summary[category].newStock += stock;
+            }
+        });
     });
 
     draftBooks.forEach((book) => {
-        const category = getSummaryCategoryKey(book.category);
-        if (!summary[category]) {
-            summary[category] = {
-                published: 0,
-                publishedStock: 0,
-                draft: 0,
-                draftStock: 0,
-                new: 0,
-                newStock: 0
-            };
-        }
-        const stock = Math.max(0, Number(book.stock || 0));
-        summary[category].draft += 1;
-        summary[category].draftStock += stock;
+        const categories = getCategoryCountBuckets(book);
+        categories.forEach((categoryName) => {
+            const category = getSummaryCategoryKey(categoryName);
+            if (!summary[category]) {
+                summary[category] = {
+                    published: 0,
+                    publishedStock: 0,
+                    draft: 0,
+                    draftStock: 0,
+                    new: 0,
+                    newStock: 0
+                };
+            }
+            const stock = Math.max(0, Number(book.stock || 0));
+            summary[category].draft += 1;
+            summary[category].draftStock += stock;
+        });
     });
 
     return summary;
@@ -488,12 +640,12 @@ const renderCategorySummary = (publishedBooks, draftBooks) => {
     }).join('');
 
     container.innerHTML = `
-        <div class="admin-category-summary-header">카테고리별 등록, 임시등록 및 신간 도서 수 현황</div>
+        <div class="admin-category-summary-header">카테고리별 등록, 임시등록 및 신간도서 수 현황</div>
         <div class="admin-category-table">
             <div class="admin-category-row admin-category-row--header">
                 <span class="admin-category-cell admin-category-name">카테고리</span>
                 <span class="admin-category-cell">등록 도서</span>
-                <span class="admin-category-cell">신간 도서</span>
+                <span class="admin-category-cell">신간도서</span>
                 <span class="admin-category-cell">임시 등록 도서</span>
             </div>
             ${categoryRows}
@@ -525,7 +677,7 @@ const updateAdminStats = (books) => {
     const totalBooksCount = publishedBooksCount + draftBooksCount;
     const draftStockCount = draftBooks.reduce((sum, book) => sum + Math.max(0, Number(book.stock || 0)), 0);
     const totalStockCount = [...publishedBooks, ...draftBooks].reduce((sum, book) => sum + Math.max(0, Number(book.stock || 0)), 0);
-    const categories = new Set(publishedBooks.map((book) => book.category).filter(Boolean));
+    const categories = new Set(publishedBooks.flatMap((book) => getBookCategories(book)).filter(Boolean));
     const newBooks = publishedBooks.filter((book) => {
         if (book.newUntil) {
             return new Date(book.newUntil) > new Date();
@@ -722,7 +874,7 @@ const renderAdminBooks = () => {
             return `
                 <div class="admin-book-row admin-draft-row" data-role="open-draft" data-book-id="${book.id}" tabindex="0">
                     <span>${getAdminStatusLabel(book)}</span>
-                    <span>${book.category || '미분류'}</span>
+                    <span>${getBookCategories(book).join(', ') || '미분류'}</span>
                     <span>${book.title}</span>
                     <span>${book.author || '미상'}</span>
                     <span>${book.translator || '-'}</span>
@@ -762,6 +914,97 @@ const renderAdminBooks = () => {
     updateAdminStats(getBooksFromStorage());
 };
 
+const getExportableBooks = () => {
+    const publishedBooks = getBooksFromStorage().map((book) => ({
+        ...book,
+        status: book.status === 'draft' ? 'draft' : 'published'
+    }));
+    const draftBooks = getDraftBooksFromStorage().map((book) => ({
+        ...book,
+        status: 'draft'
+    }));
+
+    return [...publishedBooks, ...draftBooks].map((book) => ({
+        id: book.id || '',
+        category: getBookCategories(book).join(', ') || '',
+        title: book.title || '',
+        author: book.author || '',
+        translator: book.translator || '',
+        publisher: book.publisher || '',
+        cover: book.cover || '',
+        price: Number(book.price || 0),
+        stock: Number(book.stock || 0),
+        description: book.description || '',
+        preview: book.preview || '',
+        barcode: book.barcode || '',
+        isbn: book.isbn || '',
+        qrcode: book.qrcode || '',
+        incomingDate: book.incomingDate || book.arrivalDate || '',
+        registeredAt: book.registeredAt || '',
+        newUntil: book.newUntil || '',
+        status: book.status || 'published',
+        note: book.note || ''
+    }));
+};
+
+const escapeCsvValue = (value) => {
+    const text = String(value ?? '');
+    if (/[",\n\r]/.test(text)) {
+        return `"${text.replace(/"/g, '""')}"`;
+    }
+    return text;
+};
+
+const exportAllBooksToExcel = () => {
+    const books = getExportableBooks();
+    if (!books.length) {
+        window.alert('내보낼 도서 정보가 없습니다.');
+        return;
+    }
+
+    const totalKinds = books.length;
+    const totalCopies = books.reduce((sum, book) => sum + Math.max(0, Number(book.stock || 0)), 0);
+
+    const headers = [
+        'id',
+        'category',
+        'title',
+        'author',
+        'translator',
+        'publisher',
+        'cover',
+        'price',
+        'stock',
+        'description',
+        'preview',
+        'barcode',
+        'isbn',
+        'qrcode',
+        'incomingDate',
+        'registeredAt',
+        'newUntil',
+        'status',
+        'note'
+    ];
+
+    const koreanHeaders = headers.map((key) => BOOK_FIELD_LABELS[key] || key);
+    const csvRows = [
+        koreanHeaders.join(','),
+        ...books.map((book) => headers.map((header) => escapeCsvValue(book[header])).join(','))
+    ];
+    const csvContent = `\uFEFF${csvRows.join('\n')}`;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `syntropy-books-export-${totalKinds}종-${totalCopies}권.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    window.alert(`${totalKinds}종 ${totalCopies}권의 도서 목록이 한국어 헤더 기준의 CSV 파일로 다운로드되었습니다.`);
+};
+
 const setEntryMode = (mode = 'manual') => {
     const form = document.querySelector('#book-form');
     if (!form) {
@@ -795,15 +1038,25 @@ const openBookForm = (book = null, mode = 'manual') => {
     }
 
     const newBook = {
+        id: '',
         title: '',
         author: '',
         category: '철학',
+        categories: ['철학'],
         publisher: 'Syntropy Books 큐레이션',
         description: '',
         barcode: '',
+        isbn: '',
+        qrcode: '',
         translator: '',
         price: 0,
-        stock: 1
+        stock: 1,
+        preview: '',
+        incomingDate: '',
+        registeredAt: '',
+        newUntil: '',
+        status: '대기중',
+        note: ''
     };
 
     modal.hidden = false;
@@ -813,18 +1066,40 @@ const openBookForm = (book = null, mode = 'manual') => {
         status.textContent = '';
     }
 
+    form.querySelector('#book-id').value = '';
+    form.querySelector('#book-status').value = newBook.status;
+
     if (book) {
         form.dataset.bookId = book.id;
+        form.querySelector('#book-id').value = book.id || '';
         form.querySelector('#book-title').value = book.title;
         form.querySelector('#book-author').value = book.author;
-        form.querySelector('#book-category').value = book.category || newBook.category;
+        form.querySelector('#book-category').value = getPrimaryCategory(book) || newBook.category;
+        const selectedCategories = getBookCategories(book);
+        form.querySelectorAll('input[name="categories"]').forEach((checkbox) => {
+            checkbox.checked = selectedCategories.includes(checkbox.value);
+        });
         form.querySelector('#book-publisher').value = book.publisher || newBook.publisher;
         form.querySelector('#book-description').value = book.description || '';
+        form.querySelector('#book-preview').value = book.preview || '';
         form.querySelector('#book-barcode').value = book.barcode || '';
+        form.querySelector('#book-isbn').value = book.isbn || '';
+        form.querySelector('#book-qrcode').value = book.qrcode || '';
+        form.querySelector('#book-price').value = Number(book.price || 0);
         form.querySelector('#book-stock').value = Number(book.stock || 1);
+        form.querySelector('#book-translator').value = book.translator || '';
+        form.querySelector('#book-incoming-date').value = book.incomingDate || '';
+        form.querySelector('#book-registered-at').value = book.registeredAt ? new Date(book.registeredAt).toISOString().slice(0, 10) : '';
+        form.querySelector('#book-new-until').value = book.newUntil || '';
+        form.querySelector('#book-status').value = BOOK_STATUS_KEYS[book.status] || book.status || newBook.status;
+        form.querySelector('#book-note').value = book.note || '';
     } else {
         delete form.dataset.bookId;
-        window.location.href = '../books/book-detail.html?book=' + encodeURIComponent(newBook.title || '새 도서') + '&draft=true';
+        form.querySelectorAll('input[name="categories"]').forEach((checkbox) => {
+            checkbox.checked = checkbox.value === newBook.category;
+        });
+        form.querySelector('#book-category').value = newBook.category;
+        setEntryMode(mode);
         return;
     }
 
@@ -929,6 +1204,10 @@ const handleBookSubmit = async (event) => {
     }
 
     const formData = new FormData(form);
+    const selectedCategories = [...document.querySelectorAll('input[name="categories"]:checked')].map((checkbox) => String(checkbox.value || '').trim()).filter(Boolean);
+    const primaryCategory = String(formData.get('category') || selectedCategories[0] || '').trim();
+    const categories = [...new Set([...selectedCategories, primaryCategory].filter(Boolean))];
+
     const incomingFile = document.querySelector('#book-cover')?.files?.[0];
     let coverValue = '';
     if (incomingFile && incomingFile.type.startsWith('image/')) {
@@ -940,13 +1219,16 @@ const handleBookSubmit = async (event) => {
     }
 
     let newBook = {
+        id: String(formData.get('id') || form.dataset.bookId || '').trim() || generateBookId(),
         title: String(formData.get('title') || '').trim(),
         author: String(formData.get('author') || '').trim(),
-        category: String(formData.get('category') || '').trim(),
+        category: primaryCategory,
+        categories,
         publisher: String(formData.get('publisher') || '').trim(),
         description: String(formData.get('description') || '').trim(),
         barcode: String(formData.get('barcode') || '').trim(),
         isbn: String(formData.get('isbn') || '').trim(),
+        qrcode: String(formData.get('qrcode') || '').trim(),
         translator: String(formData.get('translator') || '').trim(),
         price: Number(formData.get('price') || 0),
         stock: Number(formData.get('stock') || 0),
@@ -956,7 +1238,8 @@ const handleBookSubmit = async (event) => {
         classification: String(formData.get('classification') || (Number(formData.get('stock') || 0) === 0 ? BOOK_STATUS.SOLD_OUT : BOOK_STATUS.COMPLETE)).trim(),
         preview: String(formData.get('preview') || '').trim(),
         cover: coverValue,
-        status: 'draft'
+        status: 'draft',
+        note: String(formData.get('note') || '').trim()
     };
 
     if (entryMode === 'barcode') {
@@ -973,6 +1256,9 @@ const handleBookSubmit = async (event) => {
         }
         return;
     }
+
+    newBook.category = getPrimaryCategory(newBook);
+    newBook.categories = getBookCategories(newBook);
 
     const drafts = getDraftBooksFromStorage();
     const existingBookId = form.dataset.bookId;
@@ -1191,6 +1477,9 @@ const protectAdminPage = () => {
     document.querySelectorAll('[data-close-book-form]').forEach((element) => {
         element.addEventListener('click', closeBookForm);
     });
+
+    const exportButton = document.querySelector('#export-books-btn');
+    exportButton?.addEventListener('click', exportAllBooksToExcel);
 
     const form = document.querySelector('#book-form');
     form?.addEventListener('submit', handleBookSubmit);

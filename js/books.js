@@ -108,6 +108,50 @@ const updateBooksPageHeading = () => {
     heading.innerHTML = category ? `도서목록 / ${category}` : '질서 있는 선택을 위한<br>도서 큐레이션';
 };
 
+const getBookCategories = (book = {}) => {
+    const rawValue = Array.isArray(book?.categories)
+        ? book.categories
+        : (Array.isArray(book?.categoryList)
+            ? book.categoryList
+            : (book?.category ?? book?.categories ?? ''));
+
+    const values = Array.isArray(rawValue) ? rawValue : String(rawValue ?? '').split(/[\n,;/]+/);
+    const categories = values
+        .flatMap((item) => Array.isArray(item) ? item : String(item ?? '').split('/'))
+        .map((item) => String(item || '').trim())
+        .filter(Boolean)
+        .filter((category, index, list) => list.indexOf(category) === index);
+
+    if (categories.length) {
+        return categories;
+    }
+
+    const fallbackCategory = String(book?.category || '').trim();
+    return fallbackCategory ? [fallbackCategory] : [];
+};
+
+const isUncategorizedBook = (book = {}) => {
+    const categories = getBookCategories(book)
+        .map((category) => String(category || '').trim())
+        .filter(Boolean);
+    const categoryName = String(book?.category || '').trim();
+    const knownCategories = new Set(Object.values(bookCategoryLabels).filter((label) => label !== '미분류'));
+
+    if (!categories.length && !categoryName) {
+        return true;
+    }
+
+    if (categoryName === '미분류') {
+        return true;
+    }
+
+    if (!categories.length) {
+        return true;
+    }
+
+    return !categories.some((category) => knownCategories.has(category)) && !knownCategories.has(categoryName);
+};
+
 const getFallbackCatalogBooks = () => Object.entries(categoryBooks).flatMap(([categorySlug, books]) => books.map((book) => ({
     title: String(book.title || '').trim(),
     author: String(book.author || '미상').trim(),
@@ -116,6 +160,7 @@ const getFallbackCatalogBooks = () => Object.entries(categoryBooks).flatMap(([ca
     description: String(book.description || '').trim(),
     cover: String(book.cover || '').trim(),
     category: bookCategoryLabels[categorySlug] || categorySlug,
+    categories: [bookCategoryLabels[categorySlug] || categorySlug],
     categorySlug
 })));
 
@@ -142,10 +187,18 @@ const getAvailableCatalogBooks = () => getCatalogBooks();
 const getTotalBookCount = () => getAvailableCatalogBooks().length;
 
 const getCategoryBookCount = (categorySlug, categoryLabel) => getAvailableCatalogBooks().filter((book) => {
+    const categories = getBookCategories(book);
+    const categoryNames = new Set(categories.map((item) => String(item || '').trim()).filter(Boolean));
     const bookCategory = String(book.category || '').trim();
-    const matchesCategoryLabel = categoryLabel ? bookCategory === categoryLabel : false;
+    const isUncategorizedTarget = categoryLabel === '미분류';
+
+    if (isUncategorizedTarget) {
+        return isUncategorizedBook(book);
+    }
+
+    const matchesCategoryLabel = categoryLabel ? categoryNames.has(categoryLabel) || bookCategory === categoryLabel : false;
     const matchesCategorySlug = String(book.categorySlug || '').trim() === String(categorySlug || '');
-    return matchesCategoryLabel || matchesCategorySlug || (bookCategory === (categoryLabel || bookCategoryLabels[categorySlug] || ''));
+    return matchesCategoryLabel || matchesCategorySlug || (categoryNames.has(categoryLabel || bookCategoryLabels[categorySlug] || ''));
 }).length;
 
 const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
@@ -158,6 +211,10 @@ const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
         return null;
     }
 
+    const categories = getBookCategories(book);
+    const primaryCategory = categories[0] || String(book.category || categoryLabel || '').trim();
+    const normalizedCategory = isUncategorizedBook(book) && categoryLabel === '미분류' ? '미분류' : primaryCategory;
+
     return {
         title,
         author: String(book.author || '미상').trim(),
@@ -165,7 +222,8 @@ const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
         publisher: String(book.publisher || 'Syntropy Books').trim(),
         description: String(book.description || '새로 추가된 도서입니다.').trim(),
         cover: String(book.cover || '').trim(),
-        category: String(book.category || categoryLabel || '').trim(),
+        category: normalizedCategory,
+        categories: isUncategorizedBook(book) && categoryLabel === '미분류' ? [] : categories,
         categorySlug
     };
 };
@@ -179,11 +237,28 @@ const getBooksForCategory = (categorySlug, categoryLabel) => {
         if (!categoryLabel) {
             return true;
         }
-        return book.category === categoryLabel;
+
+        if (categoryLabel === '미분류') {
+            return isUncategorizedBook(book);
+        }
+
+        const categories = getBookCategories(book);
+        return categories.includes(categoryLabel) || book.category === categoryLabel;
     });
 
     if (matchingCatalogBooks.length > 0) {
         return matchingCatalogBooks;
+    }
+
+    if (categoryLabel === '미분류') {
+        return (categoryBooks.uncategorized || []).map((book) => ({
+            title: book.title,
+            author: book.author,
+            description: book.description,
+            category: '미분류',
+            categorySlug,
+            cover: book.cover || ''
+        }));
     }
 
     return (categoryBooks[categorySlug] || []).map((book) => ({

@@ -79,6 +79,50 @@ const getCatalogBooks = () => {
     }
 };
 
+const getBookCategories = (book = {}) => {
+    const rawValue = Array.isArray(book?.categories)
+        ? book.categories
+        : (Array.isArray(book?.categoryList)
+            ? book.categoryList
+            : (book?.category ?? book?.categories ?? ''));
+
+    const values = Array.isArray(rawValue) ? rawValue : String(rawValue ?? '').split(/[\n,;/]+/);
+    const categories = values
+        .flatMap((item) => Array.isArray(item) ? item : String(item ?? '').split('/'))
+        .map((item) => String(item || '').trim())
+        .filter(Boolean)
+        .filter((category, index, list) => list.indexOf(category) === index);
+
+    if (categories.length) {
+        return categories;
+    }
+
+    const fallbackCategory = String(book?.category || '').trim();
+    return fallbackCategory ? [fallbackCategory] : [];
+};
+
+const isUncategorizedBook = (book = {}) => {
+    const categories = getBookCategories(book)
+        .map((category) => String(category || '').trim())
+        .filter(Boolean);
+    const categoryName = String(book?.category || '').trim();
+    const knownCategories = new Set(Object.values(newBookCategoryLabels).filter((label) => label !== '미분류'));
+
+    if (!categories.length && !categoryName) {
+        return true;
+    }
+
+    if (categoryName === '미분류') {
+        return true;
+    }
+
+    if (!categories.length) {
+        return true;
+    }
+
+    return !categories.some((category) => knownCategories.has(category)) && !knownCategories.has(categoryName);
+};
+
 const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
     if (!book || typeof book !== 'object') {
         return null;
@@ -89,6 +133,9 @@ const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
         return null;
     }
 
+    const categories = getBookCategories(book);
+    const primaryCategory = categories[0] || String(book.category || categoryLabel || '').trim();
+
     return {
         title,
         author: String(book.author || '미상').trim(),
@@ -96,7 +143,9 @@ const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
         publisher: String(book.publisher || 'Syntropy Books').trim(),
         description: String(book.description || '새로 추가된 도서입니다.').trim(),
         cover: String(book.cover || '').trim(),
-        category: String(book.category || categoryLabel || '').trim()
+        category: primaryCategory,
+        categories,
+        categorySlug
     };
 };
 
@@ -109,11 +158,28 @@ const getBooksForCategory = (categorySlug, categoryLabel) => {
         if (!categoryLabel) {
             return true;
         }
-        return book.category === categoryLabel;
+
+        if (categoryLabel === '미분류') {
+            return isUncategorizedBook(book);
+        }
+
+        const categories = getBookCategories(book);
+        return categories.includes(categoryLabel) || book.category === categoryLabel;
     });
 
     if (matchingCatalogBooks.length > 0) {
         return matchingCatalogBooks;
+    }
+
+    if (categoryLabel === '미분류') {
+        return (newCategoryBooks.uncategorized || []).map((book) => ({
+            title: book[0],
+            author: book[1],
+            translator: book[2],
+            publisher: book[3],
+            description: book[4],
+            cover: book[5]
+        }));
     }
 
     return (newCategoryBooks[categorySlug] || []).map((book) => ({

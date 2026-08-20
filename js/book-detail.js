@@ -51,6 +51,39 @@ const getSavedBooks = () => {
     }
 };
 
+const getBookCategories = (book = {}) => {
+    const rawValue = Array.isArray(book?.categories)
+        ? book.categories
+        : (Array.isArray(book?.categoryList)
+            ? book.categoryList
+            : (book?.category ?? book?.categories ?? ''));
+
+    const values = Array.isArray(rawValue) ? rawValue : String(rawValue ?? '').split(/[\n,;/]+/);
+    const categories = values
+        .flatMap((item) => Array.isArray(item) ? item : String(item ?? '').split('/'))
+        .map((item) => String(item || '').trim())
+        .filter(Boolean)
+        .filter((category, index, list) => list.indexOf(category) === index);
+
+    if (categories.length) {
+        return categories;
+    }
+
+    const fallbackCategory = String(book?.category || '').trim();
+    return fallbackCategory ? [fallbackCategory] : [];
+};
+
+const getCategoryBadgeMarkup = (categories = [], fallbackText = '미분류') => {
+    const validCategories = (Array.isArray(categories) ? categories : [categories]).map((category) => String(category || '').trim()).filter(Boolean);
+    const labels = validCategories.length ? validCategories : [fallbackText];
+
+    return labels.map((categoryLabel) => {
+        const page = categoryPageByName[categoryLabel];
+        const href = page ? `../books/${page}` : 'books.html';
+        return `<a class="book-detail-category-badge" href="${href}">${categoryLabel}</a>`;
+    }).join('');
+};
+
 const normalizeDraftDisplayValue = (value, fallback = '없음') => {
     const text = String(value ?? '').trim();
     return text || fallback;
@@ -280,6 +313,7 @@ const renderEditableDraftDetail = (draftBook) => {
     const coverSrc = coverPath.startsWith('data:') ? coverPath : `../images/book-covers/${coverPath}`;
 
     content.innerHTML = `
+        <div class="subtitle" id="book-detail-category" aria-label="카테고리 목록">${getCategoryBadgeMarkup(getBookCategories(draftBook), '미분류')}</div>
         <form id="draft-book-form" class="book-detail-form" autocomplete="off">
             <input type="hidden" name="cover" value="${String(draftBook.cover || 'book.svg').replace(/"/g, '&quot;')}" />
             <div class="book-detail-form-cover-wrap">
@@ -287,6 +321,10 @@ const renderEditableDraftDetail = (draftBook) => {
                     <img class="book-detail-cover book-detail-cover--editable" id="book-detail-cover" src="${coverSrc}" alt="${String(draftBook.title || '도서 표지').replace(/"/g, '&quot;')} 책표지">
                 </label>
                 <input id="book-cover-input" type="file" accept="image/*" hidden>
+            </div>
+
+            <div class="book-detail-category-badges" aria-label="카테고리 목록">
+                ${getCategoryBadgeMarkup(getBookCategories(draftBook), '미분류')}
             </div>
 
             <div class="book-detail-form-body">
@@ -493,6 +531,7 @@ const showBookDetail = () => {
     const title = params.get('book') || '도서 소개';
     const isDraft = params.get('draft') === 'true';
     const draftBook = isDraft ? getSavedDrafts().find((book) => book.title === title) : null;
+    const savedBook = !isDraft ? getSavedBooks().find((book) => book.title === title) : null;
 
     if (isDraft && draftBook) {
         const categoryLink = document.querySelector('#book-detail-category-back');
@@ -511,7 +550,7 @@ const showBookDetail = () => {
         return;
     }
 
-    const book = draftBook || bookDetails[title] || {
+    const book = draftBook || savedBook || bookDetails[title] || {
         category: '도서 안내',
         author: 'Syntropy Books 큐레이션',
         translator: '',
@@ -523,15 +562,21 @@ const showBookDetail = () => {
     };
 
     const categoryLink = document.querySelector('#book-detail-category-back');
-    const categoryPage = categoryPageByName[book.category];
+    const categoryNames = getBookCategories(book);
+    const primaryCategory = categoryNames[0] || book.category || '도서 안내';
+    const primaryCategoryPage = categoryPageByName[primaryCategory];
     if (categoryLink) {
-        categoryLink.href = categoryPage ? `../books/${categoryPage}` : 'books.html';
-        categoryLink.textContent = book.category === '도서 안내' ? '도서 목록으로 돌아가기' : `${book.category} 카테고리로 돌아가기`;
+        categoryLink.href = primaryCategoryPage ? `../books/${primaryCategoryPage}` : 'books.html';
+        categoryLink.textContent = primaryCategory === '도서 안내' ? '도서 목록으로 돌아가기' : `${primaryCategory} 카테고리로 돌아가기`;
+    }
+
+    const categoryContainer = document.querySelector('#book-detail-category');
+    if (categoryContainer) {
+        categoryContainer.innerHTML = getCategoryBadgeMarkup(categoryNames.length ? categoryNames : [primaryCategory], '미분류');
     }
 
     document.title = `${title} | Syntropy Books`;
     document.querySelector('#book-detail-title').textContent = title;
-    document.querySelector('#book-detail-category').textContent = book.category || '미분류';
     document.querySelector('#book-detail-author').textContent = book.author || '미상';
     document.querySelector('#book-detail-translator').textContent = book.translator ? `옮긴이: ${book.translator}` : '옮긴이: 정보 없음';
     document.querySelector('#book-detail-publisher').textContent = `출판사: ${book.publisher || '미기재'}`;

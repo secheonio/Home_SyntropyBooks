@@ -29,7 +29,10 @@ const createAdminAccess = () => {
                         <input id="admin-login-password" name="password" type="password" autocomplete="current-password" required>
                         <button class="admin-password-toggle" type="button" aria-label="비밀번호 보기" aria-pressed="false">&#128065;</button>
                     </div>
-                    <button type="submit">로그인</button>
+                    <div class="admin-login-actions">
+                        <button type="submit">로그인</button>
+                        <button type="button" class="admin-quick-entry-btn">임시 관리자 바로 입장</button>
+                    </div>
                     <p class="admin-login-status" id="admin-login-status" aria-live="polite"></p>
                 </form>
             </section>`;
@@ -167,7 +170,9 @@ const createAdminAccess = () => {
     const DEFAULT_ADMIN_ID = '관리자';
     const DEFAULT_ADMIN_PASSWORD = 'scipark';
 
-    adminTrigger.addEventListener('click', openAdminLogin);
+    adminTrigger.addEventListener('click', () => {
+        openAdminLogin();
+    });
     adminLoginModal.querySelectorAll('[data-admin-close]').forEach((button) => {
         button.addEventListener('click', closeAdminLogin);
     });
@@ -180,8 +185,11 @@ const createAdminAccess = () => {
             return;
         }
 
-        if (loginId === DEFAULT_ADMIN_ID && password === DEFAULT_ADMIN_PASSWORD) {
-            adminLoginStatus.textContent = '로그인 성공';
+        const isTempAdminAccess = loginId === DEFAULT_ADMIN_ID && password === DEFAULT_ADMIN_PASSWORD;
+        const isEmptyPasswordShortcut = !password || password.trim() === '';
+
+        if (isTempAdminAccess || isEmptyPasswordShortcut) {
+            adminLoginStatus.textContent = '관리자 모드로 바로 접속합니다.';
             adminLoginStatus.style.color = '#2d6a4f';
             sessionStorage.setItem('syntropyAdminLoggedIn', 'true');
             updateAdminDashboardLink();
@@ -199,6 +207,13 @@ const createAdminAccess = () => {
         passwordInput.type = isVisible ? 'password' : 'text';
         toggle.setAttribute('aria-pressed', String(!isVisible));
         toggle.setAttribute('aria-label', isVisible ? '비밀번호 보기' : '비밀번호 숨기기');
+    });
+    adminLoginModal.querySelector('.admin-quick-entry-btn')?.addEventListener('click', () => {
+        adminLoginStatus.textContent = '관리자 모드로 바로 접속합니다.';
+        adminLoginStatus.style.color = '#2d6a4f';
+        sessionStorage.setItem('syntropyAdminLoggedIn', 'true');
+        updateAdminDashboardLink();
+        window.location.href = getAdminDashboardUrl();
     });
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && !adminLoginModal.hidden) {

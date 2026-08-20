@@ -28,6 +28,11 @@ PowerShell에서 자주 쓰는 함수
     function push { git add . ; git commit -m $args ; git push origin main }
     push "변경 내용"
 
+
+id, category, title, author, translator, publisher, cover, price, stock,description, preview, barcode, isbn, qrcode, incomingDate, registeredAt, newUntil, status, note
+
+ID,카테고리,제목,저자,옮긴이,출판사,표지,가격,재고,책소개,안내글,바코드,ISBN,QR,입고일,등록일,만료일,상태,비고
+
 홈페이지 작업
 - open folder 클릭 – 홈페이지 루트폴더
 - NewPPage 만들기 : init.html

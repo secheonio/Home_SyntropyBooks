@@ -623,12 +623,14 @@
 
 .admin-dialog {
     position: relative;
-    width: min(560px, calc(100vw - 32px));
-    background: #f8f7f3;
-    border: 1px solid rgba(45, 77, 59, 0.18);
+    width: min(640px, calc(100vw - 28px));
+    max-height: calc(100vh - 28px);
+    overflow: auto;
+    background: linear-gradient(180deg, #fbfaf8 0%, #f4f3ee 100%);
+    border: 1px solid rgba(45, 77, 59, 0.14);
     border-radius: 22px;
-    padding: 28px 24px 22px;
-    box-shadow: 0 24px 60px rgba(18, 27, 21, 0.18);
+    padding: 24px 18px 18px;
+    box-shadow: 0 20px 48px rgba(18, 27, 21, 0.14);
 }
 
 .admin-dialog-close {
@@ -644,41 +646,54 @@
 
 #book-form {
     display: grid;
-    gap: 10px;
+    gap: 7px;
     margin-top: 12px;
 }
 
 #book-form label {
-    font-size: 0.9rem;
-    color: #36473a;
-    font-weight: 600;
+    font-size: 0.77rem;
+    letter-spacing: 0.04em;
+    color: #3d4d3f;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    text-align: right;
-    min-height: 42px;
+    justify-content: flex-start;
+    text-align: left;
+    min-height: 32px;
     white-space: nowrap;
-    padding: 0 12px 0 0;
+    padding: 0 8px 0 0;
     box-sizing: border-box;
     width: 100%;
-    min-width: 120px;
-    max-width: 150px;
+    min-width: 86px;
+    max-width: 116px;
 }
 
 #book-form input,
 #book-form select,
 #book-form textarea {
     width: 100%;
-    max-width: 420px;
+    max-width: 100%;
+    min-height: 40px;
     box-sizing: border-box;
-    border: 1px solid rgba(45, 77, 59, 0.2);
+    border: 1px solid rgba(45, 77, 59, 0.18);
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 8px 10px;
     font: inherit;
+    font-size: 0.94rem;
     background: #ffffff;
     color: var(--forest-deep, #1f2d1d);
-    text-align: center;
+    text-align: left;
     justify-self: start;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+#book-form input:focus,
+#book-form select:focus,
+#book-form textarea:focus {
+    outline: none;
+    border-color: rgba(45, 77, 59, 0.5);
+    box-shadow: 0 0 0 3px rgba(45, 77, 59, 0.08);
+    background: #fffefc;
 }
 
 .book-entry-mode-group {
@@ -706,23 +721,29 @@
 
 .entry-mode-panel {
     display: none;
-    gap: 8px;
+    gap: 10px;
 }
 
 .entry-mode-panel.is-visible {
     display: grid;
-    grid-template-columns: 120px minmax(0, 1fr);
+    grid-template-columns: 110px minmax(0, 1fr);
     align-items: center;
     justify-items: stretch;
-    column-gap: 12px;
-    row-gap: 10px;
+    column-gap: 10px;
+    row-gap: 7px;
+    background: rgba(255, 255, 255, 0.48);
+    border: 1px solid rgba(45, 77, 59, 0.12);
+    border-radius: 14px;
+    padding: 10px 10px 8px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
 }
 
 .entry-mode-panel.is-visible > label {
     grid-column: 1;
     width: 100%;
-    justify-self: end;
+    justify-self: stretch;
     padding-right: 12px;
+    color: #2f4638;
 }
 
 .entry-mode-panel.is-visible > input,
@@ -740,11 +761,71 @@
     color: rgba(31, 45, 29, 0.7);
     font-size: 0.76rem;
     text-align: left;
+    line-height: 1.5;
+}
+
+.book-category-checkboxes {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 8px 10px;
+    border: 1px solid rgba(45, 77, 59, 0.18);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.book-category-checkboxes legend {
+    padding: 0 6px;
+    font-size: 0.77rem;
+    letter-spacing: 0.04em;
+    color: #3d4d3f;
+    font-weight: 700;
+}
+
+.book-category-checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 10px;
+    margin-top: 6px;
+}
+
+.book-category-checkbox-grid label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--forest-deep, #1f2d1d);
+    white-space: nowrap;
+    max-width: none;
+    min-height: 24px;
+    padding: 0;
+    width: auto;
+}
+
+.book-category-checkbox-grid input[type="checkbox"] {
+    width: 16px;
+    min-height: 16px;
+    margin: 0;
 }
 
 #book-form textarea {
     resize: vertical;
-    min-height: 120px;
+    min-height: 82px;
+}
+
+#book-form input[type="file"] {
+    min-height: 40px;
+    padding: 8px 10px;
+    background: #f7faf6;
+}
+
+#book-form textarea[name="description"],
+#book-form textarea[name="preview"],
+#book-form textarea[name="note"] {
+    min-height: 86px;
+}
+
+#book-form input[type="date"] {
+    min-height: 40px;
 }
 
 .autocomplete-wrapper {
@@ -786,11 +867,21 @@
 }
 
 .admin-form-submit {
-    background: var(--forest, #2d4d3b);
+    background: linear-gradient(180deg, #395f48 0%, #2d4d3b 100%);
     border-color: var(--forest, #2d4d3b);
     color: #ffffff;
     margin-top: 8px;
     justify-self: start;
+    border-radius: 10px;
+    min-width: 144px;
+    padding: 10px 16px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    box-shadow: 0 10px 18px rgba(45, 77, 59, 0.16);
+}
+
+.admin-form-submit:hover {
+    filter: brightness(1.02);
 }
 
 @media (max-width: 768px) {
@@ -815,6 +906,38 @@
     .admin-book-stock-box {
         justify-self: start;
     }
+
+    .admin-dialog {
+        width: min(94vw, 520px);
+        padding: 20px 12px 16px;
+    }
+
+    .entry-mode-panel.is-visible {
+        grid-template-columns: 1fr;
+        row-gap: 5px;
+        padding: 12px 10px;
+    }
+
+    .entry-mode-panel.is-visible > label,
+    .entry-mode-panel.is-visible > input,
+    .entry-mode-panel.is-visible > select,
+    .entry-mode-panel.is-visible > textarea,
+    .entry-mode-panel.is-visible > .entry-hint {
+        grid-column: auto;
+        max-width: none;
+    }
+
+    #book-form label {
+        max-width: none;
+        min-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    #book-form input,
+    #book-form select,
+    #book-form textarea {
+        min-height: 38px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -825,5 +948,21 @@
     .admin-main {
         padding-left: 16px;
         padding-right: 16px;
+    }
+
+    .book-entry-mode-group {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .entry-mode-btn {
+        width: 100%;
+        padding: 7px 6px;
+        font-size: 0.82rem;
+    }
+
+    .admin-form-submit {
+        width: 100%;
+        justify-self: stretch;
     }
 }
