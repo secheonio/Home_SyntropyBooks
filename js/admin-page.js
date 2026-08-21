@@ -1016,7 +1016,7 @@ const renderAdminBooks = () => {
 
         const coverSrc = book.cover
             ? (book.cover.startsWith('data:') ? book.cover : `../images/book-covers/${book.cover}`)
-            : '../images/SB_logo_White.png';
+            : '../images/SyntropyBooks_logo.png';
 
         return `
             <article class="admin-book-card admin-draft-row" data-role="open-draft" data-book-id="${book.id}" tabindex="0">

@@ -52,7 +52,7 @@ body {
     flex-wrap: nowrap;
     justify-content: center;
     align-items: stretch;
-    gap: 18px;
+    gap: 16px;
     width: min(100%, 1100px);
     margin: 20px auto 0;
 }
@@ -61,9 +61,8 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     gap: 8px;
-    flex: 1 1 0;
     min-width: 0;
     height: 100%;
 }
@@ -82,25 +81,29 @@ body {
 }
 
 .site-menu-parent {
-    display: flex;
-    width: 100%;
-    min-height: 52px;
-    height: 52px;
-    padding: 12px 18px;
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 0;
+    height: auto;
+    padding: 0.45em 1.2em;
     background: var(--surface);
     border: 1px solid var(--forest);
     border-radius: 5px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     line-height: 1.2;
     white-space: nowrap;
     color: var(--forest-deep);
     box-sizing: border-box;
     letter-spacing: -0.02em;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .site-menu-sub {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 12px);
     left: 50%;
     z-index: 30;
     display: flex;
@@ -108,32 +111,39 @@ body {
     align-items: stretch;
     gap: 8px;
     min-width: 180px;
-    padding: 12px 10px;
-    background: rgba(247, 244, 234, 0.96);
+    padding: 10px 12px;
+    background: rgba(247, 244, 234, 0.97);
     border: 1px solid rgba(37, 72, 59, 0.2);
-    border-radius: 10px;
-    box-shadow: 0 12px 24px rgba(37, 72, 59, 0.12);
+    border-radius: 12px;
+    box-shadow: 0 14px 26px rgba(37, 72, 59, 0.15);
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-50%) translateY(-6px);
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    transform: translateX(-50%) translateY(6px);
+    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
 }
 
 .site-menu-group:hover .site-menu-sub,
-.site-menu-group:focus-within .site-menu-sub {
+.site-menu-group:focus-within .site-menu-sub,
+.site-menu-group > .site-menu-parent:hover + .site-menu-sub,
+.site-menu-group > .site-menu-parent:focus + .site-menu-sub {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
 }
 
 .site-menu-sub a {
-    padding: 6px 10px;
-    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    background: rgba(255, 255, 255, 0.45);
     border: 1px solid rgba(37, 72, 59, 0.2);
     border-radius: 999px;
     color: var(--forest-deep);
     font-size: 0.72rem;
     white-space: nowrap;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
 }
 
 .site-menu-parent.active,
@@ -369,6 +379,35 @@ body {
     
     gap: 20px;                 /* 왼쪽 로고 박스와 오른쪽 영역 사이 간격 */
     box-sizing: border-box;
+}
+
+/* 메인 페이지를 제외한 모든 서브 페이지 헤더는 좌측 로고칸 + 우측 2줄 텍스트칸 구조로 유지 */
+.header-left {
+    flex: 0 0 min(18%, 210px);
+    max-width: 210px;
+}
+
+.header-right {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.header-top-row {
+    flex: 2 1 0;
+    min-height: 0;
+}
+
+.header-bottom-row {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 16px 10px;
+    gap: 12px;
 }
 
 /* ==========================================================================
@@ -660,25 +699,37 @@ body {
    헤더 왼쪽 로고 영역의 너비를 변수로 고정
    ========================================================================== */
 .header-left { 
-    flex: 0 0 var(--sidebar-width); /* 사이드바와 정확히 같은 너비(260px)로 고정 */
+    flex: 0 0 min(18%, 210px); /* 로고 이미지칸은 서브페이지 공통 레이아웃에 맞게 정해진 비율 유지 */
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    background: var(--forest-deep); 
+    background: #ffffff; 
     border: 1px dashed var(--earth); 
-    padding: 10px 12px; 
+    padding: 3px; 
     border-radius: 10px; 
     box-sizing: border-box;
     min-height: 110px;
+}
+
+.header-left a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 3px;
+    box-sizing: border-box;
 }
 
 /* 헤더 내부의 로고 이미지 태그 스타일입니다.[cite: 6] */
 .header-logo { 
     display: block;
     width: min(100%, 210px);
-    max-width: 210px;
+    max-width: 100%;
     height: auto;
     object-fit: contain;
+    padding: 3px;
+    box-sizing: border-box;
     transition: transform 0.3s, box-shadow 0.3s; /* 마우스 호버 시 애니메이션 효과[cite: 6] */
 }
 
@@ -690,20 +741,20 @@ body {
 
 /* 헤더의 오른쪽 영역: 타이틀과 하단 메뉴를 수직으로 품는 컨테이너입니다.[cite: 6] */
 .header-right { 
-    flex-grow: 1;              /* 남은 공간을 가득 채우도록 확장[cite: 6] */
+    flex: 1 1 auto;            /* 남은 공간을 가득 채우도록 확장[cite: 6] */
     display: flex; 
     flex-direction: column;    /* 상단(타이틀)과 하단(메뉴)을 세로로 배치[cite: 6] */
     min-height: 0;             /* 내부 콘텐츠로 인해 레이아웃이 깨지는 현상 방지[cite: 6] */
     border: 1px dashed var(--forest); 
     border-radius: 10px; 
     background: rgba(247, 244, 234, 0.76); /* 반투명한 종이색 배경 */
-    overflow: hidden;          /* 넘치는 콘텐츠가 모서리 밖으로 나가지 않도록 차단[cite: 6] */
+    overflow: visible;         /* 드롭다운 메뉴가 잘 보이도록 부모 영역을 넘칠 수 있게 허용 */
     box-sizing: border-box;
 }
 
 /* 우측 영역의 상단부: 메인 타이틀(브랜드명)이 위치하는 곳입니다.[cite: 6] */
 .header-top-row { 
-    flex: 2;                   /* 하단 영역 대비 2배의 공간 비율 차지[cite: 6] */
+    flex: 2 1 0;               /* 상단 영역이 하단 영역보다 2:1 비율로 유지 */
     display: flex;             
     align-items: center;       /* 세로 중앙 정렬[cite: 6] */
     justify-content: center;   /* 가로 중앙 정렬[cite: 6] */
@@ -724,7 +775,7 @@ body {
 
 /* 우측 영역의 하단부: 개념 소개 글과 네비게이션 메뉴를 좌우로 나누는 곳입니다.[cite: 6] */
 .header-bottom-row { 
-    flex: 1;                   /* 1의 비율 공간 차지[cite: 6] */
+    flex: 1 1 0;               /* 하단 영역은 상단보다 절반 비율로 유지 */
     display: flex; 
     align-items: center;       /* 세로 중앙 정렬[cite: 6] */
     padding: 0 20px;
@@ -789,12 +840,20 @@ body {
     /* 좌측 로고 박스 너비를 모바일 화면에 맞게 100%로 확장[cite: 6] */
     .header-left { 
         width: 100%; 
-        padding: 10px 0; 
+        padding: 3px; 
+    }
+
+    .header-left a {
+        width: 100%;
+        padding: 3px;
     }
     
     /* 모바일 환경에서 로고 높이를 축소된 변수값으로 변경[cite: 6] */
-    .header-logo { 
-        height: var(--logo-height-mobile); 
+    .header-logo {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        padding: 3px;
     } 
     
     /* 우측 영역 너비도 100%로 확장[cite: 6] */

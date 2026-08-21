@@ -15,11 +15,10 @@
 .main-logo {
     width: clamp(180px, 22vw, 260px);
     height: auto;
-    padding: 12px 14px;
+    padding: 3px;
     border: 1px solid var(--forest);
     border-radius: 10px;
-    background-color: var(--forest-deep);
-    /* background-color: #073642; /* #ffffff(흰색) 대신 어두운 배경 적용 */
+    background-color: #ffffff;
     margin-bottom: 15px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     object-fit: contain;
@@ -28,6 +27,48 @@
 .main-logo:hover {
     transform: scale(1.05); /* 확대 효과 */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 메인 페이지: 3개 버튼을 텍스트 길이에 맞춘 여유 폭으로 배치 */
+.header-section .site-menu {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 18px;
+    width: min(100%, 900px);
+}
+
+.header-section .site-menu-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+
+.header-section .site-menu-parent {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 0;
+    height: auto;
+    padding: 0.5em 1.6em;
+    margin: 0 auto;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-section .site-menu-sub {
+    top: calc(100% + 12px);
+    transform: translateX(-50%) translateY(6px);
+}
+
+.header-section .site-menu-group:hover .site-menu-sub,
+.header-section .site-menu-group:focus-within .site-menu-sub,
+.header-section .site-menu-group > .site-menu-parent:hover + .site-menu-sub,
+.header-section .site-menu-group > .site-menu-parent:focus + .site-menu-sub {
+    transform: translateX(-50%) translateY(0);
 }
 
 /* 헤더 타이틀 3단계 텍스트 라인 */
