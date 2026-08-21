@@ -164,21 +164,41 @@ const getFallbackCatalogBooks = () => Object.entries(categoryBooks).flatMap(([ca
     categorySlug
 })));
 
+const isDisplayablePublishedBook = (book = {}) => {
+    const status = String(book?.status || '').trim();
+    const classification = String(book?.classification || '').trim();
+    if (status === 'draft') {
+        return false;
+    }
+    if (status === 'pending') {
+        return false;
+    }
+    if (classification === '등록대기' || classification === '대기중' || classification === '대기') {
+        return false;
+    }
+    return true;
+};
+
 const getCatalogBooks = () => {
     const fallbackBooks = getFallbackCatalogBooks();
     try {
         const parsedBooks = JSON.parse(localStorage.getItem('syntropyBooksCatalog') || '[]');
         if (!Array.isArray(parsedBooks) || parsedBooks.length === 0) {
-            return fallbackBooks;
+            return fallbackBooks.filter(isDisplayablePublishedBook);
+        }
+
+        const visibleBooks = parsedBooks.filter(isDisplayablePublishedBook);
+        if (visibleBooks.length === 0) {
+            return fallbackBooks.filter(isDisplayablePublishedBook);
         }
 
         if (parsedBooks.length < fallbackBooks.length) {
-            return fallbackBooks;
+            return fallbackBooks.filter(isDisplayablePublishedBook);
         }
 
-        return parsedBooks;
+        return visibleBooks;
     } catch (error) {
-        return fallbackBooks;
+        return fallbackBooks.filter(isDisplayablePublishedBook);
     }
 };
 
@@ -231,7 +251,8 @@ const normalizeCatalogBook = (book, categorySlug, categoryLabel) => {
 const getBooksForCategory = (categorySlug, categoryLabel) => {
     const catalogBooks = getCatalogBooks()
         .map((book) => normalizeCatalogBook(book, categorySlug, categoryLabel))
-        .filter(Boolean);
+        .filter(Boolean)
+        .filter((book) => isDisplayablePublishedBook(book));
 
     const matchingCatalogBooks = catalogBooks.filter((book) => {
         if (!categoryLabel) {
@@ -239,7 +260,7 @@ const getBooksForCategory = (categorySlug, categoryLabel) => {
         }
 
         if (categoryLabel === '미분류') {
-            return isUncategorizedBook(book);
+            return isUncategorizedBook(book) && String(book.category || '').trim() !== '미분류';
         }
 
         const categories = getBookCategories(book);
@@ -251,14 +272,18 @@ const getBooksForCategory = (categorySlug, categoryLabel) => {
     }
 
     if (categoryLabel === '미분류') {
-        return (categoryBooks.uncategorized || []).map((book) => ({
-            title: book.title,
-            author: book.author,
-            description: book.description,
-            category: '미분류',
-            categorySlug,
-            cover: book.cover || ''
-        }));
+        return (getCatalogBooks())
+            .filter((book) => isUncategorizedBook(book) && String(book.category || '').trim() !== '미분류')
+            .map((book) => ({
+                title: String(book.title || '').trim(),
+                author: String(book.author || '미상').trim(),
+                translator: String(book.translator || '').trim(),
+                publisher: String(book.publisher || 'Syntropy Books').trim(),
+                description: String(book.description || '새로 추가된 도서입니다.').trim(),
+                category: '미분류',
+                categorySlug,
+                cover: String(book.cover || '').trim() || 'book.svg'
+            }));
     }
 
     return (categoryBooks[categorySlug] || []).map((book) => ({
@@ -324,11 +349,27 @@ const updateOverviewBookCard = (card, featuredBook, categoryLabel) => {
 
 const filterBooksOverview = () => {
     const selectedCategory = window.location.hash.slice(1);
-    const isValidCategory = Object.prototype.hasOwnProperty.call(bookCategoryLabels, selectedCategory);
+    const isKnownCategory = Object.prototype.hasOwnProperty.call(bookCategoryLabels, selectedCategory);
     const cards = [...document.querySelectorAll('.book-container .book-card')];
 
     cards.forEach((card) => {
-        const shouldShow = !isValidCategory || card.id === selectedCategory;
+        const isUncategorizedCard = card.id === 'uncategorized';
+        const shouldShow = (() => {
+            if (!selectedCategory) {
+                return true;
+            }
+
+            if (selectedCategory === 'uncategorized') {
+                return isUncategorizedCard;
+            }
+
+            if (isKnownCategory) {
+                return card.id === selectedCategory || isUncategorizedCard;
+            }
+
+            return false;
+        })();
+
         card.classList.toggle('is-hidden', !shouldShow);
     });
 };
@@ -709,7 +750,11 @@ const initBooksPage = () => {
     startBookRotation();
     startBookSearch();
     updateBooksPageHeading();
-    window.addEventListener('hashchange', updateBooksPageHeading);
+    window.addEventListener('hashchange', () => {
+        updateBooksPageHeading();
+        filterBooksOverview();
+        syncCatalogWithBooksPage();
+    });
 };
 
 if (document.readyState === 'loading') {

@@ -13,15 +13,16 @@
 
 /* 메인 로고 이미지 스타일 */
 .main-logo {
-    width: 180px;
+    width: clamp(180px, 22vw, 260px);
     height: auto;
-    padding: 15px;
+    padding: 12px 14px;
     border: 1px solid var(--forest);
     border-radius: 10px;
     background-color: var(--forest-deep);
     /* background-color: #073642; /* #ffffff(흰색) 대신 어두운 배경 적용 */
     margin-bottom: 15px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    object-fit: contain;
 }
 
 .main-logo:hover {

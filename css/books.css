@@ -376,43 +376,91 @@
     cursor: pointer;
 }
 
-.book-detail-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+.draft-edit-card {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(97, 111, 89, 0.18);
+    border-radius: 16px;
+    box-shadow: 0 8px 18px rgba(35, 52, 42, 0.04);
+    padding: 16px 14px 14px;
+    display: grid;
+    gap: 12px;
+    max-width: 100%;
 }
 
-.book-detail-form-cover-wrap {
+.draft-edit-card-header {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 90px;
 }
 
-.book-detail-cover-upload {
+.draft-edit-card-title {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: clamp(1.3rem, 1.8vw, 2rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--forest-deep);
+    word-break: break-word;
+}
+
+.draft-edit-cover-wrap {
     display: inline-flex;
-    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    margin-left: 8px;
 }
 
-.book-detail-form-body {
+.draft-edit-cover {
+    width: 58px;
+    height: 74px;
+    border-radius: 10px;
+    border: 1px solid rgba(45, 77, 59, 0.14);
+    box-shadow: 0 4px 10px rgba(35, 52, 42, 0.08);
+    object-fit: cover;
+}
+
+.book-detail-form {
     display: grid;
     gap: 12px;
 }
 
+.book-detail-form-cover-wrap {
+    display: none;
+}
+
+.book-detail-form-body {
+    display: grid;
+    gap: 10px;
+}
+
 .book-detail-form-row {
     display: grid;
-    grid-template-columns: 120px minmax(0, 1fr);
+    grid-template-columns: 110px minmax(0, 1fr);
     gap: 12px;
     align-items: center;
 }
 
 .book-detail-form-row--full {
-    grid-template-columns: 120px minmax(0, 1fr);
+    grid-template-columns: 1fr;
+    gap: 6px;
 }
 
 .book-detail-form-label {
-    color: var(--forest-deep);
+    color: #656a66;
+    font-size: 0.8rem;
     font-weight: 700;
-    text-align: right;
+    text-align: left;
     white-space: nowrap;
+}
+
+.book-detail-form-row--full .book-detail-form-label {
+    white-space: normal;
+    font-size: 0.78rem;
+    color: #4a504c;
 }
 
 .book-detail-form input,

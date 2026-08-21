@@ -47,33 +47,124 @@ body {
     justify-content: center;   /* 버튼 그룹을 정중앙으로 정렬[cite: 6] */
 }
 
-/* 개별 네비게이션 링크 버튼의 디자인 스타일입니다.[cite: 6] */
+.site-menu {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 18px;
+    width: min(100%, 1100px);
+    margin: 20px auto 0;
+}
+
+.site-menu-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 100%;
+}
+
+.site-menu-parent,
+.site-menu-sub a,
 .nav-bar a {
-    display: flex;             /* 내부 콘텐츠 정렬을 위한 Flex 선언[cite: 6] */
-    justify-content: center;   /* 텍스트 가로 중앙 정렬[cite: 6] */
-    gap: 10px;                 
-    text-decoration: none;     /* 링크 밑줄 제거[cite: 6] */
-    color: #268bd2;            /* 브랜드 포인트 푸른색 글씨[cite: 6] */
-    font-weight: bold;         /* 글씨를 굵게 강조[cite: 6] */
-    padding: 6px 12px;         /* 클릭 영역을 넓혀주는 내부 여백[cite: 6] */
-    background: var(--surface);       /* 따뜻한 종이 질감의 표면 */
-    border: 1px solid var(--forest); /* 숲색 포인트 테두리 */
-    border-radius: 5px;        /* 테두리를 둥글게 처리[cite: 6] */
-    font-size: 0.85rem;        /* 본문보다 살짝 작은 글자 크기[cite: 6] */
-    transition: all 0.3s ease; /* 마우스 호버 시 색상이 부드럽게 바뀌도록 설정[cite: 6] */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #268bd2;
+    font-weight: bold;
+    transition: all 0.3s ease;
     text-align: center;
+}
+
+.site-menu-parent {
+    display: flex;
+    width: 100%;
+    min-height: 52px;
+    height: 52px;
+    padding: 12px 18px;
+    background: var(--surface);
+    border: 1px solid var(--forest);
+    border-radius: 5px;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--forest-deep);
+    box-sizing: border-box;
+    letter-spacing: -0.02em;
+}
+
+.site-menu-sub {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    min-width: 180px;
+    padding: 12px 10px;
+    background: rgba(247, 244, 234, 0.96);
+    border: 1px solid rgba(37, 72, 59, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 12px 24px rgba(37, 72, 59, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+.site-menu-group:hover .site-menu-sub,
+.site-menu-group:focus-within .site-menu-sub {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.site-menu-sub a {
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(37, 72, 59, 0.2);
+    border-radius: 999px;
+    color: var(--forest-deep);
+    font-size: 0.72rem;
+    white-space: nowrap;
+}
+
+.site-menu-parent.active,
+.site-menu-sub a.active {
+    background-color: var(--forest);
+    color: #ffffff;
+}
+
+.nav-bar a {
+    gap: 10px;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--forest);
+    border-radius: 5px;
+    font-size: 0.85rem;
 } 
+
+.site-menu-parent:hover,
+.site-menu-sub a:hover,
+.nav-bar a:hover,
+.site-menu-parent:focus-visible,
+.site-menu-sub a:focus-visible,
+.nav-bar a:focus-visible {
+    background-color: var(--forest);
+    color: #ffffff;
+}
 
 /* 현재 사용자가 보고 있는 페이지에 해당하는 메뉴 버튼의 스타일입니다.[cite: 6] */
 .nav-bar a.active {
-    background-color: var(--forest); /* 버튼 배경을 숲색으로 채움 */
-    color: #ffffff;            /* 글자 색상을 흰색으로 반전[cite: 6] */
-}
-
-/* 마우스를 올렸을 때(Hover)의 상호작용 효과입니다.[cite: 6] */
-.nav-bar a:hover { 
-    background-color: var(--forest); 
-    color: #ffffff; 
+    background-color: var(--forest);
+    color: #ffffff;
 }
 
 
@@ -545,11 +636,24 @@ body {
     color: #25483b;
 }
 
+.book-category-list .category-item:nth-child(9) {
+    background-color: #d9d9d9;
+    border-color: #9ea7a2;
+    color: #2e2e2e;
+}
+
 .book-category-list .category-item.active {
     box-shadow: inset 0 0 0 2px var(--forest-deep);
     color: #ffffff !important;
     font-weight: bold;
     text-shadow: 0 1px 2px rgba(37, 72, 59, 0.75);
+}
+
+.book-category-list[aria-label="도서 카테고리"] .category-item.active:nth-child(9),
+.book-category-list[aria-label="신간도서 카테고리"] .category-item.active:nth-child(9) {
+    background-color: #7d7d7d;
+    border-color: #7d7d7d;
+    color: #ffffff !important;
 }
 
 /* ==========================================================================
@@ -562,16 +666,19 @@ body {
     justify-content: center; 
     background: var(--forest-deep); 
     border: 1px dashed var(--earth); 
-    padding: 0 15px; 
+    padding: 10px 12px; 
     border-radius: 10px; 
     box-sizing: border-box;
+    min-height: 110px;
 }
 
 /* 헤더 내부의 로고 이미지 태그 스타일입니다.[cite: 6] */
 .header-logo { 
-    height: var(--logo-height-desktop); /* 루트 변수에서 정의한 높이를 상속[cite: 6] */
-    width: auto;                       /* 이미지 비율 유지를 위해 너비는 자동 조절[cite: 6] */
-    display: block; 
+    display: block;
+    width: min(100%, 210px);
+    max-width: 210px;
+    height: auto;
+    object-fit: contain;
     transition: transform 0.3s, box-shadow 0.3s; /* 마우스 호버 시 애니메이션 효과[cite: 6] */
 }
 

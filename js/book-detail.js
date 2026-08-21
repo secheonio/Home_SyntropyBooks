@@ -313,111 +313,111 @@ const renderEditableDraftDetail = (draftBook) => {
     const coverSrc = coverPath.startsWith('data:') ? coverPath : `../images/book-covers/${coverPath}`;
 
     content.innerHTML = `
-        <div class="subtitle" id="book-detail-category" aria-label="카테고리 목록">${getCategoryBadgeMarkup(getBookCategories(draftBook), '미분류')}</div>
-        <form id="draft-book-form" class="book-detail-form" autocomplete="off">
-            <input type="hidden" name="cover" value="${String(draftBook.cover || 'book.svg').replace(/"/g, '&quot;')}" />
-            <div class="book-detail-form-cover-wrap">
-                <label class="book-detail-cover-upload" for="book-cover-input" title="이미지 삽입">
-                    <img class="book-detail-cover book-detail-cover--editable" id="book-detail-cover" src="${coverSrc}" alt="${String(draftBook.title || '도서 표지').replace(/"/g, '&quot;')} 책표지">
-                </label>
+        <article class="draft-edit-card">
+            <form id="draft-book-form" class="book-detail-form" autocomplete="off">
+                <input type="hidden" name="cover" value="${String(draftBook.cover || 'book.svg').replace(/"/g, '&quot;')}" />
+
+                <div class="draft-edit-card-header">
+                    <div class="draft-edit-card-title">${String(draftBook.title || '미등록 도서').replace(/"/g, '&quot;')}</div>
+                    <label class="book-detail-cover-upload draft-edit-cover-wrap" for="book-cover-input" title="이미지 삽입">
+                        <img class="book-detail-cover book-detail-cover--editable draft-edit-cover" id="book-detail-cover" src="${coverSrc}" alt="${String(draftBook.title || '도서 표지').replace(/"/g, '&quot;')} 책표지">
+                    </label>
+                </div>
+
                 <input id="book-cover-input" type="file" accept="image/*" hidden>
-            </div>
 
-            <div class="book-detail-category-badges" aria-label="카테고리 목록">
-                ${getCategoryBadgeMarkup(getBookCategories(draftBook), '미분류')}
-            </div>
+                <div class="book-detail-form-body">
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-category">카테고리</label>
+                        <select id="draft-category" name="category">
+                            <option value="생명과학" ${draftBook.category === '생명과학' ? 'selected' : ''}>생명과학</option>
+                            <option value="시스템 사고" ${draftBook.category === '시스템 사고' ? 'selected' : ''}>시스템 사고</option>
+                            <option value="복잡계" ${draftBook.category === '복잡계' ? 'selected' : ''}>복잡계</option>
+                            <option value="우주와 질서" ${draftBook.category === '우주와 질서' ? 'selected' : ''}>우주와 질서</option>
+                            <option value="진화와 협력" ${draftBook.category === '진화와 협력' ? 'selected' : ''}>진화와 협력</option>
+                            <option value="문명과 에너지" ${draftBook.category === '문명과 에너지' ? 'selected' : ''}>문명과 에너지</option>
+                            <option value="생태철학" ${draftBook.category === '생태철학' ? 'selected' : ''}>생태철학</option>
+                            <option value="철학" ${draftBook.category === '철학' ? 'selected' : ''}>철학</option>
+                        </select>
+                    </div>
 
-            <div class="book-detail-form-body">
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-category">카테고리</label>
-                    <select id="draft-category" name="category">
-                        <option value="생명과학" ${draftBook.category === '생명과학' ? 'selected' : ''}>생명과학</option>
-                        <option value="시스템 사고" ${draftBook.category === '시스템 사고' ? 'selected' : ''}>시스템 사고</option>
-                        <option value="복잡계" ${draftBook.category === '복잡계' ? 'selected' : ''}>복잡계</option>
-                        <option value="우주와 질서" ${draftBook.category === '우주와 질서' ? 'selected' : ''}>우주와 질서</option>
-                        <option value="진화와 협력" ${draftBook.category === '진화와 협력' ? 'selected' : ''}>진화와 협력</option>
-                        <option value="문명과 에너지" ${draftBook.category === '문명과 에너지' ? 'selected' : ''}>문명과 에너지</option>
-                        <option value="생태철학" ${draftBook.category === '생태철학' ? 'selected' : ''}>생태철학</option>
-                        <option value="철학" ${draftBook.category === '철학' ? 'selected' : ''}>철학</option>
-                    </select>
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-title">책 제목</label>
+                        <input id="draft-title" name="title" type="text" value="${String(draftBook.title || '').replace(/"/g, '&quot;')}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-author">지은이</label>
+                        <input id="draft-author" name="author" type="text" value="${String(draftBook.author || '').replace(/"/g, '&quot;')}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-translator">옮긴이</label>
+                        <input id="draft-translator" name="translator" type="text" value="${String(draftBook.translator || '없음').replace(/"/g, '&quot;')}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-publisher">출판사</label>
+                        <input id="draft-publisher" name="publisher" type="text" value="${String(draftBook.publisher || '').replace(/"/g, '&quot;')}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-price">책값</label>
+                        <input id="draft-price" name="price" type="number" min="0" step="100" value="${Number(draftBook.price || 0)}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-stock">재고</label>
+                        <input id="draft-stock" name="stock" type="number" min="0" step="1" value="${Number(draftBook.stock || 0)}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-incomingDate">입고일</label>
+                        <input id="draft-incomingDate" name="incomingDate" type="date" value="${draftBook.incomingDate ? draftBook.incomingDate.slice(0, 10) : ''}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-registeredAt">등록일</label>
+                        <input id="draft-registeredAt" name="registeredAt" type="date" value="${draftBook.registeredAt ? draftBook.registeredAt.slice(0, 10) : ''}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-newUntil">신간 만료일</label>
+                        <input id="draft-newUntil" name="newUntil" type="date" value="${draftBook.newUntil ? draftBook.newUntil.slice(0, 10) : ''}" />
+                    </div>
+
+                    <div class="book-detail-form-row">
+                        <label class="book-detail-form-label" for="draft-classification">상태 분류</label>
+                        <select id="draft-classification" name="classification">
+                            <option value="구매중" ${String(draftBook.classification || '') === '구매중' ? 'selected' : ''}>구매중</option>
+                            <option value="대기중" ${String(draftBook.classification || '') === '대기중' ? 'selected' : ''}>대기중</option>
+                            <option value="신규책" ${String(draftBook.classification || '') === '신규책' ? 'selected' : ''}>신규책</option>
+                            <option value="등록완료" ${String(draftBook.classification || '') === '등록완료' ? 'selected' : ''}>등록완료</option>
+                            <option value="발송예정" ${String(draftBook.classification || '') === '발송예정' ? 'selected' : ''}>발송예정</option>
+                            <option value="반품처리" ${String(draftBook.classification || '') === '반품처리' ? 'selected' : ''}>반품처리</option>
+                            <option value="품절" ${String(draftBook.classification || '') === '품절' ? 'selected' : ''}>품절</option>
+                        </select>
+                    </div>
+
+                    <div class="book-detail-form-row book-detail-form-row--full">
+                        <label class="book-detail-form-label" for="draft-description">책 소개</label>
+                        <textarea id="draft-description" name="description" rows="6">${String(draftBook.description || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')}</textarea>
+                    </div>
+
+                    <div class="book-detail-form-row book-detail-form-row--full">
+                        <label class="book-detail-form-label" for="draft-preview">미리보기 문장</label>
+                        <textarea id="draft-preview" name="preview" rows="2">${String(draftBook.preview || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')}</textarea>
+                    </div>
                 </div>
 
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-title">책 제목</label>
-                    <input id="draft-title" name="title" type="text" value="${String(draftBook.title || '').replace(/"/g, '&quot;')}" />
+                <div class="book-detail-form-actions">
+                    <button type="button" class="book-detail-action-btn book-detail-action-btn--secondary" data-action="save">임시 저장</button>
+                    <button type="button" class="admin-form-submit" data-action="publish">정식 등록하기</button>
+                    <a href="../admin/admin.html" class="book-detail-back-link">미등록 도서목록으로 가기</a>
                 </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-author">지은이</label>
-                    <input id="draft-author" name="author" type="text" value="${String(draftBook.author || '').replace(/"/g, '&quot;')}" />
-                </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-translator">옮긴이</label>
-                    <input id="draft-translator" name="translator" type="text" value="${String(draftBook.translator || '없음').replace(/"/g, '&quot;')}" />
-                </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-publisher">출판사</label>
-                    <input id="draft-publisher" name="publisher" type="text" value="${String(draftBook.publisher || '').replace(/"/g, '&quot;')}" />
-                </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-price">책값</label>
-                    <input id="draft-price" name="price" type="number" min="0" step="100" value="${Number(draftBook.price || 0)}" />
-                </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-stock">재고</label>
-                    <input id="draft-stock" name="stock" type="number" min="0" step="1" value="${Number(draftBook.stock || 0)}" />
-                </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-incomingDate">입고일</label>
-                    <input id="draft-incomingDate" name="incomingDate" type="date" value="${draftBook.incomingDate ? draftBook.incomingDate.slice(0, 10) : ''}" />
-                </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-registeredAt">등록일</label>
-                    <input id="draft-registeredAt" name="registeredAt" type="date" value="${draftBook.registeredAt ? draftBook.registeredAt.slice(0, 10) : ''}" />
-                </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-newUntil">신간 만료일</label>
-                    <input id="draft-newUntil" name="newUntil" type="date" value="${draftBook.newUntil ? draftBook.newUntil.slice(0, 10) : ''}" />
-                </div>
-
-                <div class="book-detail-form-row">
-                    <label class="book-detail-form-label" for="draft-classification">상태 분류</label>
-                    <select id="draft-classification" name="classification">
-                        <option value="구매중" ${String(draftBook.classification || '') === '구매중' ? 'selected' : ''}>구매중</option>
-                        <option value="대기중" ${String(draftBook.classification || '') === '대기중' ? 'selected' : ''}>대기중</option>
-                        <option value="신규책" ${String(draftBook.classification || '') === '신규책' ? 'selected' : ''}>신규책</option>
-                        <option value="등록완료" ${String(draftBook.classification || '') === '등록완료' ? 'selected' : ''}>등록완료</option>
-                        <option value="발송예정" ${String(draftBook.classification || '') === '발송예정' ? 'selected' : ''}>발송예정</option>
-                        <option value="반품처리" ${String(draftBook.classification || '') === '반품처리' ? 'selected' : ''}>반품처리</option>
-                        <option value="품절" ${String(draftBook.classification || '') === '품절' ? 'selected' : ''}>품절</option>
-                    </select>
-                </div>
-
-                <div class="book-detail-form-row book-detail-form-row--full">
-                    <label class="book-detail-form-label" for="draft-description">책 소개</label>
-                    <textarea id="draft-description" name="description" rows="6">${String(draftBook.description || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')}</textarea>
-                </div>
-
-                <div class="book-detail-form-row book-detail-form-row--full">
-                    <label class="book-detail-form-label" for="draft-preview">미리보기 문장</label>
-                    <textarea id="draft-preview" name="preview" rows="2">${String(draftBook.preview || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')}</textarea>
-                </div>
-            </div>
-
-            <div class="book-detail-form-actions">
-                <button type="button" class="book-detail-action-btn book-detail-action-btn--secondary" data-action="save">임시 저장</button>
-                <button type="button" class="admin-form-submit" data-action="publish">정식 등록하기</button>
-                <a href="../admin/admin.html" class="book-detail-back-link">미등록 도서목록으로 가기</a>
-            </div>
-            <p id="book-detail-status" class="admin-login-status" aria-live="polite"></p>
-        </form>
+                <p id="book-detail-status" class="admin-login-status" aria-live="polite"></p>
+            </form>
+        </article>
     `;
 
     const statusText = document.querySelector('#book-detail-status');

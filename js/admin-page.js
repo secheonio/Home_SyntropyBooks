@@ -464,15 +464,26 @@ const CATEGORY_ORDER = [
     '생태철학',
     '철학'
 ];
-const UNCATEGORIZED_CATEGORY = '미등록 카테고리 서적';
+const UNCATEGORIZED_CATEGORY = '미분류';
+const CATEGORY_COLOR_MAP = Object.freeze({
+    '생명과학': { background: '#f4c7c3', border: '#d9827a', text: '#7b302b' },
+    '시스템 사고': { background: '#f6d5b3', border: '#d99a61', text: '#75451f' },
+    '복잡계': { background: '#f4e6a9', border: '#c7aa3a', text: '#665510' },
+    '우주와 질서': { background: '#c7e3c0', border: '#75a96d', text: '#2e6130' },
+    '진화와 협력': { background: '#c3e1e8', border: '#6fa9b8', text: '#245c6a' },
+    '문명과 에너지': { background: '#cbd3ed', border: '#7d8ec5', text: '#344576' },
+    '생태철학': { background: '#dccbea', border: '#a587bd', text: '#5b3d70' },
+    '철학': { background: '#ffffff', border: '#b8c5b8', text: '#25483b' },
+    '미분류': { background: '#e9ece9', border: '#b8c5b8', text: '#4a5852' }
+});
 
 const BOOK_STATUS = Object.freeze({
     PURCHASE: '구매중',
-    WAITING: '대기중',
-    NEW: '신규책',
-    COMPLETE: '등록완료',
-    SHIPPING: '발송예정',
-    RETURNED: '반품처리',
+    WAITING: '등록대기',
+    NEW: '신간',
+    COMPLETE: '등록도서',
+    SHIPPING: '발송중',
+    RETURNED: '반품중',
     SOLD_OUT: '품절'
 });
 
@@ -528,7 +539,16 @@ const normalizeAdminBookStatus = (book) => {
             [BOOK_STATUS.COMPLETE]: 'registered',
             [BOOK_STATUS.SHIPPING]: 'shipping',
             [BOOK_STATUS.RETURNED]: 'returned',
-            [BOOK_STATUS.SOLD_OUT]: 'soldout'
+            [BOOK_STATUS.SOLD_OUT]: 'soldout',
+            '대기중': 'draft',
+            '신규책': 'new',
+            '등록완료': 'registered',
+            '발송예정': 'shipping',
+            '반품처리': 'returned',
+            '등록도서': 'registered',
+            '신간': 'new',
+            '발송중': 'shipping',
+            '반품중': 'returned'
         };
         return mapping[String(book.classification).trim()] || 'registered';
     }
@@ -540,7 +560,20 @@ const normalizeAdminBookStatus = (book) => {
     return Number(book.stock || 0) === 0 ? 'soldout' : 'registered';
 };
 
-const getAdminStatusLabel = (book) => ADMIN_STATUS_LABELS[normalizeAdminBookStatus(book)] || BOOK_STATUS.COMPLETE;
+const getAdminStatusLabel = (book) => {
+    const statusKey = normalizeAdminBookStatus(book);
+    const mappedLabel = ADMIN_STATUS_LABELS[statusKey] || BOOK_STATUS.COMPLETE;
+    if (statusKey === 'draft') {
+        return BOOK_STATUS.WAITING;
+    }
+    if (statusKey === 'new') {
+        return BOOK_STATUS.NEW;
+    }
+    if (statusKey === 'registered') {
+        return BOOK_STATUS.COMPLETE;
+    }
+    return mappedLabel;
+};
 
 const isNewBook = (book) => {
     if (book.newUntil) {
@@ -653,20 +686,111 @@ const renderCategorySummary = (publishedBooks, draftBooks) => {
     `;
 };
 
+const getCategoryMetricSummary = (categoryName, publishedBooks, draftBooks) => {
+    const summary = getCategorySummary(publishedBooks, draftBooks);
+    const item = summary[categoryName] || {
+        published: 0,
+        publishedStock: 0,
+        draft: 0,
+        draftStock: 0,
+        new: 0,
+        newStock: 0
+    };
+
+    return {
+        category: categoryName,
+        total: {
+            kind: item.published + item.draft,
+            stock: item.publishedStock + item.draftStock
+        },
+        registered: {
+            kind: item.published,
+            stock: item.publishedStock
+        },
+        new: {
+            kind: item.new,
+            stock: item.newStock
+        },
+        draft: {
+            kind: item.draft,
+            stock: item.draftStock
+        }
+    };
+};
+
+const renderSelectedCategorySummary = (categoryName, publishedBooks, draftBooks) => {
+    const categoriesElement = document.querySelector('[data-stat="categories"]');
+    if (!categoriesElement) {
+        return;
+    }
+
+    const existingPanel = categoriesElement.querySelector('.category-detail-panel');
+    if (existingPanel) {
+        existingPanel.remove();
+    }
+
+    const summary = getCategoryMetricSummary(categoryName, publishedBooks, draftBooks);
+
+    const statDetails = [
+        { selector: '[data-stat="total-books"]', value: `${summary.category} | ${summary.total.kind}종 ${summary.total.stock}권` },
+        { selector: '[data-stat="registered-books"]', value: `${summary.category} | ${summary.registered.kind}종 ${summary.registered.stock}권` },
+        { selector: '[data-stat="new-books"]', value: `${summary.category} | ${summary.new.kind}종 ${summary.new.stock}권` },
+        { selector: '[data-stat="draft-books"]', value: `${summary.category} | ${summary.draft.kind}종 ${summary.draft.stock}권` }
+    ];
+
+    statDetails.forEach(({ selector, value }) => {
+        const statNode = document.querySelector(selector);
+        const card = statNode?.closest('.admin-card') || statNode?.parentElement?.closest('.admin-card');
+        if (!card) {
+            return;
+        }
+
+        let detail = card.querySelector('.stat-detail');
+        if (!detail) {
+            detail = document.createElement('div');
+            detail.className = 'stat-detail';
+            card.appendChild(detail);
+        }
+
+        const palette = CATEGORY_COLOR_MAP[categoryName] || CATEGORY_COLOR_MAP[UNCATEGORIZED_CATEGORY];
+        const [categoryLabel, countLabel = ''] = value.split('|');
+        detail.innerHTML = `
+            <span class="stat-detail-category">${categoryLabel.trim()}</span>
+            <span class="stat-detail-count">| ${countLabel.trim()}</span>
+        `;
+        detail.style.background = palette.background;
+        detail.style.border = `1px solid ${palette.border}`;
+        detail.style.color = palette.text;
+        detail.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.35)';
+    });
+
+    categoriesElement.querySelectorAll('.category-mini-button').forEach((button) => {
+        button.classList.toggle('is-active', button.dataset.category === categoryName);
+    });
+};
+
 const renderCategoryMiniButtons = (publishedBooks, draftBooks) => {
     const categoriesElement = document.querySelector('[data-stat="categories"]');
     if (!categoriesElement) {
         return;
     }
 
-    const summary = getCategorySummary(publishedBooks, draftBooks);
-    const categoryButtons = CATEGORY_ORDER.map((category) => `
-        <button type="button" class="category-mini-button" aria-label="${category} 카테고리">
+    const categoryNames = [...CATEGORY_ORDER, UNCATEGORIZED_CATEGORY];
+    const categoryButtons = categoryNames.map((category) => `
+        <button type="button" class="category-mini-button" data-category="${category}" aria-label="${category} 카테고리">
             <span class="category-mini-button-name">${category}</span>
         </button>
     `).join('');
 
     categoriesElement.innerHTML = categoryButtons;
+    categoriesElement.querySelectorAll('.category-mini-button').forEach((button) => {
+        button.addEventListener('click', () => {
+            renderSelectedCategorySummary(button.dataset.category, publishedBooks, draftBooks);
+        });
+    });
+
+    const initialCategory = categoryNames[0];
+    renderSelectedCategorySummary(initialCategory, publishedBooks, draftBooks);
 };
 
 const updateAdminStats = (books) => {
@@ -771,7 +895,7 @@ const attachAdminBookActions = (list) => {
                 return;
             }
 
-            const confirmed = window.confirm(`"${targetBook.title}" 도서를 삭제하시겠습니까?`);
+            const confirmed = window.confirm(`"${targetBook.title}" 도서를 정말 삭제하시겠습니까?\n삭제된 도서는 복구할 수 없습니다.`);
             if (!confirmed) {
                 return;
             }
@@ -839,61 +963,120 @@ const renderAdminBooks = () => {
         return;
     }
 
-    const headerRow = `
-        <div class="admin-book-header-row" aria-label="등록 대기 도서 목록 헤더">
-            <span class="admin-book-header-cell">상태</span>
-            <span class="admin-book-header-cell">카테고리</span>
-            <span class="admin-book-header-cell">책 제목</span>
-            <span class="admin-book-header-cell">저자</span>
-            <span class="admin-book-header-cell">옮긴이</span>
-            <span class="admin-book-header-cell">출판사</span>
-            <span class="admin-book-header-cell">가격</span>
-            <span class="admin-book-header-cell">권수</span>
-            <span class="admin-book-header-cell">삭제</span>
-        </div>
-    `;
+    const renderFieldValue = (value, fallbackText = '미등록') => {
+        const normalized = typeof value === 'string' ? value.trim() : value;
+        const hasValue = normalized !== '' && normalized !== null && normalized !== undefined && !(Array.isArray(normalized) && normalized.length === 0);
+        const text = hasValue ? String(value).trim() : fallbackText;
+        return {
+            text,
+            missing: !hasValue
+        };
+    };
 
     if (!books.length) {
         list.innerHTML = `
-            ${headerRow}
-            <div class="admin-book-row empty-state">
-                <span>임시 등록된 도서가 없습니다.</span>
-                <span>수기, 바코드, 엑셀 방식으로 등록할 수 있습니다.</span>
-                <span>정식 등록 전에는 홈페이지에 노출되지 않습니다.</span>
+            <div class="admin-book-card empty-state">
+                <h4>임시 등록된 도서가 없습니다.</h4>
+                <p>수기, 바코드, 엑셀 방식으로 등록할 수 있습니다.</p>
+                <p>정식 등록 전에는 홈페이지에 노출되지 않습니다.</p>
             </div>
         `;
         updateAdminStats(getBooksFromStorage());
         return;
     }
 
-    list.innerHTML = `${headerRow}${books
-        .slice()
-        .reverse()
-        .map((book) => {
-            const status = normalizeAdminBookStatus(book);
+    const buildAdminBookCardMarkup = (book) => {
+        const fields = [
+            { label: '카테고리', value: getBookCategories(book).join(', ') || '미등록' },
+            { label: '저자', value: book.author || '미등록' },
+            { label: '옮긴이', value: book.translator || '미등록' },
+            { label: '출판사', value: book.publisher || '미등록' },
+            { label: '가격', value: book.price ? `${Number(book.price).toLocaleString()}원` : '미등록' },
+            { label: '재고', value: Number(book.stock || 0) > 0 ? `${Number(book.stock || 0)}권` : '미등록' },
+            { label: '바코드', value: book.barcode || '미등록' },
+            { label: 'ISBN', value: book.isbn || '미등록' },
+            { label: 'QR', value: book.qrcode || '미등록' },
+            { label: '입고일', value: book.incomingDate || book.arrivalDate || '미등록' },
+            { label: '등록일', value: book.registeredAt || '미등록' },
+            { label: '만료일', value: book.newUntil || '미등록' },
+            { label: '비고', value: book.note || '미등록' },
+            { label: '상태', value: getAdminStatusLabel(book) || '미등록' },
+            { label: '안내글', value: book.preview || '미등록' },
+            { label: '책소개', value: book.description || '미등록' }
+        ].map((item) => {
+            const field = renderFieldValue(item.value, '미등록');
+            const isWideDescription = item.label === '책소개';
             return `
-                <div class="admin-book-row admin-draft-row" data-role="open-draft" data-book-id="${book.id}" tabindex="0">
-                    <span>${getAdminStatusLabel(book)}</span>
-                    <span>${getBookCategories(book).join(', ') || '미분류'}</span>
-                    <span>${book.title}</span>
-                    <span>${book.author || '미상'}</span>
-                    <span>${book.translator || '-'}</span>
-                    <span>${book.publisher || '미기재'}</span>
-                    <span>${book.price ? `${Number(book.price).toLocaleString()}원` : '미입력'}</span>
-                    <div class="admin-book-stock-box" data-book-id="${book.id}">
-                        <div class="admin-stock-stepper" data-book-id="${book.id}">
-                            <button type="button" class="admin-stock-btn admin-stock-btn--up" data-role="stock-up" data-book-id="${book.id}" aria-label="재고 증가"></button>
-                            <input type="number" min="0" step="1" class="admin-stock-input" data-role="stock-input" data-book-id="${book.id}" value="${Number(book.stock || 0)}">
-                            <button type="button" class="admin-stock-btn admin-stock-btn--down" data-role="stock-down" data-book-id="${book.id}" aria-label="재고 감소"></button>
-                        </div>
-                    </div>
-                    <div class="admin-book-actions">
-                        <button type="button" class="admin-book-action-btn danger" data-role="delete" data-book-id="${book.id}">삭제</button>
-                    </div>
+                <div class="admin-book-detail-row ${isWideDescription ? 'admin-book-detail-row--wide' : ''}">
+                    <span class="admin-book-detail-label">${item.label}</span>
+                    <span class="admin-book-detail-value ${field.missing ? 'is-missing' : ''}">${field.text}</span>
                 </div>
             `;
+        }).join('');
+
+        const coverSrc = book.cover
+            ? (book.cover.startsWith('data:') ? book.cover : `../images/book-covers/${book.cover}`)
+            : '../images/SB_logo_White.png';
+
+        return `
+            <article class="admin-book-card admin-draft-row" data-role="open-draft" data-book-id="${book.id}" tabindex="0">
+                <div class="admin-book-card-top-row">
+                    <div class="admin-book-card-title">${book.title || '미등록'}</div>
+                    <img class="admin-book-card-cover" src="${coverSrc}" alt="${String(book.title || '도서').replace(/"/g, '&quot;')} 표지" loading="lazy">
+                </div>
+
+                <div class="admin-book-card-meta">
+                    ${fields}
+                </div>
+            </article>
+        `;
+    };
+
+    const allCategoryNames = Array.from(new Set([
+        ...CATEGORY_ORDER,
+        ...books.flatMap((book) => getBookCategories(book).filter((category) => !CATEGORY_ORDER.includes(category) && category !== UNCATEGORIZED_CATEGORY)),
+        ...books.flatMap((book) => {
+            const categories = getBookCategories(book);
+            return categories.length ? categories : [UNCATEGORIZED_CATEGORY];
+        }).filter((category) => category === UNCATEGORIZED_CATEGORY || CATEGORY_ORDER.includes(category))
+    ]));
+
+    const orderedCategoryNames = allCategoryNames.filter((category) => CATEGORY_ORDER.includes(category) || category === UNCATEGORIZED_CATEGORY || !CATEGORY_ORDER.includes(category) && ![UNCATEGORIZED_CATEGORY].includes(category));
+    const typedGroups = [...CATEGORY_ORDER, ...Array.from(new Set(
+        books.flatMap((book) => getBookCategories(book))
+            .filter((category) => !CATEGORY_ORDER.includes(category) && category !== UNCATEGORIZED_CATEGORY)
+    )), UNCATEGORIZED_CATEGORY];
+    const groupedOrder = Array.from(new Set(typedGroups.filter(Boolean)));
+    const groupedBooks = Object.fromEntries(groupedOrder.map((category) => [category, []]));
+
+    books.forEach((book) => {
+        const categories = getBookCategories(book);
+        const targetCategories = categories.length ? categories : [UNCATEGORIZED_CATEGORY];
+        targetCategories.forEach((category) => {
+            const normalizedCategory = CATEGORY_ORDER.includes(category) ? category : (!category || category === '미분류' ? UNCATEGORIZED_CATEGORY : category);
+            if (!groupedBooks[normalizedCategory]) {
+                groupedBooks[normalizedCategory] = [];
+            }
+            groupedBooks[normalizedCategory].push(book);
+        });
+    });
+
+    list.innerHTML = groupedOrder
+        .map((category) => {
+            const categoryBooks = [...(groupedBooks[category] || [])].slice().reverse();
+            const palette = CATEGORY_COLOR_MAP[category] || { background: '#e9ece9', border: '#b8c5b8', text: '#4a5852' };
+            const cardMarkup = categoryBooks.length
+                ? categoryBooks.map((book) => buildAdminBookCardMarkup(book)).join('')
+                : '';
+
+            return `
+                <section class="admin-category-section">
+                    <div class="admin-category-header" style="--category-bg:${palette.background}; --category-border:${palette.border}; --category-text:${palette.text};">${category}</div>
+                    ${cardMarkup ? `<div class="admin-category-cards">${cardMarkup}</div>` : ''}
+                </section>
+            `;
         })
-        .join('')}`;
+        .join('');
 
     attachAdminBookActions(list);
     list.querySelectorAll('[data-role="open-draft"]').forEach((element) => {
