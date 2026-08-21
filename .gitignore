@@ -1,0 +1,5 @@
+archive/
+
+# Keep the site assets that are actually used by the project
+# (do not ignore critical website files/folders)
+# index.html, css/, js/, books/, images/ are intentionally tracked
