@@ -20,6 +20,11 @@
                     <div class="main-header-text">Syntropy Books</div>
                 </div>
                 <div class="header-bottom-row">
+                    <section class="header-search" aria-label="도서 검색">
+                        <label for="book-search-input">도서 검색</label>
+                        <input id="book-search-input" type="search" placeholder="제목, 저자, 카테고리로 검색" autocomplete="off">
+                        <p id="book-search-status" class="book-search-status" aria-live="polite">검색 도서수</p>
+                    </section>
                     <div class="header-nav-wrap">
                         <nav class="site-menu" aria-label="메인 메뉴">
                             <div class="site-menu-group">
@@ -74,6 +79,7 @@
     </footer>
 
     <script src="../js/admin-login.js"></script>
+    <script src="../js/common-search.js"></script>
     <script src="../js/search-results.js"></script>
 </body>
 </html>

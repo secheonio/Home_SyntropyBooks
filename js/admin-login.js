@@ -64,7 +64,7 @@ const createAdminAccess = () => {
         searchSection.innerHTML = `
             <label for="book-search-input">도서 검색</label>
             <input id="book-search-input" type="search" placeholder="제목, 저자, 카테고리로 검색" autocomplete="off">
-            <p id="book-search-status" class="book-search-status" aria-live="polite">전체 도서 8권</p>
+            <p id="book-search-status" class="book-search-status" aria-live="polite">총 0종 0권</p>
         `;
 
         headerBottomRow.insertBefore(searchSection, navWrap);

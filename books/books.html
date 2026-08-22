@@ -34,7 +34,7 @@
                 <section class="book-search" aria-label="도서 검색">
                     <label for="book-search-input">도서 검색</label>
                     <input id="book-search-input" type="search" placeholder="제목, 저자, 카테고리로 검색" autocomplete="off">
-                    <p id="book-search-status" class="book-search-status" aria-live="polite">전체 도서 9권</p>
+                    <p id="book-search-status" class="book-search-status" aria-live="polite">총 0종 0권</p>
                 </section>
 
                 <div class="header-nav-wrap">
@@ -232,18 +232,6 @@
                         <img class="book-cover" src="../images/book-covers/philosophy.svg" alt="철학 책표지 미리보기">
                 </article>
 
-                <article class="book-card" id="uncategorized" data-category-label="미분류">
-                    <div class="book-card-top">
-                        <span class="book-category">미분류</span>
-                        <span class="book-new-badge">신간</span>
-                    </div>
-                    <h2 class="book-title">미분류 샘플 도서</h2>
-                    <p class="book-author">분류 대기</p>
-                    <p class="book-translator"></p>
-                    <p class="book-publisher">출판사: Syntropy Books 큐레이션</p>
-                    <p class="book-description">카테고리 지정이 완료되지 않은 도서를 임시로 모아 보여줍니다.</p>
-                    <img class="book-cover" src="../images/book-covers/book.svg" alt="미분류 책표지 미리보기">
-                </article>
             </section>
         </main>
     </div>
@@ -255,8 +243,16 @@
     </footer>
 
     <script src="../js/catalog-data.js"></script>
+    <script src="../js/common-search.js"></script>
     <script src="../js/books.js"></script>
     <script src="../js/admin-login.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initCommonBookSearch) {
+                window.initCommonBookSearch();
+            }
+        });
+    </script>
 
 </body>
 </html>

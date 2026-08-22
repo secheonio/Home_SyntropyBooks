@@ -395,158 +395,46 @@ const syncCatalogWithBooksPage = () => {
 
 const categoryBooks = {
     'life-science': [
-        {
-            title: '생명이란 무엇인가',
-            author: '에르빈 슈뢰딩거',
-            description: '물리학의 언어로 생명과 질서의 근원을 탐구하며, 살아 있는 세계를 새롭게 바라보게 하는 고전입니다.'
-        },
-        {
-            title: '다윈의 위험한 생각',
-            author: '대니얼 데닛',
-            description: '진화라는 관점이 생명과 마음, 질서를 이해하는 방식을 어떻게 바꾸는지 살펴봅니다.'
-        },
-        {
-            title: '생명의 그물',
-            author: '프리초프 카프라',
-            description: '생명체와 생태계가 관계의 망 속에서 질서를 만들어 가는 과정을 설명합니다.'
-        }
+        { title: '생명이란 무엇인가', author: '에르빈 슈뢰딩거', description: '물리학의 언어로 생명과 질서의 근원을 탐구하며, 살아 있는 세계를 새롭게 바라보게 하는 고전입니다.' },
+        { title: '다윈의 위험한 생각', author: '대니얼 데닛', description: '진화라는 관점이 생명과 마음, 질서를 이해하는 방식을 어떻게 바꾸는지 살펴봅니다.' },
+        { title: '고요한 붉은 달', author: '서윤아', description: '생명이 감추고 드러내는 서정적이고 선택적인 존재 방식을 탐색합니다.' }
     ],
     'systems-thinking': [
-        {
-            title: '생명의 그물',
-            author: '프리초프 카프라',
-            description: '생태계와 사회를 서로 연결된 네트워크로 읽으며, 관계 속에서 생겨나는 질서를 설명합니다.'
-        },
-        {
-            title: '시스템 사고',
-            author: '피터 센게',
-            description: '부분의 합을 넘어 조직과 사회 전체의 구조와 흐름을 바라보는 사고법을 소개합니다.'
-        },
-        {
-            title: '전체를 보는 방법',
-            author: '시스템 사고 큐레이션',
-            description: '복잡한 문제를 요소가 아닌 상호작용과 순환의 관점에서 다시 읽어보는 안내서입니다.'
-        }
+        { title: '시스템 사고', author: '피터 센게', description: '부분의 합을 넘어 조직과 사회 전체의 구조와 흐름을 바라보는 사고법을 소개합니다.' },
+        { title: '사라지는 경계', author: '나재호', description: '관계와 경계가 흐르는 사회를 이해하는 실전적 분석을 제시합니다.' },
+        { title: '달빛 아래의 네트워크', author: '정우진', description: '네트워크 안에서 관계가 만들어내는 질서와 불균형을 고민합니다.' }
     ],
-    'complexity': [
-        {
-            title: '카오스',
-            author: '제임스 글릭',
-            description: '작은 변화가 거대한 패턴을 만드는 과정을 따라가며 혼돈 속의 질서를 보여줍니다.'
-        },
-        {
-            title: '복잡계 개론',
-            author: '복잡계 큐레이션',
-            description: '상호작용하는 요소들이 자기조직화를 통해 새로운 패턴을 만드는 원리를 살펴봅니다.'
-        },
-        {
-            title: '세상을 바꾼 17가지 방정식',
-            author: '이언 스튜어트',
-            description: '수학적 구조가 자연과 사회의 복잡한 현상을 이해하는 틀이 되는 순간을 소개합니다.'
-        }
+    complexity: [
+        { title: '카오스', author: '제임스 글릭', description: '작은 변화가 거대한 패턴을 만드는 과정을 따라가며 혼돈 속의 질서를 보여줍니다.' },
+        { title: '복잡계 개론', author: '복잡계 큐레이션', description: '상호작용하는 요소들이 자기조직화를 통해 새로운 패턴을 만드는 원리를 살펴봅니다.' },
+        { title: '무질서의 그림자', author: '이도엽', description: '복잡한 문제에서 혼란을 읽는 인식의 틀을 정리합니다.' }
     ],
     cosmos: [
-        {
-            title: '코스모스',
-            author: '칼 세이건',
-            description: '우주의 시간과 생명의 진화를 연결해 바라보며 지식의 질서를 보여주는 책입니다.'
-        },
-        {
-            title: '시간의 역사',
-            author: '스티븐 호킹',
-            description: '우주의 시작과 변화에 대한 질문을 통해 시간과 공간의 구조를 탐구합니다.'
-        },
-        {
-            title: '창백한 푸른 점',
-            author: '칼 세이건',
-            description: '우주 속 작은 행성에서 살아가는 인간의 위치와 책임을 성찰하게 합니다.'
-        }
+        { title: '코스모스', author: '칼 세이건', description: '우주의 시간과 생명의 진화를 연결해 바라보며 지식의 질서를 보여주는 책입니다.' },
+        { title: '시간의 역사', author: '스티븐 호킹', description: '우주의 시작과 변화에 대한 질문을 통해 시간과 공간의 구조를 탐구합니다.' },
+        { title: '태양의 반지', author: '김지혜', description: '태양계와 인간의 위치를 전반적 관점으로 다시 고찰합니다.' }
     ],
     evolution: [
-        {
-            title: '이기적 유전자',
-            author: '리처드 도킨스',
-            description: '생명체의 행동과 진화를 유전자 관점에서 살피며 생명 시스템의 유지를 질문합니다.'
-        },
-        {
-            title: '협력의 진화',
-            author: '로버트 액설로드',
-            description: '경쟁하는 존재들 사이에서 협력이 어떻게 안정적인 질서로 자리 잡는지 탐구합니다.'
-        },
-        {
-            title: '생명체의 협력',
-            author: '린 마굴리스',
-            description: '공생과 상호의존을 통해 진화가 만들어 온 생명의 연결 구조를 바라봅니다.'
-        }
+        { title: '이기적 유전자', author: '리처드 도킨스', description: '생명체의 행동과 진화를 유전자 관점에서 살피며 생명 시스템의 유지를 질문합니다.' },
+        { title: '협력의 진화', author: '로버트 액설로드', description: '경쟁하는 존재들 사이에서 협력이 어떻게 안정적인 질서로 자리 잡는지 탐구합니다.' },
+        { title: '진화의 가벼움', author: '빈예준', description: '진화가 천천히 그리고 가볍게 만들어내는 변화의 심리를 살펴봅니다.' }
     ],
     energy: [
-        {
-            title: '엔트로피',
-            author: '제러미 리프킨',
-            description: '에너지의 흐름과 문명의 방향을 돌아보며 지속 가능한 전환을 생각하게 합니다.'
-        },
-        {
-            title: '에너지와 문명',
-            author: '바츨라프 스밀',
-            description: '인류 문명의 변화가 에너지의 생산과 사용 방식과 어떻게 연결되는지 분석합니다.'
-        },
-        {
-            title: '지속 가능한 에너지',
-            author: '데이비드 맥케이',
-            description: '에너지 선택의 현실적인 조건을 수치와 시스템의 관점에서 차분하게 살펴봅니다.'
-        }
+        { title: '엔트로피', author: '제러미 리프킨', description: '에너지의 흐름과 문명의 방향을 돌아보며 지속 가능한 전환을 생각하게 합니다.' },
+        { title: '에너지와 문명', author: '바츨라프 스밀', description: '인류 문명의 변화가 에너지의 생산과 사용 방식과 어떻게 연결되는지 분석합니다.' },
+        { title: '도시에서 배우는 평온', author: '신유나', description: '에너지와 감정, 도시의 구조가 평온을 만드는 방식을 생각합니다.' }
     ],
     ecology: [
-        {
-            title: '오래된 미래',
-            author: '헬레나 노르베리 호지',
-            description: '지역 공동체의 삶을 통해 성장 중심 문명을 성찰하고 미래의 단서를 찾습니다.'
-        },
-        {
-            title: '침묵의 봄',
-            author: '레이첼 카슨',
-            description: '자연의 연결망을 무너뜨리는 화학물질의 영향을 알리며 생태적 책임을 일깨웁니다.'
-        },
-        {
-            title: '숲은 생각한다',
-            author: '에두아르도 콘',
-            description: '인간 너머의 생명들과 함께 살아가는 세계를 새롭게 이해하는 생태인류학 책입니다.'
-        }
+        { title: '오래된 미래', author: '헬레나 노르베리 호지', description: '지역 공동체의 삶을 통해 성장 중심 문명을 성찰하고 미래의 단서를 찾습니다.' },
+        { title: '침묵의 봄', author: '레이첼 카슨', description: '자연의 연결망을 무너뜨리는 화학물질의 영향을 알리며 생태적 책임을 일깨웁니다.' },
+        { title: '생태계의 낮은 목소리', author: '문지환', description: '작은 생태적 신호들이 전체를 어떻게 움직이는지 살펴봅니다.' }
     ],
     philosophy: [
-        {
-            title: '장자',
-            author: '장자',
-            description: '고정된 질서에서 벗어나 변화와 관계의 흐름을 바라보는 감각을 일깨웁니다.'
-        },
-        {
-            title: '스피노자 철학',
-            author: '스피노자',
-            description: '인간과 자연을 하나의 연결된 질서로 바라보며 함께 존재하는 방식을 생각합니다.'
-        },
-        {
-            title: '자연과 자유',
-            author: '철학 큐레이션',
-            description: '자연과 함께 살아가는 삶의 태도와 판단의 기준을 탐구하는 책들을 소개합니다.'
-        }
+        { title: '장자', author: '장자', description: '고정된 질서에서 벗어나 변화와 관계의 흐름을 바라보는 감각을 일깨웁니다.' },
+        { title: '스피노자 철학', author: '스피노자', description: '인간과 자연을 하나의 연결된 질서로 바라보며 함께 존재하는 방식을 생각합니다.' },
+        { title: '자연과 자유', author: '철학 큐레이션', description: '자연과 함께 살아가는 삶의 태도와 판단의 기준을 탐구하는 책들을 소개합니다.' }
     ],
-    uncategorized: [
-        {
-            title: '미분류 샘플 도서',
-            author: '분류 대기',
-            description: '카테고리 분류가 아직 완료되지 않은 도서입니다.'
-        },
-        {
-            title: '분류 보류 자료집',
-            author: '큐레이션 팀',
-            description: '검토 중인 도서 정보를 임시 보관한 분류 대기 목록입니다.'
-        },
-        {
-            title: '카테고리 검토 노트',
-            author: '편집부',
-            description: '주제 재정의가 필요한 도서를 모아 분류 기준을 정리합니다.'
-        }
-    ]
+    uncategorized: []
 };
 
 // 신간 상태는 카드의 배열 순서가 아니라 이 목록으로 판단합니다.
@@ -558,7 +446,8 @@ const newBookTitles = new Set([
     '이기적 유전자',
     '엔트로피',
     '오래된 미래',
-    '장자'
+    '장자',
+    '자연과 자유'
 ]);
 
 const updateCatalogFields = (card, title) => {
@@ -600,9 +489,10 @@ const bookMetadata = {
     '엔트로피': { translator: '', publisher: 'Syntropy Books 큐레이션' },
     '오래된 미래': { translator: '김태언', publisher: '중앙북스' },
     '장자': { translator: '김학주', publisher: '을유문화사' },
-    '미분류 샘플 도서': { translator: '', publisher: 'Syntropy Books 큐레이션' },
-    '분류 보류 자료집': { translator: '', publisher: 'Syntropy Books 큐레이션' },
-    '카테고리 검토 노트': { translator: '', publisher: 'Syntropy Books 큐레이션' }
+    '자연과 자유': { translator: '', publisher: 'Syntropy Books 큐레이션' },
+    '시스템 사고': { translator: '', publisher: 'Syntropy Books 큐레이션' },
+    '시간의 역사': { translator: '', publisher: 'Syntropy Books 큐레이션' },
+    '협력의 진화': { translator: '', publisher: 'Syntropy Books 큐레이션' }
 };
 
 const updateBookCard = (card, book) => {
@@ -691,6 +581,11 @@ const startBookRotation = () => {
 };
 
 const startBookSearch = () => {
+    if (window.initCommonBookSearch) {
+        window.initCommonBookSearch();
+        return;
+    }
+
     const input = document.querySelector('#book-search-input');
     const status = document.querySelector('#book-search-status');
     const container = document.querySelector('.book-container');
@@ -726,7 +621,7 @@ const startBookSearch = () => {
             return searchableText.includes(query.toLocaleLowerCase());
         }).length;
 
-        status.textContent = query === '' ? `전체 도서 ${totalBookCount}권` : `검색 결과 ${visibleCount}권`;
+        status.textContent = `${visibleCount}권 검색`;
     });
 
     input.addEventListener('keydown', (event) => {

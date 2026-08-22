@@ -526,12 +526,31 @@ const renderEditableDraftDetail = (draftBook) => {
     });
 };
 
+const normalizeTitleLookup = (value = '') => String(value ?? '').trim().replace(/\s+/g, ' ').toLowerCase();
+
+const findBookByTitle = (title) => {
+    const normalized = normalizeTitleLookup(title);
+    if (!normalized) {
+        return null;
+    }
+
+    const allBooks = [...getSavedBooks(), ...Object.entries(bookDetails).map(([bookTitle, meta]) => ({
+        title: bookTitle,
+        ...meta
+    }))];
+
+    return allBooks.find((book) => normalizeTitleLookup(book.title || '') === normalized)
+        || allBooks.find((book) => normalizeTitleLookup(book.title || '').includes(normalized))
+        || allBooks.find((book) => normalized.includes(normalizeTitleLookup(book.title || '')))
+        || null;
+};
+
 const showBookDetail = () => {
     const params = new URLSearchParams(window.location.search);
     const title = params.get('book') || '도서 소개';
     const isDraft = params.get('draft') === 'true';
-    const draftBook = isDraft ? getSavedDrafts().find((book) => book.title === title) : null;
-    const savedBook = !isDraft ? getSavedBooks().find((book) => book.title === title) : null;
+    const draftBook = isDraft ? getSavedDrafts().find((book) => normalizeTitleLookup(book.title) === normalizeTitleLookup(title)) : null;
+    const savedBook = !isDraft ? findBookByTitle(title) : null;
 
     if (isDraft && draftBook) {
         const categoryLink = document.querySelector('#book-detail-category-back');

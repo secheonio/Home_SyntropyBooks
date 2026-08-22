@@ -1,5 +1,17 @@
+# Ignore non-production archive and backup content
 archive/
+archive/**
+
+# Ignore editor and OS metadata
+.DS_Store
+Thumbs.db
+
+# Ignore local exports, receipts, and temporary artifacts
+*.log
+*.tmp
+*.bak
+*.orig
 
 # Keep the site assets that are actually used by the project
 # (do not ignore critical website files/folders)
-# index.html, css/, js/, books/, images/ are intentionally tracked
+# index.html, css/, js/, books/, images/, about/, admin/, contact/ are intentionally tracked

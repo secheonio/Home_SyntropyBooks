@@ -2,6 +2,8 @@ const getMainPageUrl = () => new URL('../index.html', window.location.href).toSt
 
 const STORAGE_KEY = 'syntropyBooksCatalog';
 const DRAFT_STORAGE_KEY = 'syntropyDraftBooksCatalog';
+const INVENTORY_KIND_TARGET = 35;
+const INVENTORY_COPY_TARGET = 158;
 const BARCODE_BOOK_LOOKUP = {
     '9788990000001': {
         title: '생명이란 무엇인가',
@@ -69,6 +71,35 @@ const incompleteDraftSeedBooks = [
     { title: '새벽의 구조', author: '전예림', publisher: 'Syntropy Books 큐레이TION', category: '철학', description: '', stock: 2, price: '', cover: '', translator: '김보라', registeredAt: '2026-08-11' }
 ];
 
+const buildInventoryBaseline = () => {
+    const titles = [
+        '생명이란 무엇인가', '다윈의 위험한 생각', '생명의 그물', '시스템 사고', '카오스', '복잡계 개론',
+        '코스모스', '시간의 역사', '이기적 유전자', '협력의 진화', '엔트로피', '에너지와 문명',
+        '오래된 미래', '침묵의 봄', '장자', '스피노자 철학', '고요한 붉은 달', '결정의 형태',
+        '사라지는 경계', '무질서의 그림자', '빛의 장기', '달빛 아래의 네트워크', '우주에서 읽는 인간',
+        '시간의 나무', '진화의 가벼움', '공존의 패턴', '에너지의 일기', '도시에서 배우는 평온',
+        '생태계의 낮은 목소리', '막다른 길의 철학', '새벽의 구조', '태양의 반지', '도시와 평온',
+        '첫 번째 질문', '자연과 자유'
+    ];
+
+    const stockValues = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 4, 4, 2];
+
+    return titles.map((title, index) => ({
+        id: `baseline-${index + 1}`,
+        title,
+        author: ['에르빈 슈뢰딩거', '대니얼 데닛', '프리초프 카프라', '피터 센게', '제임스 글릭', '복잡계 큐레이션', '칼 세이건', '스티븐 호킹', '리처드 도킨스', '로버트 액설로드', '제러미 리프킨', '바츨라프 스밀', '헬레나 노르베리 호지', '레이첼 카슨', '장자', '스피노자', '서윤아', '최하린', '나재호', '이도엽', '박서린', '정우진', '강민서', '유세은', '빈예준', '오태경', '홍지우', '신유나', '문지환', '이한결', '전예림', '김지혜', '신예린', '이성우', '철학 큐레이션'][index],
+        category: ['생명과학', '생명과학', '시스템 사고', '시스템 사고', '복잡계', '복잡계', '우주와 질서', '우주와 질서', '진화와 협력', '진화와 협력', '문명과 에너지', '문명과 에너지', '생태철학', '생태철학', '철학', '철학', '생명과학', '철학', '시스템 사고', '복잡계', '미분류', '시스템 사고', '우주와 질서', '철학', '진화와 협력', '진화와 협력', '문명과 에너지', '문명과 에너지', '생태철학', '철학', '철학', '우주와 질서', '문명과 에너지', '생태철학', '철학'][index],
+        publisher: 'Syntropy Books 큐레이션',
+        description: '기본 비치 도서 기준 데이터입니다.',
+        href: `book-detail.html?book=${encodeURIComponent(title)}`,
+        cover: '',
+        registeredAt: '2026-08-22',
+        status: 'published',
+        stock: Number(stockValues[index] || 4),
+        price: 15000
+    }));
+};
+
 const seedIncompleteDraftBooks = () => {
     const currentDrafts = getDraftBooksFromStorage();
     if (currentDrafts.length >= incompleteDraftSeedBooks.length) {
@@ -97,34 +128,29 @@ const seedIncompleteDraftBooks = () => {
 
 const ensureBaselineCatalogBooks = () => {
     try {
-        const publishedRaw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-        const draftRaw = JSON.parse(localStorage.getItem(DRAFT_STORAGE_KEY) || 'null');
+        const rawStored = localStorage.getItem(STORAGE_KEY);
+        const stored = rawStored ? JSON.parse(rawStored) : null;
+        const sampleTitles = new Set(['신규추가도서', '미분류 샘플 도서', '분류 보류 자료집', '카테고리 검토 노트']);
+        const isSampleCatalog = Array.isArray(stored)
+            ? stored.some((book) => sampleTitles.has(String(book.title || '').trim()))
+            : false;
+        const currentKindCount = Array.isArray(stored) ? stored.length : 0;
+        const currentTotalCopies = Array.isArray(stored)
+            ? stored.reduce((sum, book) => sum + Math.max(0, Number(book.stock || 0)), 0)
+            : 0;
 
-        if (!Array.isArray(publishedRaw) || publishedRaw.length < defaultBooks.length) {
-            const publishedBooks = normalizeBooks(defaultBooks, 'published');
-            const merged = Array.isArray(publishedRaw) ? publishedBooks.filter((seed) => !publishedRaw.some((book) => String(book.title || '').trim().toLowerCase() === String(seed.title || '').trim().toLowerCase()))
-                .concat(publishedRaw) : publishedBooks;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeBooks(merged, 'published')));
+        const isCanonicalCatalog = Array.isArray(stored)
+            && currentKindCount === INVENTORY_KIND_TARGET
+            && currentTotalCopies === INVENTORY_COPY_TARGET
+            && !isSampleCatalog;
+
+        if (isCanonicalCatalog) {
+            return;
         }
 
-        if (!Array.isArray(draftRaw) || draftRaw.length < incompleteDraftSeedBooks.length) {
-            const existingDrafts = Array.isArray(draftRaw) ? draftRaw : [];
-            const draftBooks = incompleteDraftSeedBooks.map((book, index) => buildDraftBook({
-                ...book,
-                id: `draft-seed-${Date.now()}-${index + 1}`,
-                status: 'draft',
-                registeredAt: book.registeredAt || new Date().toISOString(),
-                stock: Number(book.stock || 0),
-                price: book.price === '' ? 0 : Number(book.price || 0),
-                category: String(book.category || '').trim(),
-                description: String(book.description || '').trim(),
-                cover: String(book.cover || '').trim(),
-                translator: String(book.translator || '').trim(),
-                newUntil: ''
-            }));
-            const mergedDrafts = [...existingDrafts, ...draftBooks.filter((seed) => !existingDrafts.some((book) => String(book.title || '').trim().toLowerCase() === String(seed.title || '').trim().toLowerCase()))];
-            saveDraftBooksToStorage(mergedDrafts);
-        }
+        const baselineCatalog = buildInventoryBaseline();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeBooks(baselineCatalog, 'published')));
+        localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify([]));
     } catch (error) {
         console.warn('기본 도서 데이터 보강 중 오류가 발생했습니다.', error);
     }

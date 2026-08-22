@@ -27,13 +27,20 @@
 }
 
 /* 전체 페이지의 기본 배경색, 글꼴, 여백을 초기화합니다. */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body { 
     background-color: var(--page-bg); /* 생태적이고 차분한 연한 세이지 배경 */
     font-family: 'Arial', sans-serif; /* 기본 산세리프 글꼴 지정[cite: 6] */
-    margin: 0;  /* 브라우저 기본 여백 제거[cite: 6] */
     padding: 0; /* 브라우저 기본 패딩 제거[cite: 6] */
     color: #333333; /* 가독성을 위한 기본 텍스트 색상[cite: 6] */
     box-sizing: border-box; /* 패딩이 너비에 영향을 주지 않도록 박스 모델 설정[cite: 6] */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     scroll-behavior: smooth;
 }
 
@@ -425,13 +432,37 @@ html {
 .content-wrapper {
     display: flex;             
     flex-direction: row;       
-    gap: var(--layout-gap);    
+    gap: var(--layout-gap);
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge legacy */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
     
     /* 헤더 안쪽(.header-inner)과 완전히 동일한 규격을 가집니다 */
     max-width: var(--site-max-width); 
-    margin: 40px auto;                
-    padding: 0 var(--site-padding);   
+    margin: 40px auto 0;                
+    padding: 0 var(--site-padding) 30px;   
     box-sizing: border-box;
+}
+
+.content-wrapper::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.content-wrapper {
+    scroll-snap-type: y proximity;
+}
+
+.content-wrapper > * {
+    scroll-snap-align: start;
 }
 
 /* ==========================================================================
@@ -810,6 +841,7 @@ html {
 }
 
 .header-search {
+    position: relative;
     display: flex;
     flex: 1 1 auto;
     align-items: center;
