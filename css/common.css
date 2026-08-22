@@ -17,13 +17,13 @@
     --border: #a8b9a6;
     --site-max-width: 1200px; /* 웹사이트 전체가 공유할 최대 가로 폭 기준 */
     --site-padding: 30px;     /* 웹사이트 전체가 공유할 좌우 안전 여백 */
-    --sidebar-width: 260px;   /* 사이드바 및 헤더 왼쪽 칸의 고정 너비 */
+    --layout-gap: 20px;        /* 헤더와 본문의 2단 레이아웃 간격 기준 */
+    --sidebar-width: 240px;    /* 사이드바의 기본 너비 */
+    --header-left-width: 220px; /* 헤더 좌측 로고 영역의 고정 너비 */
 
     --logo-height-desktop: 100px; /* 데스크톱 환경에서 기준이 되는 로고 높이[cite: 4, 5, 6, 7] */
     --logo-height-mobile: 80px;   /* 모바일 환경에서 축소 적용될 로고 높이[cite: 4, 5, 6, 7] */
     --title-ratio: 0.8;           /* 타이틀 폰트 크기 조절을 위한 세부 배율 계수[cite: 4, 5, 6, 7] */
-    --sidebar-width: 15%;  /* 사이드바의 기본 너비 비율 */
-    --header-left-width: 15%; /* 헤더 좌측 로고 영역의 너비 비율 */
 }
 
 /* 전체 페이지의 기본 배경색, 글꼴, 여백을 초기화합니다. */
@@ -377,14 +377,14 @@ body {
     margin: 0 auto;                   /* 화면 중앙 배치 */
     padding: 0 var(--site-padding);   /* 좌우 안전 여백 통일 */
     
-    gap: 20px;                 /* 왼쪽 로고 박스와 오른쪽 영역 사이 간격 */
+    gap: var(--layout-gap);    /* 헤더 좌우 2단 간격 기준 */
     box-sizing: border-box;
 }
 
 /* 메인 페이지를 제외한 모든 서브 페이지 헤더는 좌측 로고칸 + 우측 2줄 텍스트칸 구조로 유지 */
 .header-left {
-    flex: 0 0 min(18%, 210px);
-    max-width: 210px;
+    flex: 0 0 var(--header-left-width);
+    max-width: var(--header-left-width);
 }
 
 .header-right {
@@ -416,7 +416,7 @@ body {
 .content-wrapper {
     display: flex;             
     flex-direction: row;       
-    gap: 20px;                 
+    gap: var(--layout-gap);    
     
     /* 헤더 안쪽(.header-inner)과 완전히 동일한 규격을 가집니다 */
     max-width: var(--site-max-width); 
@@ -699,7 +699,7 @@ body {
    헤더 왼쪽 로고 영역의 너비를 변수로 고정
    ========================================================================== */
 .header-left { 
-    flex: 0 0 min(18%, 210px); /* 로고 이미지칸은 서브페이지 공통 레이아웃에 맞게 정해진 비율 유지 */
+    flex: 0 0 var(--header-left-width); /* 로고 이미지칸은 서브페이지 공통 레이아웃에 맞게 정해진 고정 폭 유지 */
     display: flex; 
     align-items: center; 
     justify-content: center; 
@@ -779,30 +779,31 @@ body {
     display: flex; 
     align-items: center;       /* 세로 중앙 정렬[cite: 6] */
     padding: 0 20px;
-    gap: 20px;                 /* 소개 문구와 메뉴 바 사이의 안전 거리[cite: 6] */
+    gap: 18px;                 /* 소개 문구와 메뉴 바 사이의 안전 거리[cite: 6] */
+    justify-content: space-between;
 }
 
 /* 하단 영역의 왼쪽: 슬로건이나 책방 핵심 개념을 설명하는 텍스트 영역입니다.[cite: 6] */
 .header-intro-text {
-    flex-grow: 1;              /* 메뉴가 차지하고 남은 잔여 공간을 모두 흡수[cite: 6] */
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-right: 8px;
     text-align: left;          /* 왼쪽 정렬[cite: 6] */
-    font-size: 14px; 
+    font-size: 0.78rem; 
+    font-weight: 600;
+    line-height: 1.4;
     color: #586e75;    
-    letter-spacing: 0.5px;
-}
-
-/* 헤더 소개 문구 제거 후 메뉴를 오른쪽에 배치 */
-.header-bottom-row {
-    justify-content: flex-end;
-}
-
-.header-intro-text {
-    display: none;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 하단 영역의 오른쪽: 네비게이션 메뉴의 크기가 찌그러지지 않도록 방어하는 래퍼입니다.[cite: 6] */
 .header-nav-wrap {
     flex-shrink: 0;            /* 화면이 좁아져도 메뉴 버튼 영역은 줄어들지 않도록 고정[cite: 6] */
+    margin-left: auto;
 }
 
 /* ==========================================================================
