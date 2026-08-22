@@ -20,7 +20,11 @@
                     <div class="main-header-text">Syntropy Books</div>
                 </div>
                 <div class="header-bottom-row">
-                    <p class="header-intro-text">Syntropy : 무질서 속에서 새로운 질서와 생명력을 만들어내는 힘</p>
+                    <section class="header-search" aria-label="도서 검색">
+                        <label for="book-search-input">도서 검색</label>
+                        <input id="book-search-input" type="search" placeholder="제목, 저자, 카테고리로 검색" autocomplete="off">
+                        <p id="book-search-status" class="book-search-status" aria-live="polite">전체 도서 9권</p>
+                    </section>
                     <div class="header-nav-wrap">
                         <nav class="site-menu" aria-label="메인 메뉴">
                             <div class="site-menu-group">
@@ -110,47 +114,47 @@
                 <h1 class="main-title" id="new-books-heading">새롭게 만나는<br>이번 달의 책</h1>
             </header>
             <section class="book-container new-book-container" aria-label="신간도서 목록">
-                <article class="book-card new-book-card" data-category-id="life-science" data-category-label="생명과학">
+                <article id="life-science" class="book-card new-book-card" data-category-id="life-science" data-category-label="생명과학">
                     <div class="book-card-top"><span class="book-category">생명과학</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">생명이란 무엇인가</h2><p class="book-author">에르빈 슈뢰딩거</p><p class="book-publisher">출판사: Syntropy Books 큐레이션</p><p class="book-description">물리학의 언어로 생명과 질서의 근원을 탐구하는 고전입니다.</p>
                     <img class="book-cover" src="../images/book-covers/life-science.svg" alt="생명과학 책표지 미리보기">
                 </article>
-                <article class="book-card new-book-card" data-category-id="systems-thinking" data-category-label="시스템 사고">
+                <article id="systems-thinking" class="book-card new-book-card" data-category-id="systems-thinking" data-category-label="시스템 사고">
                     <div class="book-card-top"><span class="book-category">시스템 사고</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">생명의 그물</h2><p class="book-author">프리초프 카프라</p><p class="book-publisher">출판사: Syntropy Books 큐레이션</p><p class="book-description">생태계와 사회를 서로 연결된 네트워크로 읽어냅니다.</p>
                     <img class="book-cover" src="../images/book-covers/systems-thinking.svg" alt="시스템 사고 책표지 미리보기">
                 </article>
-                <article class="book-card new-book-card" data-category-id="complexity" data-category-label="복잡계">
+                <article id="complexity" class="book-card new-book-card" data-category-id="complexity" data-category-label="복잡계">
                     <div class="book-card-top"><span class="book-category">복잡계</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">카오스</h2><p class="book-author">제임스 글릭</p><p class="book-translator">옮긴이: 박배식</p><p class="book-publisher">출판사: 승산</p><p class="book-description">혼돈 속에서 반복되는 패턴과 새로운 질서를 발견합니다.</p>
                     <img class="book-cover" src="../images/book-covers/complexity.svg" alt="복잡계 책표지 미리보기">
                 </article>
-                <article class="book-card new-book-card" data-category-id="cosmos" data-category-label="우주와 질서">
+                <article id="cosmos" class="book-card new-book-card" data-category-id="cosmos" data-category-label="우주와 질서">
                     <div class="book-card-top"><span class="book-category">우주와 질서</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">코스모스</h2><p class="book-author">칼 세이건</p><p class="book-translator">옮긴이: 홍승수</p><p class="book-publisher">출판사: 사이언스북스</p><p class="book-description">우주의 시간과 생명의 진화를 하나의 흐름으로 연결합니다.</p>
                     <img class="book-cover" src="../images/book-covers/cosmos.svg" alt="우주와 질서 책표지 미리보기">
                 </article>
-                <article class="book-card new-book-card" data-category-id="evolution" data-category-label="진화와 협력">
+                <article id="evolution" class="book-card new-book-card" data-category-id="evolution" data-category-label="진화와 협력">
                     <div class="book-card-top"><span class="book-category">진화와 협력</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">이기적 유전자</h2><p class="book-author">리처드 도킨스</p><p class="book-translator">옮긴이: 홍영남, 이상임</p><p class="book-publisher">출판사: 을유문화사</p><p class="book-description">진화의 구조 안에서 생명 시스템의 유지를 질문합니다.</p>
                     <img class="book-cover" src="../images/book-covers/evolution.svg" alt="진화와 협력 책표지 미리보기">
                 </article>
-                <article class="book-card new-book-card" data-category-id="energy" data-category-label="문명과 에너지">
+                <article id="energy" class="book-card new-book-card" data-category-id="energy" data-category-label="문명과 에너지">
                     <div class="book-card-top"><span class="book-category">문명과 에너지</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">엔트로피</h2><p class="book-author">제러미 리프킨</p><p class="book-publisher">출판사: Syntropy Books 큐레이션</p><p class="book-description">에너지의 흐름과 문명의 방향을 돌아봅니다.</p>
                     <img class="book-cover" src="../images/book-covers/energy.svg" alt="문명과 에너지 책표지 미리보기">
                 </article>
-                <article class="book-card new-book-card" data-category-id="ecology" data-category-label="생태철학">
+                <article id="ecology" class="book-card new-book-card" data-category-id="ecology" data-category-label="생태철학">
                     <div class="book-card-top"><span class="book-category">생태철학</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">오래된 미래</h2><p class="book-author">헬레나 노르베리 호지</p><p class="book-translator">옮긴이: 김태언</p><p class="book-publisher">출판사: 중앙북스</p><p class="book-description">지역 공동체의 삶에서 지속 가능한 미래의 단서를 찾습니다.</p>
                     <img class="book-cover" src="../images/book-covers/ecology.svg" alt="생태철학 책표지 미리보기">
                 </article>
-                <article class="book-card new-book-card" data-category-id="philosophy" data-category-label="철학">
+                <article id="philosophy" class="book-card new-book-card" data-category-id="philosophy" data-category-label="철학">
                     <div class="book-card-top"><span class="book-category">철학</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">장자</h2><p class="book-author">장자</p><p class="book-translator">옮긴이: 김학주</p><p class="book-publisher">출판사: 을유문화사</p><p class="book-description">변화와 관계의 흐름을 바라보며 함께 살아가는 감각을 일깨웁니다.</p>
                     <img class="book-cover" src="../images/book-covers/philosophy.svg" alt="철학 책표지 미리보기">
                 </article>
-                <article class="book-card new-book-card" data-category-id="uncategorized" data-category-label="미분류">
+                <article id="uncategorized" class="book-card new-book-card" data-category-id="uncategorized" data-category-label="미분류">
                     <div class="book-card-top"><span class="book-category">미분류</span><span class="book-number">NEW</span></div>
                     <h2 class="book-title">미분류 샘플 도서</h2><p class="book-author">분류 대기</p><p class="book-publisher">출판사: Syntropy Books 큐레이션</p><p class="book-description">카테고리 검토 중인 신간도서를 임시로 모아 안내합니다.</p>
                     <img class="book-cover" src="../images/book-covers/book.svg" alt="미분류 책표지 미리보기">

@@ -284,6 +284,7 @@ const filterNewBooks = () => {
     const isValidCategory = newBookCategories.includes(selectedCategory);
     const cards = [...document.querySelectorAll('.new-book-card[data-category-id]')];
     const categoryLinks = [...document.querySelectorAll('.book-category-list[aria-label="신간도서 카테고리"] .category-item')];
+    const headerLinks = [...document.querySelectorAll('.site-menu-group .site-menu-sub a[href*="books-new.html#"])'];
 
     updateNewBooksHeading(isValidCategory ? selectedCategory : '');
 
@@ -293,6 +294,13 @@ const filterNewBooks = () => {
     });
 
     categoryLinks.forEach((link) => {
+        const linkCategory = new URL(link.href).hash.slice(1);
+        const isActive = isValidCategory && linkCategory === selectedCategory;
+        link.classList.toggle('active', isActive);
+        link.setAttribute('aria-current', isActive ? 'page' : 'false');
+    });
+
+    headerLinks.forEach((link) => {
         const linkCategory = new URL(link.href).hash.slice(1);
         const isActive = isValidCategory && linkCategory === selectedCategory;
         link.classList.toggle('active', isActive);
